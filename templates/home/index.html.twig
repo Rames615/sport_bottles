@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sports Bottles - Bouteilles Durables
+{% endblock %}
+
+{% block body %}
+	<!-- Hero Section -->
+	<section class="hero-section-full">
+		<div class="hero-image-container">
+			<img src="{{ asset('hero.png') }}" alt="Hero image" class="hero-main-image">
+			<div class="hero-overlay"></div>
+		</div>
+		<div class="hero-content-wrapper">
+			<h1 class="hero-title-main">Des bouteilles durables pour un mode de vie actif</h1>
+			<p class="hero-subtitle">Sans BPA • Écologiques • Livraison 24–48h</p>
+			<div class="hero-cta-group">
+				<a href="{{path('app_product')}}" class="btn-cta-primary">DÉCOUVRIR NOS PRODUITS</a>
+				<a href="#products" class="btn-cta-secondary">VOIR PLUS</a>
+			</div>
+		</div>
+		<a href="#products" class="scroll-down-btn" aria-label="Scroll down">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		</a>
+	</section>
+
+	<!-- Best Sellers Section -->
+	<section class="bestsellers-section" id="products">
+		<div class="container-main">
+			<h2 class="section-title">Best Sellers</h2>
+			<div class="products-grid">
+				{% for bottle in bottles|slice(0, 4) %}
+					<div class="product-card">
+						<div class="product-badge">Best Seller</div>
+						<img src="{{ bottle.imgUrl }}" alt="{{ bottle.name }}" class="product-image">
+						<div class="product-info">
+							<h3 class="product-name">{{ bottle.name }}</h3>
+							<div class="product-rating">
+								<span class="stars">⭐⭐⭐⭐⭐</span>
+								<span class="rating-text">(4.8)</span>
+							</div>
+							<p class="product-price">{{ bottle.price }}€</p>
+							<button class="btn-add-cart">Ajouter</button>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+
+	<!-- Reassurance Section -->
+	<section class="reassurance-section">
+        <h2 class="section-title">Nos garanties</h2>
+		<div class="reassurance-container">
+			<div class="reassurance-card">
+				<div class="reassurance-icon">🚚</div>
+				<h3 class="reassurance-title">Livraison rapide</h3>
+			</div>
+			<div class="reassurance-card">
+				<div class="reassurance-icon">🔄</div>
+				<h3 class="reassurance-title">Retours faciles</h3>
+			</div>
+			<div class="reassurance-card">
+				<div class="reassurance-icon">🔒</div>
+				<h3 class="reassurance-title">Paiement sécurisé</h3>
+			</div>
+			<div class="reassurance-card">
+				<div class="reassurance-icon">🌱</div>
+				<h3 class="reassurance-title">Écoresponsable</h3>
+			</div>
+		</div>
+	</section>
+{% endblock %}

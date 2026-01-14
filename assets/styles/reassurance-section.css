@@ -1,0 +1,93 @@
+/* Reassurance Section */
+.reassurance-section {
+  width: 100%;
+  background-color: var(--background-color);
+  padding: 20px;
+}
+
+.reassurance-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.reassurance-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 30px 20px;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: transform 0.3s ease;
+}
+
+.reassurance-card:hover {
+  transform: translateY(-5px);
+}
+
+.reassurance-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.reassurance-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .reassurance-section {
+    padding: 50px 20px;
+  }
+
+  .reassurance-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .reassurance-card {
+    padding: 25px 15px;
+  }
+
+  .reassurance-icon {
+    font-size: 2.5rem;
+  }
+
+  .reassurance-title {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .reassurance-section {
+    padding: 40px 15px;
+  }
+
+  .reassurance-container {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .reassurance-card {
+    padding: 20px 15px;
+  }
+
+  .reassurance-icon {
+    font-size: 2.25rem;
+    margin-bottom: 12px;
+  }
+
+  .reassurance-title {
+    font-size: 0.95rem;
+  }
+}
+

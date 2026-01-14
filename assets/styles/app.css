@@ -1,0 +1,5 @@
+/* This file is kept for backward compatibility */
+/* All styles have been moved to separate section files */
+/* See: variables.css, nav.css, hero-section.css, reassurance-section.css, categories.css, bestsellers.css, footer.css, cart.css */
+
+@import './cart.css';

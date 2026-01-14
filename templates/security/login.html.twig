@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion - Sports Bottles{% endblock %}
+
+{% block body %}
+<div class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">Connexion</h1>
+                <p class="login-subtitle">Connectez-vous à votre compte</p>
+            </div>
+
+            {% if error %}
+                <div class="alert alert-danger" role="alert" aria-live="assertive">
+                    <strong>Erreur :</strong> 
+                    {% if error.messageKey == 'Invalid credentials.' %}
+                        Compte non trouvé. Veuillez vous inscrire avant de vous connecter.
+                    {% else %}
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success" role="alert" aria-live="assertive">
+                    <strong>Succès :</strong> {{ message }}
+                </div>
+            {% endfor %}
+
+            {% if app.user %}
+                <div class="alert alert-info" role="status">
+                    Vous êtes connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>, 
+                    <a href="{{ logout_path() }}" aria-label="Se déconnecter" class="alert-link">Se déconnecter</a>
+                </div>
+            {% endif %}
+
+            <form method="post" class="login-form" novalidate>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="mb-3">
+                    <label for="username" class="form-label required">Email</label>
+                    <input 
+                        type="email" 
+                        id="username" 
+                        name="_username" 
+                        value="{{ last_username }}" 
+                        class="form-control {% if error %}is-invalid{% endif %}"
+                        autocomplete="email" 
+                        required 
+                        autofocus
+                        aria-required="true"
+                        aria-invalid="{% if error %}true{% else %}false{% endif %}"
+                        aria-describedby="{% if error %}username-error{% endif %}"
+                        placeholder="votre@email.com"
+                    >
+                    {% if error %}
+                        <div id="username-error" class="invalid-feedback d-block" role="alert">
+                            {% if error.messageKey == 'Invalid credentials.' %}
+                                Compte non trouvé. Veuillez vous inscrire avant de vous connecter.
+                            {% else %}
+                                {{ error.messageKey|trans(error.messageData, 'security') }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label required">Mot de passe</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="_password" 
+                        class="form-control {% if error %}is-invalid{% endif %}"
+                        autocomplete="current-password" 
+                        required
+                        aria-required="true"
+                        aria-invalid="{% if error %}true{% else %}false{% endif %}"
+                        aria-describedby="{% if error %}password-error{% endif %}"
+                        placeholder="••••••••"
+                    >
+                    {% if error %}
+                        <div id="password-error" class="invalid-feedback d-block" role="alert">
+                            Vérifiez votre mot de passe
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 mt-2" aria-label="Se connecter">
+                    Se connecter
+                </button>
+            </form>
+
+            <div class="register-section">
+                <p class="register-text">Si vous n'avez pas encore de compte, inscrivez-vous.</p>
+                <a href="{{ path('app_register') }}" class="btn btn-outline-primary w-100" aria-label="Créer un compte">
+                    S'inscrire
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

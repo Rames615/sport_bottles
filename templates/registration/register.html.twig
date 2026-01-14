@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription - Sports Bottles{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('styles/registration.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="registration-page">
+	<div class="registration-container">
+		<div class="registration-card">
+			<div class="registration-header">
+				<h1 class="registration-title">Créer un compte</h1>
+				<p class="registration-subtitle">Rejoignez-nous pour accéder à nos services</p>
+			</div>
+
+			{% if app.flashes('verify_email_error') %}
+				{% for flash_error in app.flashes('verify_email_error') %}
+					<div class="alert-error" role="alert" aria-live="assertive">
+						<strong>Erreur :</strong> {{ flash_error }}
+					</div>
+				{% endfor %}
+			{% endif %}
+
+			{% if app.user %}
+				<div class="logged-in-message" role="status">
+					Vous êtes connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>, 
+					<a href="{{ logout_path() }}" aria-label="Se déconnecter">Se déconnecter</a>
+				</div>
+			{% endif %}
+
+			<form method="post" class="registration-form" novalidate>
+				{% if registrationForm._token is defined %}
+				<input type="hidden" name="{{ registrationForm._token.vars.full_name }}" value="{{ registrationForm._token.vars.value }}">
+			{% endif %}
+
+				<div class="form-group">
+					<label for="registration_form_email" class="form-label required">Email</label>
+					<input 
+						type="email" 
+						id="registration_form_email" 
+					name="{{ registrationForm.email.vars.full_name }}"
+						value="{{ registrationForm.email.vars.value ?? '' }}" 
+						class="form-input {% if registrationForm.email.vars.errors is not empty %}form-input-error{% endif %}"
+						autocomplete="email" 
+						required 
+						autofocus
+						aria-required="true"
+						aria-invalid="{% if registrationForm.email.vars.errors is not empty %}true{% else %}false{% endif %}"
+						aria-describedby="{% if registrationForm.email.vars.errors is not empty %}email-error{% endif %}"
+						placeholder="votre@email.com"
+					>
+					{% if registrationForm.email.vars.errors is not empty %}
+						<span id="email-error" class="error-message" role="alert">
+							{% for error in registrationForm.email.vars.errors %}
+								{{ error.message }}
+							{% endfor %}
+						</span>
+					{% endif %}
+				</div>
+
+				<div class="form-group">
+					<label for="registration_form_plainPassword" class="form-label required">Mot de passe</label>
+					<input 
+						type="password" 
+						id="registration_form_plainPassword" 
+					name="{{ registrationForm.plainPassword.vars.full_name }}"
+						class="form-input {% if registrationForm.plainPassword.vars.errors is not empty %}form-input-error{% endif %}"
+						autocomplete="new-password" 
+						required
+						aria-required="true"
+						aria-invalid="{% if registrationForm.plainPassword.vars.errors is not empty %}true{% else %}false{% endif %}"
+						aria-describedby="{% if registrationForm.plainPassword.vars.errors is not empty %}password-error{% endif %} password-hint"
+						placeholder="••••••••"
+					>
+					<span id="password-hint" class="form-hint">Minimum 6 caractères</span>
+					{% if registrationForm.plainPassword.vars.errors is not empty %}
+						<span id="password-error" class="error-message" role="alert">
+							{% for error in registrationForm.plainPassword.vars.errors %}
+								{{ error.message }}
+							{% endfor %}
+						</span>
+					{% endif %}
+				</div>
+
+				<div class="form-group checkbox-group">
+					<div class="checkbox-wrapper">
+						<input 
+							type="checkbox" 
+							id="registration_form_agreeTerms" 
+						name="{{ registrationForm.agreeTerms.vars.full_name }}"
+							value="1"
+							{% if registrationForm.agreeTerms.vars.value %}checked{% endif %}
+							required
+							aria-required="true"
+							aria-invalid="{% if registrationForm.agreeTerms.vars.errors is not empty %}true{% else %}false{% endif %}"
+							aria-describedby="{% if registrationForm.agreeTerms.vars.errors is not empty %}terms-error{% endif %}"
+						>
+						<label for="registration_form_agreeTerms" class="form-label checkbox-label required">
+							J'accepte les <a href="#" aria-label="Conditions d'utilisation">conditions d'utilisation</a> et la <a href="#" aria-label="Politique de confidentialité">politique de confidentialité</a>
+						</label>
+					</div>
+					{% if registrationForm.agreeTerms.vars.errors is not empty %}
+						<span id="terms-error" class="error-message" role="alert">
+							{% for error in registrationForm.agreeTerms.vars.errors %}
+								{{ error.message }}
+							{% endfor %}
+						</span>
+					{% endif %}
+				</div>
+
+				<button type="submit" class="btn-register" aria-label="Créer un compte">
+					S'inscrire
+				</button>
+			</form>
+
+			<div class="login-section">
+				<p class="login-text">Vous avez déjà un compte ?</p>
+				<a href="{{ path('app_login') }}" class="btn-login" aria-label="Se connecter">
+					Se connecter
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

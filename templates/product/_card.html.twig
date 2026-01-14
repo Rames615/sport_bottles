@@ -1,0 +1,60 @@
+<div class="product-card" 
+	 data-category="{{ product.category.slug }}" 
+	 data-price="{{ product.price }}" 
+	 data-capacity="{{ product.capacity }}" 
+	 data-temperature="{{ product.temperature }}">
+	
+	<div class="product-image-wrapper">
+		{% if product.imgPath %}
+			<img 
+				src="{{ asset('images_products/' ~ product.imgPath) }}" 
+				alt="{{ product.designation }}"
+				class="product-image"
+				onerror="this.src='{{ asset('images/placeholder.png') }}'">
+		{% else %}
+			<img 
+				src="{{ asset('images/placeholder.png') }}" 
+				alt="{{ product.designation }}"
+				class="product-image">
+		{% endif %}
+	</div>
+
+	<div class="product-info">
+		<h3 class="product-name">{{ product.designation }}</h3>
+		
+		{# Use slice to truncate description since `truncate` filter is not available #}
+		{% if product.description is defined and product.description|length > 100 %}
+			<p class="product-description">{{ product.description|slice(0, 100) ~ '...' }}</p>
+		{% else %}
+			<p class="product-description">{{ product.description }}</p>
+		{% endif %}
+		
+		<div class="product-specs">
+			<div class="product-spec-item">
+				<strong>Capacité:</strong> {{ product.capacity }}
+			</div>
+			{% if product.temperature %}
+				<div class="product-spec-item">
+					<strong>Température:</strong> {{ product.temperature }}
+				</div>
+			{% endif %}
+			{% if product.category %}
+				<div class="product-spec-item">
+					<strong>Catégorie:</strong> {{ product.category.name }}
+				</div>
+			{% endif %}
+		</div>
+
+		<p class="product-price">{{ product.price|number_format(2, ',', ' ') }} €</p>
+		
+		<div class="product-actions">
+			<form method="post" action="{{ path('app_cartadd', {id: product.id}) }}" style="display:inline" class="add-to-cart-form">
+				<input type="hidden" name="_token" value="{{ csrf_token('cart_add') }}">
+				<button type="submit" class="btn-add-cart" title="Ajouter {{ product.designation }} au panier">Ajouter au panier</button>
+			</form>
+			<button class="btn-details" data-product-id="{{ product.id }}">
+				Voir détails
+			</button>
+		</div>
+	</div>
+</div>
