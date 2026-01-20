@@ -32,11 +32,25 @@ class AppFixtures extends Fixture
 
         // Create sample products
         $productsData = [
-            ['designation'=>'Bouteille verre bleue','description'=>'Bouteille en verre soufflé, élégante et résistante.','price'=>'12.90','imgPath'=>'verre_blue.png','capacity'=>'500ml','temperature'=>null,'category'=>'verres'],
-            ['designation'=>'Bouteille verre verte','description'=>'Verre teinté vert, parfait pour usage quotidien.','price'=>'11.50','imgPath'=>'glass_green.png','capacity'=>'750ml','temperature'=>null,'category'=>'verres'],
-            ['designation'=>'Bouteille inox vert','description'=>'Acier inoxydable durable, finition verte.','price'=>'24.99','imgPath'=>'acier_inoxydable_vert.png','capacity'=>'1L','temperature'=>null,'category'=>'inox'],
-            ['designation'=>'Bouteille isothermique bleue','description'=>'Garde boissons chaudes/froides pendant des heures.','price'=>'29.90','imgPath'=>'isothermique_blue.png','capacity'=>'500ml','temperature'=>'12h','category'=>'isothermiques'],
-            ['designation'=>'Bouteille sans BPA transparente','description'=>'Matériau sans BPA, léger et pratique.','price'=>'9.90','imgPath'=>'transparent_sans_bpa.png','capacity'=>'750ml','temperature'=>null,'category'=>'sans-bpa'],
+            // verres
+            ['designation'=>'Bouteille verre','description'=>'Bouteille en verre soufflé, élégante et résistante.','price'=>'12.90','imgPath'=>'verre_blue.png','capacity'=>'500ml','temperature'=>null,'category'=>'verres'],
+            ['designation'=>'Bouteille verre','description'=>'Verre teinté vert, parfait pour usage quotidien.','price'=>'11.50','imgPath'=>'glass_green.png','capacity'=>'750ml','temperature'=>null,'category'=>'verres'],
+            ['designation'=>'Bouteille verre','description'=>'Design épuré, idéale pour une utilisation quotidienne.','price'=>'14.20','imgPath'=>'glass_degrade_blue.png','capacity'=>'1L','temperature'=>null,'category'=>'verres'],
+
+            // inox
+            ['designation'=>'Bouteille inox','description'=>'Acier inoxydable durable, finition verte.','price'=>'24.99','imgPath'=>'acier_inoxydable_vert.png','capacity'=>'1L','temperature'=>null,'category'=>'inox'],
+            ['designation'=>'Bouteille Acier Inoxydable','description'=>'Matériau acier, léger et pratique.','price'=>'10.99','imgPath'=>'acier_inoxydable.png','capacity'=>'500ml','temperature'=>null,'category'=>'inox'],
+            ['designation'=>'Bouteille inoxydable','description'=>'Finition charcoal, robuste et élégante.','price'=>'19.50','imgPath'=>'acier_inox_charcoal.png','capacity'=>'750ml','temperature'=>null,'category'=>'inox'],
+
+            // isothermiques
+            ['designation'=>'Bouteille isothermique','description'=>'Garde boissons chaudes/froides pendant des heures.','price'=>'29.90','imgPath'=>'isothermique_blue.png','capacity'=>'500ml','temperature'=>'12h','category'=>'isothermiques'],
+            ['designation'=>'Bouteille isothermique','description'=>'Double paroi pour une isolation optimale.','price'=>'34.50','imgPath'=>'isothermique_red.png','capacity'=>'750ml','temperature'=>'24h','category'=>'isothermiques'],
+            ['designation'=>'Bouteille isothermique','description'=>'Parfaite pour les boissons chaudes et froides.','price'=>'27.80','imgPath'=>'isothermique_green.png','capacity'=>'1L','temperature'=>'18h','category'=>'isothermiques'],
+
+            // sans-bpa
+            ['designation'=>'Bouteille sans BPA','description'=>'Matériau sans BPA, léger et pratique.','price'=>'9.90','imgPath'=>'transparent_sans_bpa.png','capacity'=>'750ml','temperature'=>null,'category'=>'sans-bpa'],
+            ['designation'=>'Bouteille sans BPA','description'=>'Design épuré, idéale pour une utilisation quotidienne.','price'=>'8.50','imgPath'=>'sky_blue_sans_bpa.png','capacity'=>'500ml','temperature'=>null,'category'=>'sans-bpa'],
+            ['designation'=>'Bouteille sans BPA','description'=>'Couleur dégradée, moderne et tendance.','price'=>'11.20','imgPath'=>'degrade_pink_sans_bpa.png','capacity'=>'1L','temperature'=>null,'category'=>'sans-bpa'],
         ];
 
         foreach ($productsData as $pd) {

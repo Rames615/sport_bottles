@@ -7,7 +7,7 @@
 	<div class="product-image-wrapper">
 		{% if product.imgPath %}
 			<img 
-				src="{{ asset('images_products/' ~ product.imgPath) }}" 
+				src="{{ asset('products_images/'  ~ product.category.slug ~ '/' ~ product.imgPath) }}" 
 				alt="{{ product.designation }}"
 				class="product-image"
 				onerror="this.src='{{ asset('images/placeholder.png') }}'">
