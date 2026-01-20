@@ -38,7 +38,7 @@
                                     <!-- Product Image -->
                                     <div class="col-md-2 col-3 mb-3 mb-md-0 text-center">
                                         {% if item.product %}
-                                            {% set imagePath = item.product.imgPath ? 'images_products/' ~ item.product.imgPath : 'logo.png' %}
+                                            {% set imagePath = item.product.imgPath ? 'products_images/' ~ item.product.category.slug ~ '/' ~ item.product.imgPath : 'logo.png' %}
                                             <img src="{{ asset(imagePath) }}" 
                                                  alt="{{ item.product.designation }}" 
                                                  class="img-fluid rounded"
