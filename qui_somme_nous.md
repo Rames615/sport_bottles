@@ -58,3 +58,4 @@ Notre vision
 
 À travers ce projet, nous souhaitons bâtir bien plus qu’une boutique en ligne :
 un espace de confiance dédié à l’hydratation, au sport et à un mode de vie responsable.
+

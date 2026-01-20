@@ -77,63 +77,10 @@
   margin-right: 10px;
 }
 
-.filter-option label {
-  margin: 0;
-  cursor: pointer;
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  transition: color 0.3s ease;
-}
-
-.filter-option input[type="checkbox"]:checked + label {
-  color: var(--primary-color);
-  font-weight: 600;
-}
-
-.filter-option:hover label {
-  color: var(--text-primary);
-}
-
 .filter-button-group {
   display: flex;
   gap: 10px;
   margin-top: 20px;
-}
-
-.btn-filter-apply {
-  flex: 1;
-  padding: 12px 16px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.95rem;
-}
-
-.btn-filter-apply:hover {
-  background-color: #165a47;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(31, 122, 99, 0.3);
-}
-
-.btn-filter-reset {
-  padding: 12px 16px;
-  background-color: transparent;
-  color: var(--text-secondary);
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.95rem;
-}
-
-.btn-filter-reset:hover {
-  background-color: #f5f7fa;
-  color: var(--text-primary);
 }
 
 /* Main Content Area */
@@ -241,50 +188,6 @@
   font-size: 0.95rem;
 }
 
-/* Results Header */
-.results-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #E2E8F0;
-}
-
-.results-count {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.results-sort {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.results-sort label {
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin: 0;
-  font-size: 0.95rem;
-}
-
-.results-sort select {
-  padding: 8px 12px;
-  border: 1px solid #E2E8F0;
-  border-radius: 6px;
-  background-color: white;
-  color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.results-sort select:hover {
-  border-color: var(--primary-color);
-}
-
 /* Products Grid */
 .products-grid {
   display: grid;
@@ -292,13 +195,6 @@
   gap: 32px;
   animation: fadeIn 0.3s ease;
   margin-bottom: 30px;
-}
-
-.products-grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 32px;
-  animation: fadeIn 0.3s ease;
 }
 
 .product-card {
@@ -553,7 +449,7 @@
     gap: 25px;
   }
 
-  .products-grid-container {
+  .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
   }
@@ -679,32 +575,6 @@
     margin-right: 4px;
   }
 
-  .results-header {
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
-    margin-bottom: 20px;
-  }
-
-  .results-count {
-    font-size: 0.9rem;
-  }
-
-  .results-sort {
-    width: 100%;
-    gap: 8px;
-  }
-
-  .results-sort label {
-    font-size: 0.9rem;
-  }
-
-  .results-sort select {
-    flex: 1;
-    padding: 8px 10px;
-    font-size: 0.9rem;
-  }
-
   .category-header {
     padding: 20px 15px;
     margin-bottom: 20px;
@@ -781,19 +651,9 @@
     height: 16px;
   }
 
-  .filter-option label {
-    font-size: 0.9rem;
-  }
-
   .filter-button-group {
     gap: 8px;
     margin-top: 15px;
-  }
-
-  .btn-filter-apply,
-  .btn-filter-reset {
-    padding: 11px 14px;
-    font-size: 0.9rem;
   }
 }
 
@@ -817,7 +677,7 @@
     font-size: 0.95rem;
   }
 
-  .products-grid-container {
+  .products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
@@ -903,30 +763,6 @@
     font-size: 0.9rem;
   }
 
-  .results-header {
-    padding: 12px 0;
-    margin-bottom: 15px;
-    gap: 10px;
-  }
-
-  .results-count {
-    font-size: 0.85rem;
-  }
-
-  .results-sort {
-    width: 100%;
-    gap: 6px;
-  }
-
-  .results-sort label {
-    font-size: 0.85rem;
-  }
-
-  .results-sort select {
-    padding: 6px 8px;
-    font-size: 0.85rem;
-  }
-
   .category-header {
     padding: 15px 12px;
     margin-bottom: 15px;
@@ -979,23 +815,9 @@
     margin-right: 8px;
   }
 
-  .filter-option label {
-    font-size: 0.85rem;
-  }
-
   .filter-button-group {
     gap: 6px;
     margin-top: 12px;
-  }
-
-  .btn-filter-apply {
-    padding: 10px 12px;
-    font-size: 0.85rem;
-  }
-
-  .btn-filter-reset {
-    padding: 10px 12px;
-    font-size: 0.85rem;
   }
 
   .empty-state {
