@@ -39,7 +39,7 @@
                                 <div class="d-lg-none">
                                     <div class="d-flex gap-2 mb-3">
                                         <!-- Product Image -->
-                                        <div class="flex-shrink-0">
+                                        <div class="shrink-0">
                                             {% if item.product %}
                                                 {% set imagePath = item.product.imgPath ? 'products_images/' ~ item.product.category.slug ~ '/' ~ item.product.imgPath : 'logo.png' %}
                                                 <img src="{{ asset(imagePath) }}" 
@@ -56,7 +56,7 @@
                                         </div>
                                         
                                         <!-- Product Details -->
-                                        <div class="flex-grow-1">
+                                        <div class="grow">
                                             <h5 class="mb-1 fs-6">{{ item.product.designation }}</h5>
                                             {% if item.product.capacity %}
                                                 <p class="text-muted mb-1" style="font-size: 0.85rem;">
