@@ -3,53 +3,86 @@
 {% block title %}Validation de la commande - Sports Bottles{% endblock %}
 
 {% block body %}
-<div class="cart-container container" style="margin-top: 100px; margin-bottom: 50px;">
+<div class="cart-container container-fluid container-lg" style="margin-top: 100px; margin-bottom: 50px;">
     <div class="cart-header">
         <h1><i class="bi bi-check-circle"></i> Validation de la commande</h1>
     </div>
 
-    <div class="row">
-        <div class="col-lg-8 col-md-12 mb-4">
+    <div class="row g-3 g-lg-4">
+        <!-- Order Summary -->
+        <div class="col-12 col-lg-8">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0"><i class="bi bi-list-check"></i> Récapitulatif de votre commande</h5>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Produit</th>
-                                    <th class="text-center">Quantité</th>
-                                    <th class="text-end">Prix unitaire</th>
-                                    <th class="text-end">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for item in cart.items %}
+                <div class="card-body p-2 p-sm-3 p-md-4">
+                    <!-- Mobile View: Card Layout -->
+                    <div class="d-lg-none">
+                        {% for item in cart.items %}
+                            <div class="card mb-3 p-3 border">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 class="mb-1">{{ item.product.designation }}</h6>
+                                        {% if item.product.capacity %}
+                                            <small class="text-muted d-block mb-2">{{ item.product.capacity }}</small>
+                                        {% endif %}
+                                    </div>
+                                    <span class="badge bg-secondary">{{ item.quantity }}x</span>
+                                </div>
+                                <hr class="my-2">
+                                <div class="row g-2 text-sm">
+                                    <div class="col-6">
+                                        <small class="text-muted">Prix unitaire:</small>
+                                        <p class="mb-0 fw-bold">{{ item.unitPrice|number_format(2, ',', ' ') }} €</p>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <small class="text-muted">Sous-total:</small>
+                                        <p class="mb-0 fw-bold text-primary">{{ item.subtotal|number_format(2, ',', ' ') }} €</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Desktop View: Table Layout -->
+                    <div class="d-none d-lg-block">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
                                     <tr>
-                                        <td>
-                                            <strong>{{ item.product.designation }}</strong>
-                                            {% if item.product.capacity %}
-                                                <br><small class="text-muted">{{ item.product.capacity }}</small>
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-center"><span class="badge bg-secondary">{{ item.quantity }}</span></td>
-                                        <td class="text-end">{{ item.unitPrice|number_format(2, ',', ' ') }} €</td>
-                                        <td class="text-end fw-bold">{{ item.subtotal|number_format(2, ',', ' ') }} €</td>
+                                        <th>Produit</th>
+                                        <th class="text-center">Quantité</th>
+                                        <th class="text-end">Prix unitaire</th>
+                                        <th class="text-end">Total</th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {% for item in cart.items %}
+                                        <tr>
+                                            <td>
+                                                <strong>{{ item.product.designation }}</strong>
+                                                {% if item.product.capacity %}
+                                                    <br><small class="text-muted">{{ item.product.capacity }}</small>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-center"><span class="badge bg-secondary">{{ item.quantity }}</span></td>
+                                            <td class="text-end">{{ item.unitPrice|number_format(2, ',', ' ') }} €</td>
+                                            <td class="text-end fw-bold">{{ item.subtotal|number_format(2, ',', ' ') }} €</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-4 col-md-12">
+        <!-- Order Total & Actions -->
+        <div class="col-12 col-lg-4">
             <div class="cart-summary">
                 <div class="summary-card">
-                    <h4 class="mb-3"><i class="bi bi-calculator"></i> Total</h4>
+                    <h4 class="mb-3"><i class="bi bi-calculator"></i> Résumé</h4>
                     <hr>
                     
                     <div class="summary-row">
@@ -65,16 +98,16 @@
                     <hr>
                     
                     <div class="summary-total">
-                        <span>Total</span>
-                        <span>{{ total|number_format(2, ',', ' ') }} €</span>
+                        <span>Total à payer</span>
+                        <span class="d-block" style="font-size: 1.8rem;">{{ total|number_format(2, ',', ' ') }} €</span>
                     </div>
                     
-                    <div class="alert alert-info mt-3">
+                    <div class="alert alert-info mt-3 mb-3">
                         <i class="bi bi-info-circle"></i> <small>Le paiement sera disponible prochainement</small>
                     </div>
                     
                     <a href="{{ path('app_cartindex') }}" class="btn btn-outline-primary w-100">
-                        <i class="bi bi-arrow-left"></i> Retour au panier
+                        <i class="bi bi-arrow-left"></i> <span class="d-none d-sm-inline">Retour au panier</span><span class="d-sm-none">Retour</span>
                     </a>
                 </div>
             </div>

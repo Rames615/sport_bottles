@@ -1402,3 +1402,26 @@ vendor/bin/phpstan analyse  ou  php vendor/bin/phpstan analyse
 
 ## note: « PHPStan garantit l’intégrité structurelle du code en détectant les incohérences de typage et les erreurs d’architecture avant l’exécution. C’est un outil clé pour les projets Symfony basés sur Doctrine. »
 
+<!-- todo : Étape 7 : Interface d'Administration  -->
+Comment l’intégrer proprement (Symfony best practices)
+Option 1 — EasyAdmin (recommandée)
+
+✅ Rapide
+✅ Propre
+✅ Standard Symfony
+✅ Très bien vu académiquement
+
+Installation :
+
+composer require easycorp/easyadmin-bundle
+
+
+Puis :
+
+symfony console make:admin:dashboard
+symfony console make:admin:crud Product
+symfony console make:admin:crud Order
+
+## Phrase parfaite pour jury
+
+« L’interface d’administration n’est pas strictement nécessaire au fonctionnement du site, mais elle est essentielle pour assurer la gestion métier, la maintenance et l’exploitation réelle de la plateforme. »
