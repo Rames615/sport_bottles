@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard - Sports Bottles{% endblock %}
+
+{% block stylesheets %}
+<style>
+.admin-dashboard {
+    padding: 2rem 1rem;
+}
+.admin-cards .card {
+    border: 0;
+    border-radius: .75rem;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+.admin-cards .card .icon {
+    font-size: 2.25rem;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container admin-dashboard">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Administration</h1>
+        <div>
+            <a href="/admin" class="btn btn-outline-secondary">EasyAdmin</a>
+            <a href="/" class="btn btn-link">View site</a>
+        </div>
+    </div>
+
+    <div class="row admin-cards g-3 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card p-3">
+                <div class="d-flex align-items-center">
+                    <div class="me-3 icon text-primary">👥</div>
+                    <div>
+                        <div class="text-muted">Users</div>
+                        <div class="h4 mb-0">{{ userCount }}</div>
+                    </div>
+                </div>
+                <a href="/admin/user" class="stretched-link"></a>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card p-3">
+                <div class="d-flex align-items-center">
+                    <div class="me-3 icon text-success">📦</div>
+                    <div>
+                        <div class="text-muted">Products</div>
+                        <div class="h4 mb-0">{{ productCount }}</div>
+                    </div>
+                </div>
+                <a href="/admin/product" class="stretched-link"></a>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card p-3">
+                <div class="d-flex align-items-center">
+                    <div class="me-3 icon text-warning">🏷️</div>
+                    <div>
+                        <div class="text-muted">Categories</div>
+                        <div class="h4 mb-0">{{ categoryCount }}</div>
+                    </div>
+                </div>
+                <a href="/admin/category" class="stretched-link"></a>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card p-3">
+                <div class="d-flex align-items-center">
+                    <div class="me-3 icon text-danger">🛒</div>
+                    <div>
+                        <div class="text-muted">Carts</div>
+                        <div class="h4 mb-0">{{ cartCount }}</div>
+                    </div>
+                </div>
+                <a href="/admin/cart" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Recent activity</h5>
+            <p class="text-muted">Add charts, KPIs or recent records here to make the dashboard more useful.</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1425,3 +1425,5 @@ symfony console make:admin:crud Order
 ## Phrase parfaite pour jury
 
 « L’interface d’administration n’est pas strictement nécessaire au fonctionnement du site, mais elle est essentielle pour assurer la gestion métier, la maintenance et l’exploitation réelle de la plateforme. »
+
+## role_admin granted to the e-mail ramesh.tr@yahoo.com

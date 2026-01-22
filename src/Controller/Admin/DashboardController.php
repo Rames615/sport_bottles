@@ -7,14 +7,34 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Entity\User;
+use App\Entity\Product;
+use App\Entity\Category;
+use App\Entity\Cart;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
+    public function __construct(
+        private EntityManagerInterface $entityManager
+    ) {}
+
+    #[IsGranted('ROLE_ADMIN')]
     public function index(): Response
     {
-        // Option 3. Render the default EasyAdmin dashboard
-        return parent::index();
+        $userCount = $this->entityManager->getRepository(User::class)->count([]);
+        $productCount = $this->entityManager->getRepository(Product::class)->count([]);
+        $categoryCount = $this->entityManager->getRepository(Category::class)->count([]);
+        $cartCount = $this->entityManager->getRepository(Cart::class)->count([]);
+
+        return $this->render('admin/dashboard.html.twig', compact(
+            'userCount',
+            'productCount',
+            'categoryCount',
+            'cartCount'
+        ));
     }
 
     public function configureDashboard(): Dashboard
@@ -25,7 +45,11 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-dashboard');
+        yield MenuItem::linkToCrud('Users', 'fa fa-users', 'App\Entity\User');
+        yield MenuItem::linkToCrud('Products', 'fa fa-box', 'App\Entity\Product');
+        yield MenuItem::linkToCrud('Categories', 'fa fa-tags', 'App\Entity\Category');
+        // yield MenuItem::linkToCrud('Orders', 'fa fa-shopping-cart', 'App\Entity\Order');
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }

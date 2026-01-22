@@ -68,4 +68,11 @@ class AppFixtures extends Fixture
 
         $manager->flush();
     }
+    // UserFactory::new()
+    // ->withAttributes([
+    //     'email' => 'admin@example.com',
+    //     'password' => 'adminpass',
+    // ])
+    // ->promoteRole('ROLE_SUPER_ADMIN')
+    // ->create();
 }
