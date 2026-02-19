@@ -16,6 +16,11 @@ security:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+            # Firewall pour webhooks externes (pas de CSRF, pas de session)
+            webhook:
+            pattern: ^/webhook/
+            stateless: true
+            security: false
         main:
             lazy: true
             provider: app_user_provider

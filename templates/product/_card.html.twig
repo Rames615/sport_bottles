@@ -1,5 +1,5 @@
 <div class="product-card" 
-	 data-category="{{ product.category.slug }}" 
+	 data-category="{{ product.category? product.category.name : 'Uncategorized' }}" 
 	 data-price="{{ product.price }}" 
 	 data-capacity="{{ product.capacity }}" 
 	 data-temperature="{{ product.temperature }}">

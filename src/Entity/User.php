@@ -44,9 +44,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'users')]
     private Collection $products;
 
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
+    private Collection $totalAmount;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->totalAmount = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -166,6 +173,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeProduct(Product $product): static
     {
         $this->products->removeElement($product);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getTotalAmount(): Collection
+    {
+        return $this->totalAmount;
+    }
+
+    public function addTotalAmount(Order $totalAmount): static
+    {
+        if (!$this->totalAmount->contains($totalAmount)) {
+            $this->totalAmount->add($totalAmount);
+            $totalAmount->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTotalAmount(Order $totalAmount): static
+    {
+        if ($this->totalAmount->removeElement($totalAmount)) {
+            // set the owning side to null (unless already changed)
+            if ($totalAmount->getUser() === $this) {
+                $totalAmount->setUser(null);
+            }
+        }
 
         return $this;
     }
