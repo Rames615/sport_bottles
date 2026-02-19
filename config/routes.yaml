@@ -7,5 +7,12 @@
 # To list all registered routes, run the following command:
 #   bin/console debug:router
 
+# Import all controllers with #[Route] attributes
 controllers:
     resource: routing.controllers
+
+# Route explicite pour le webhook
+webhook:
+    path: /webhook
+    controller: App\Controller\WebhookController::handle
+    methods: [POST]

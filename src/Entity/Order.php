@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
@@ -14,12 +15,11 @@ class Order
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'totalAmount')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'totalAmount')]
     #[ORM\JoinColumn(nullable: false)]
-    // @phpstan-ignore class.nameCase
-    private ?user $user = null;
+    private ?User $user = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $totalAmount = null;
 
     #[ORM\Column(length: 255)]
@@ -28,7 +28,7 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeSessionId = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int
@@ -36,12 +36,12 @@ class Order
         return $this->id;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 

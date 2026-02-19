@@ -1,0 +1,19 @@
+stripe_checkout:
+  path: /stripe/checkout
+  methods: [POST]
+  controller: App\\Controller\\StripeController::checkout
+
+stripe_success:
+  path: /stripe/success
+  methods: [GET]
+  controller: App\\Controller\\StripeController::success
+
+stripe_cancel:
+  path: /stripe/cancel
+  methods: [GET]
+  controller: App\\Controller\\StripeController::cancel
+
+stripe_webhook:
+  path: /webhook
+  methods: [POST]
+  controller: App\\Controller\\StripeController::webhook

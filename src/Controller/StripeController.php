@@ -3,34 +3,33 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\User;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
+use Stripe\Webhook;
+use Stripe\PaymentIntent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class StripeController extends AbstractController
 {
     #[Route('/checkout', name: 'stripe_checkout')]
-    public function checkout(
-        EntityManagerInterface $em,
-        ParameterBagInterface $params
-    ): RedirectResponse {
-
+    public function checkout(EntityManagerInterface $em): RedirectResponse
+    {
         $user = $this->getUser();
 
-        if (!$user) {
+        if (!$user instanceof User) {
             throw $this->createAccessDeniedException();
         }
 
         // Montant en centimes
-        $totalAmount = 5000; // 50.00 €
+        $totalAmount = 5000;
 
-        // Création de la commande
         $order = new Order();
         $order->setUser($user);
         $order->setTotalAmount($totalAmount);
@@ -40,8 +39,8 @@ final class StripeController extends AbstractController
         $em->persist($order);
         $em->flush();
 
-        // Clé Stripe depuis services.yaml ou .env
-        Stripe::setApiKey($params->get('stripe.secret_key'));
+        // ✅ On utilise directement .env
+        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
         $session = Session::create([
             'payment_method_types' => ['card'],
@@ -59,12 +58,12 @@ final class StripeController extends AbstractController
             'success_url' => $this->generateUrl(
                 'stripe_success',
                 [],
-                \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                UrlGeneratorInterface::ABSOLUTE_URL
             ) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => $this->generateUrl(
                 'stripe_cancel',
                 [],
-                \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                UrlGeneratorInterface::ABSOLUTE_URL
             ),
         ]);
 
@@ -75,11 +74,8 @@ final class StripeController extends AbstractController
     }
 
     #[Route('/success', name: 'stripe_success')]
-    public function success(
-        Request $request,
-        EntityManagerInterface $em
-    ): Response {
-
+    public function success(Request $request, EntityManagerInterface $em): Response
+    {
         $sessionId = $request->query->get('session_id');
 
         if (!$sessionId) {
@@ -93,12 +89,7 @@ final class StripeController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        // Optionnel : vérifier réellement le paiement auprès de Stripe
-        if ($order->getStatus() !== 'paid') {
-            $order->setStatus('paid');
-            $em->flush();
-        }
-
+        // ⚠️ La vraie validation se fait via webhook
         return $this->render('stripe/success.html.twig', [
             'order' => $order
         ]);
@@ -108,5 +99,38 @@ final class StripeController extends AbstractController
     public function cancel(): Response
     {
         return $this->render('stripe/cancel.html.twig');
+    }
+
+    #[Route('/webhook', name: 'stripe_webhook', methods: ['POST'])]
+    public function webhook(Request $request, EntityManagerInterface $em): Response
+    {
+        $payload = $request->getContent();
+        $sigHeader = $request->headers->get('Stripe-Signature');
+        $endpointSecret = $_ENV['STRIPE_WEBHOOK_SECRET'];
+
+        try {
+            $event = Webhook::constructEvent(
+                $payload,
+                $sigHeader,
+                $endpointSecret
+            );
+        } catch (\Exception $e) {
+            return new Response('Invalid webhook', 400);
+        }
+
+        if ($event->type === 'checkout.session.completed') {
+
+            $session = $event->data->object;
+
+            $order = $em->getRepository(Order::class)
+                ->findOneBy(['stripeSessionId' => $session->id]);
+
+            if ($order && $order->getStatus() !== 'paid') {
+                $order->setStatus('paid');
+                $em->flush();
+            }
+        }
+
+        return new Response('Webhook handled', 200);
     }
 }
