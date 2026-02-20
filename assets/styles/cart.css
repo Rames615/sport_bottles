@@ -1,8 +1,9 @@
 /* Cart page styles - responsive and clean UI */
 
 .cart-container {
-    padding: 2rem 0;
+    padding: 2rem;
     min-height: calc(100vh - 200px);
+    background-color:#bcc5bc;
 }
 
 .cart-header {

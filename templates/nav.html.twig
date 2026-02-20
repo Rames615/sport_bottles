@@ -29,9 +29,11 @@
                             {% if cart_item_count is defined %}
                                 {% set cartCount = cart_item_count(app.user) %}
                                 {% if cartCount > 0 %}
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem; min-width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; padding: 0 4px;">
+                                    <span id="cart-count-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem; min-width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; padding: 0 4px;">
                                         {{ cartCount }}
                                     </span>
+                                {% else %}
+                                    <span id="cart-count-badge" style="display:none"></span>
                                 {% endif %}
                             {% endif %}
                         </a>

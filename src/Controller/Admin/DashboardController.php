@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Entity\Product;
 use App\Entity\Category;
 use App\Entity\Cart;
+use App\Entity\Order;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
@@ -49,7 +50,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Users', 'fa fa-users', 'App\Entity\User');
         yield MenuItem::linkToCrud('Products', 'fa fa-box', 'App\Entity\Product');
         yield MenuItem::linkToCrud('Categories', 'fa fa-tags', 'App\Entity\Category');
-        // yield MenuItem::linkToCrud('Orders', 'fa fa-shopping-cart', 'App\Entity\Order');
+        yield MenuItem::linkToCrud('Orders', 'fa fa-shopping-cart', Order::class);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }

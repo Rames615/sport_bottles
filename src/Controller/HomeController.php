@@ -5,53 +5,20 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\ProductRepository;
 
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(): Response
+    public function index(ProductRepository $productRepository): Response
     {
+        // Get the latest 4 products to show in the hero/bestsellers section.
+        // If the DB is empty, an empty array will be passed and the template handles it.
+        $bottles = $productRepository->findBy([], ['id' => 'DESC'], 4);
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'Eco-bottle products',
-            'bottles' => $bottles = [
-                [
-                'name' => 'Acier inoxydable',
-                'size' => '500ml',
-                'color' => 'white',
-                'material' => 'Stainless Steel',
-                'price' => '19.99',
-                'description' => 'A durable stainless steel bottle designed to keep drinks cold for up to 12 hours.',
-                'imgUrl' => '/products_images/inox/acier_inoxydable.png'
-            ],
-            [
-                'name' => 'isothermique',
-                'size' => '750ml',
-                'color' => 'Blue',
-                'material' => 'Aluminum',
-                'price' => '14.50',
-                'description' => 'Lightweight aluminum bottle perfect for sports enthusiasts.',
-                'imgUrl' => '/products_images/isothermiques/isothermique_blue.png'
-            ],
-            [
-                'name' => 'Verre',
-                'size' => '350ml',
-                'color' => 'Vert',
-                'material' => 'Glass',
-                'price' => '22.00',
-                'description' => 'Made of reinforced glass, ideal for preserving natural taste.',
-                'imgUrl' => '/products_images/verres/glass_green.png'
-            ],
-            [
-                'name' => 'Plastique BPA-Free',
-                'size' => '350ml',
-                'color' => 'blue',
-                'material' => 'Plastic (BPA-Free)',
-                'price' => '8.90',
-                'description' => 'Compact and kid-friendly bottle made from BPA-free plastic.',
-                'imgUrl' => '/products_images/sans-bpa/sky_blue_sans_bpa.png'
-            ],
-            
-            ],
+            'bottles' => $bottles,
         ]);
     }
 }

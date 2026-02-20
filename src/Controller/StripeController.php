@@ -89,10 +89,25 @@ final class StripeController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        // ⚠️ La vraie validation se fait via webhook
+        // ⚠️ La vraie validation se fait via webhook. We render a success page
+        // which will poll for the final order status and show a popup when paid.
         return $this->render('stripe/success.html.twig', [
-            'order' => $order
+            'order' => $order,
+            'sessionId' => $sessionId,
         ]);
+    }
+
+    #[Route('/order-status/{sessionId}', name: 'stripe_order_status', methods: ['GET'])]
+    public function orderStatus(string $sessionId, EntityManagerInterface $em): Response
+    {
+        $order = $em->getRepository(Order::class)
+            ->findOneBy(['stripeSessionId' => $sessionId]);
+
+        if (!$order) {
+            return $this->json(['ok' => false, 'message' => 'Order not found'], 404);
+        }
+
+        return $this->json(['ok' => true, 'status' => $order->getStatus()]);
     }
 
     #[Route('/cancel', name: 'stripe_cancel')]
@@ -102,32 +117,55 @@ final class StripeController extends AbstractController
     }
 
     #[Route('/webhook', name: 'stripe_webhook', methods: ['POST'])]
-    public function webhook(Request $request, EntityManagerInterface $em): Response
+    public function webhook(Request $request, EntityManagerInterface $em, \Psr\Log\LoggerInterface $logger): Response
     {
         $payload = $request->getContent();
         $sigHeader = $request->headers->get('Stripe-Signature');
-        $endpointSecret = $_ENV['STRIPE_WEBHOOK_SECRET'];
+        $endpointSecret = $_ENV['STRIPE_WEBHOOK_SECRET'] ?? null;
+
+        $logger->info('Stripe webhook received', ['hasSig' => $sigHeader !== null, 'endpointSecretSet' => (bool) $endpointSecret]);
 
         try {
-            $event = Webhook::constructEvent(
-                $payload,
-                $sigHeader,
-                $endpointSecret
-            );
+            if ($endpointSecret) {
+                $event = Webhook::constructEvent(
+                    $payload,
+                    $sigHeader,
+                    $endpointSecret
+                );
+            } else {
+                // Fallback: try to decode payload without signature (useful for local testing only)
+                $event = json_decode($payload);
+                if (!$event) {
+                    throw new \RuntimeException('Invalid payload');
+                }
+            }
         } catch (\Exception $e) {
+            $logger->error('Invalid Stripe webhook: ' . $e->getMessage());
             return new Response('Invalid webhook', 400);
         }
 
-        if ($event->type === 'checkout.session.completed') {
+        // Handle checkout.session.completed
+        $type = is_object($event) && isset($event->type) ? $event->type : ($event['type'] ?? null);
+        $logger->info('Stripe event type', ['type' => $type]);
 
-            $session = $event->data->object;
+        if ($type === 'checkout.session.completed' || ($event->type ?? null) === 'checkout.session.completed') {
+            $session = is_object($event) ? $event->data->object : $event['data']['object'];
+
+            $logger->info('checkout.session.completed received', ['session_id' => $session->id ?? null]);
 
             $order = $em->getRepository(Order::class)
                 ->findOneBy(['stripeSessionId' => $session->id]);
 
-            if ($order && $order->getStatus() !== 'paid') {
-                $order->setStatus('paid');
-                $em->flush();
+            if (!$order) {
+                $logger->warning('Order not found for session', ['session_id' => $session->id ?? null]);
+            } else {
+                if ($order->getStatus() !== 'paid') {
+                    $order->setStatus('paid');
+                    $em->flush();
+                    $logger->info('Order status updated to paid', ['order_id' => $order->getId()]);
+                } else {
+                    $logger->info('Order already paid', ['order_id' => $order->getId()]);
+                }
             }
         }
 

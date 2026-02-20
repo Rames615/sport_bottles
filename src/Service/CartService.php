@@ -73,8 +73,20 @@ class CartService
 
         $this->em->persist($cartItem);
         $this->em->flush();
-        
+
         return true;
+    }
+
+    // Clear all items from the cart
+    public function clear(User $user): void
+    {
+        $cart = $this->getCartWithItems($user);
+
+        foreach ($cart->getItems() as $item) {
+            $cart->removeItem($item);
+        }
+
+        $this->em->flush();
     }
 
     public function getCartWithItems(User $user): Cart
