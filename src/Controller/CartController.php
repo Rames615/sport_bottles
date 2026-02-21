@@ -184,7 +184,7 @@ class CartController extends AbstractController
             return $this->redirectToRoute('app_cartindex');
         }
 
-        // 1️⃣ Création de la commande
+        // 1️Création de la commande
         $order = new Order();
         $order->setUser($user);
         // store amount in cents as integer
@@ -193,16 +193,16 @@ class CartController extends AbstractController
         $order->setStatus('pending');
         $order->setCreatedAt(new \DateTimeImmutable());
 
-        // 2️⃣ Sauvegarde en base
+        // Sauvegarde en base
         $entityManager->persist($order);
         $entityManager->flush();
 
-        // 3️⃣ Vider le panier
+        // Vider le panier
         $this->cartService->clear($user);
 
-        // ✅ 4️⃣ Ajouter le message
+        // Ajouter le message
         $this->addFlash('success', 'Merci d’avoir passé commande sur le site Sports Bottles.');
 
-        return $this->redirectToRoute('app_cartindex');
+        return $this->redirectToRoute('app_home');
     }
 }
