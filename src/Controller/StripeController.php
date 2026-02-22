@@ -18,8 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class StripeController extends AbstractController
 {
-    #[Route('/checkout', name: 'stripe_checkout')]
-    public function checkout(EntityManagerInterface $em): RedirectResponse
+    public function __construct(
+        private \App\Service\CartService $cartService,
+    ) {}
+
+    #[Route('/stripe/checkout', name: 'stripe_checkout')]
+    public function checkout(Request $request, EntityManagerInterface $em): RedirectResponse
     {
         $user = $this->getUser();
 
@@ -27,8 +31,20 @@ final class StripeController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        // Montant en centimes
-        $totalAmount = 5000;
+        if (!$this->isCsrfTokenValid('stripe_checkout', $request->request->get('_token'))) {
+            $this->addFlash('error', 'Token de sécurité invalide.');
+            return $this->redirectToRoute('app_cartindex');
+        }
+
+        // Get actual cart total from CartService
+        $checkoutResult = $this->cartService->prepareCheckout($user);
+        if (!$checkoutResult['ok']) {
+            $this->addFlash('error', $checkoutResult['message'] ?? 'Panier vide ou invalide');
+            return $this->redirectToRoute('app_cartindex');
+        }
+
+        $cart = $checkoutResult['cart'];
+        $totalAmount = (int) round($checkoutResult['total'] * 100); // Convert to cents
 
         $order = new Order();
         $order->setUser($user);
@@ -42,18 +58,27 @@ final class StripeController extends AbstractController
         // ✅ On utilise directement .env
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
+        // Build line items from cart
+        $lineItems = [];
+        foreach ($cart->getItems() as $item) {
+            $product = $item->getProduct();
+            if ($product) {
+                $lineItems[] = [
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'product_data' => [
+                            'name' => $product->getDesignation(),
+                        ],
+                        'unit_amount' => (int) round((float) $item->getUnitPrice() * 100),
+                    ],
+                    'quantity' => $item->getQuantity(),
+                ];
+            }
+        }
+
         $session = Session::create([
             'payment_method_types' => ['card'],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'eur',
-                    'product_data' => [
-                        'name' => 'Commande Sports Bottles',
-                    ],
-                    'unit_amount' => $totalAmount,
-                ],
-                'quantity' => 1,
-            ]],
+            'line_items' => $lineItems,
             'mode' => 'payment',
             'success_url' => $this->generateUrl(
                 'stripe_success',
@@ -79,7 +104,7 @@ final class StripeController extends AbstractController
         $sessionId = $request->query->get('session_id');
 
         if (!$sessionId) {
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('app_home');
         }
 
         $order = $em->getRepository(Order::class)
@@ -89,12 +114,41 @@ final class StripeController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        // ⚠️ La vraie validation se fait via webhook. We render a success page
-        // which will poll for the final order status and show a popup when paid.
+        // If order is already paid (webhook processed quickly), redirect to completion
+        if ($order->getStatus() === 'paid') {
+            return $this->redirectToRoute('stripe_payment_complete', ['orderId' => $order->getId()]);
+        }
+
+        // Otherwise show polling page waiting for webhook
         return $this->render('stripe/success.html.twig', [
             'order' => $order,
             'sessionId' => $sessionId,
         ]);
+    }
+
+    #[Route('/payment-complete/{orderId}', name: 'stripe_payment_complete')]
+    public function paymentComplete(int $orderId, EntityManagerInterface $em): RedirectResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        $order = $em->getRepository(Order::class)->find($orderId);
+        if (!$order || $order->getUser()?->getId() !== $user->getId()) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        // Only process if order is actually paid
+        if ($order->getStatus() === 'paid') {
+            // Clear the user's cart
+            $this->cartService->clear($user);
+
+            // Add success flash message
+            $this->addFlash('success', 'Merci d\'avoir passé commande sur le site Sports Bottles. Votre paiement a été confirmé.');
+        }
+
+        return $this->redirectToRoute('app_home');
     }
 
     #[Route('/order-status/{sessionId}', name: 'stripe_order_status', methods: ['GET'])]

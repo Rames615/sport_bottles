@@ -102,7 +102,8 @@
                         <span class="d-block" style="font-size: 1.8rem;">{{ total|number_format(2, ',', ' ') }} €</span>
                     </div>
                     
-                    <form action="/stripe/checkout" method="post" class="mb-2">
+                    <form action="{{ path('stripe_checkout') }}" method="post" class="mb-2">
+                        <input type="hidden" name="_token" value="{{ csrf_token('stripe_checkout') }}">
                         <button type="submit" class="btn btn-success w-100">
                             <i class="bi bi-credit-card"></i>
                             Payer {{ total|number_format(2, ',', ' ') }} €
