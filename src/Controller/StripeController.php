@@ -98,7 +98,7 @@ final class StripeController extends AbstractController
         return new RedirectResponse($session->url);
     }
 
-    #[Route('/success', name: 'stripe_success')]
+    #[Route('/stripe/success', name: 'stripe_success')]
     public function success(Request $request, EntityManagerInterface $em): Response
     {
         $sessionId = $request->query->get('session_id');
@@ -126,7 +126,7 @@ final class StripeController extends AbstractController
         ]);
     }
 
-    #[Route('/payment-complete/{orderId}', name: 'stripe_payment_complete')]
+    #[Route('/stripe/payment-complete/{orderId}', name: 'stripe_payment_complete')]
     public function paymentComplete(int $orderId, EntityManagerInterface $em): RedirectResponse
     {
         $user = $this->getUser();
@@ -151,7 +151,7 @@ final class StripeController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-    #[Route('/order-status/{sessionId}', name: 'stripe_order_status', methods: ['GET'])]
+    #[Route('/stripe/order-status/{sessionId}', name: 'stripe_order_status', methods: ['GET'])]
     public function orderStatus(string $sessionId, EntityManagerInterface $em): Response
     {
         $order = $em->getRepository(Order::class)
@@ -164,13 +164,13 @@ final class StripeController extends AbstractController
         return $this->json(['ok' => true, 'status' => $order->getStatus()]);
     }
 
-    #[Route('/cancel', name: 'stripe_cancel')]
+    #[Route('/stripe/cancel', name: 'stripe_cancel')]
     public function cancel(): Response
     {
         return $this->render('stripe/cancel.html.twig');
     }
 
-    #[Route('/webhook', name: 'stripe_webhook', methods: ['POST'])]
+    #[Route('/stripe/webhook', name: 'stripe_webhook', methods: ['POST'])]
     public function webhook(Request $request, EntityManagerInterface $em, \Psr\Log\LoggerInterface $logger): Response
     {
         $payload = $request->getContent();
