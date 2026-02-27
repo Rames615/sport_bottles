@@ -1,0 +1,291 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande confirmée — Sports Bottles{% endblock %}
+
+{% block body %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap');
+
+    .complete-wrapper {
+        min-height: 100vh;
+        background: #f0f4f8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 16px;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .complete-card {
+        background: #ffffff;
+        border-radius: 24px;
+        max-width: 560px;
+        width: 100%;
+        padding: 56px 48px 48px;
+        box-shadow: 0 8px 48px rgba(0,0,0,0.10);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .complete-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #1a8a5a, #34d18a);
+    }
+
+    /* Animated checkmark */
+    .checkmark-circle {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1a8a5a, #34d18a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 32px;
+        animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        box-shadow: 0 12px 32px rgba(26, 138, 90, 0.3);
+    }
+
+    @keyframes popIn {
+        0%   { transform: scale(0); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .checkmark-circle svg {
+        animation: drawCheck 0.4s ease 0.3s both;
+    }
+
+    @keyframes drawCheck {
+        0%   { opacity: 0; transform: scale(0.5); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+    .complete-title {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 2.6rem;
+        letter-spacing: 1px;
+        color: #0f1923;
+        margin-bottom: 10px;
+        animation: fadeUp 0.4s ease 0.2s both;
+    }
+
+    .complete-subtitle {
+        color: #6b7a8d;
+        font-size: 1rem;
+        margin-bottom: 36px;
+        line-height: 1.6;
+        animation: fadeUp 0.4s ease 0.3s both;
+    }
+
+    @keyframes fadeUp {
+        0%   { opacity: 0; transform: translateY(14px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Order details box */
+    .order-details {
+        background: #f7f9fb;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 32px;
+        text-align: left;
+        animation: fadeUp 0.4s ease 0.4s both;
+        border: 1px solid #e8edf2;
+    }
+
+    .order-details-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #e8edf2;
+        font-size: 0.95rem;
+    }
+
+    .order-details-row:last-child {
+        border-bottom: none;
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: #0f1923;
+        padding-top: 14px;
+    }
+
+    .order-details-row .label {
+        color: #6b7a8d;
+        font-weight: 500;
+    }
+
+    .order-details-row .value {
+        color: #0f1923;
+        font-weight: 600;
+    }
+
+    .badge-paid {
+        background: #e6f9f1;
+        color: #1a8a5a;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    /* Buttons */
+    .btn-home {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #1a8a5a, #34d18a);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 32px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        animation: fadeUp 0.4s ease 0.5s both;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 16px rgba(26, 138, 90, 0.25);
+    }
+
+    .btn-home:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(26, 138, 90, 0.35);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .btn-orders {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: transparent;
+        color: #1a8a5a;
+        border: 2px solid #1a8a5a;
+        border-radius: 12px;
+        padding: 13px 32px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.18s ease, color 0.18s ease;
+        animation: fadeUp 0.4s ease 0.55s both;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-orders:hover {
+        background: #1a8a5a;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    /* Confetti dots */
+    .confetti {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .dot {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0;
+        animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+        0%   { opacity: 1; transform: translateY(-10px) rotate(0deg); }
+        100% { opacity: 0; transform: translateY(120px) rotate(360deg); }
+    }
+</style>
+
+<div class="complete-wrapper">
+    <div class="complete-card">
+        <!-- Confetti -->
+        <div class="confetti" id="confetti"></div>
+
+        <!-- Check icon -->
+        <div class="checkmark-circle">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <path d="M10 20L17 27L30 13" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+
+        <h1 class="complete-title">Commande confirmée!</h1>
+        <p class="complete-subtitle">
+            Votre paiement a été accepté et votre commande est en cours de préparation.<br>
+            Vous recevrez une confirmation par e-mail.
+        </p>
+
+        <!-- Order Details -->
+        <div class="order-details">
+            <div class="order-details-row">
+                <span class="label"><i class="bi bi-hash"></i> Référence</span>
+                <span class="value">Commande #{{ order.id }}</span>
+            </div>
+            <div class="order-details-row">
+                <span class="label"><i class="bi bi-calendar3"></i> Date</span>
+                <span class="value">{{ order.createdAt|date('d/m/Y à H:i') }}</span>
+            </div>
+            <div class="order-details-row">
+                <span class="label"><i class="bi bi-credit-card"></i> Statut paiement</span>
+                <span class="badge-paid"><i class="bi bi-check-circle-fill"></i> Payé</span>
+            </div>
+            <div class="order-details-row">
+                <span class="label">Total payé</span>
+                <span class="value">{{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} €</span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <a href="{{ path('app_home') }}" class="btn-home">
+            <i class="bi bi-house-fill"></i> Retour à l'accueil
+        </a>
+        {# Uncomment if you have an orders history route:
+        <a href="{{ path('app_orders') }}" class="btn-orders">
+            <i class="bi bi-bag-check"></i> Voir mes commandes
+        </a>
+        #}
+    </div>
+</div>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+<script>
+    // Confetti burst on load
+    (function() {
+        const colors = ['#1a8a5a', '#34d18a', '#fbbf24', '#60a5fa', '#f472b6', '#a78bfa'];
+        const container = document.getElementById('confetti');
+        const count = 30;
+
+        for (let i = 0; i < count; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            const size = Math.random() * 8 + 5;
+            dot.style.cssText = `
+                width: ${size}px;
+                height: ${size}px;
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 30}%;
+                animation-duration: ${Math.random() * 1.5 + 0.8}s;
+                animation-delay: ${Math.random() * 0.6}s;
+            `;
+            container.appendChild(dot);
+        }
+    })();
+</script>
+{% endblock %}

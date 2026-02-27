@@ -16,6 +16,9 @@ class CartService
         private CartRepository $cartRepository
     ) {}
 
+    /**
+     * Récupère le panier de l'utilisateur, ou en crée un nouveau s'il n'existe pas.
+     */
     public function getCart(User $user): Cart
     {
         $cart = $this->cartRepository->findOneBy(['user' => $user]);
@@ -29,43 +32,50 @@ class CartService
         return $cart;
     }
 
+    /**
+     * Ajoute un produit au panier de l'utilisateur.
+     * Retourne true en cas de succès, false si le stock est insuffisant.
+     */
     public function addProduct(User $user, Product $product): bool
     {
         $cart = $this->getCart($user);
 
-        // Check stock - if stock is null, treat as unlimited; otherwise validate
-        $available = $product->getStock();
-        $available = $available === null ? PHP_INT_MAX : $available;
-        if ($available <= 0) {
-            // no stock available
+        // Vérifie le stock — null signifie stock illimité
+        $stockDisponible = $product->getStock();
+        $stockDisponible = $stockDisponible === null ? PHP_INT_MAX : $stockDisponible;
+
+        if ($stockDisponible <= 0) {
+            // Aucun stock disponible
             return false;
         }
 
-        // Ensure items are loaded with proper joins
+        // Charge les articles du panier avec les jointures appropriées
         $cart = $this->getCartWithItems($user);
 
-        // Check if product already exists in cart
+        // Vérifie si le produit est déjà présent dans le panier
         foreach ($cart->getItems() as $cartItem) {
-            $existingProduct = $cartItem->getProduct();
-            if ($existingProduct && $existingProduct->getId() === $product->getId()) {
-                $currentQty = $cartItem->getQuantity() ?? 0;
-                // validate against stock
-                if ($currentQty + 1 > $available) {
-                    // cannot add more than stock
+            $produitExistant = $cartItem->getProduct();
+            if ($produitExistant && $produitExistant->getId() === $product->getId()) {
+                $quantiteActuelle = $cartItem->getQuantity() ?? 0;
+
+                // Vérifie que la nouvelle quantité ne dépasse pas le stock
+                if ($quantiteActuelle + 1 > $stockDisponible) {
                     return false;
                 }
-                $cartItem->setQuantity($currentQty + 1);
+
+                $cartItem->setQuantity($quantiteActuelle + 1);
                 $cart->setUpdatedAt(new \DateTimeImmutable());
                 $this->em->flush();
+
                 return true;
             }
         }
 
-        // create new cart item
+        // Crée un nouvel article dans le panier
         $cartItem = new CartItem();
         $cartItem->setProduct($product);
         $cartItem->setQuantity(1);
-        // store the unit price at time of adding
+        // Stocke le prix unitaire au moment de l'ajout
         $cartItem->setUnitPrice((string) $product->getPrice());
 
         $cart->addItem($cartItem);
@@ -77,137 +87,174 @@ class CartService
         return true;
     }
 
-    // Clear all items from the cart
+    /**
+     * Supprime tous les articles du panier de l'utilisateur.
+     */
     public function clear(User $user): void
     {
         $cart = $this->getCartWithItems($user);
 
-        foreach ($cart->getItems() as $item) {
-            $cart->removeItem($item);
+        foreach ($cart->getItems() as $article) {
+            $cart->removeItem($article);
         }
 
         $this->em->flush();
     }
 
+    /**
+     * Récupère le panier avec ses articles chargés via jointure.
+     * Crée un panier vide si aucun n'existe.
+     */
     public function getCartWithItems(User $user): Cart
     {
         $cart = $this->cartRepository->findCartWithItems($user);
 
         if (!$cart) {
-            // retourne ou crée un panier vide pour respecter le type de retour
             return $this->getCart($user);
         }
 
         return $cart;
     }
 
+    /**
+     * Supprime un article du panier par son identifiant.
+     * Ignore l'opération si l'article est introuvable ou n'appartient pas à l'utilisateur.
+     */
     public function removeItemById(User $user, int $itemId): void
     {
-        $item = $this->em->getRepository(CartItem::class)->find($itemId);
-        if (!$item) {
+        $article = $this->em->getRepository(CartItem::class)->find($itemId);
+
+        if (!$article) {
             return;
         }
 
-        $cart = $item->getCart();
+        $cart = $article->getCart();
+
+        // Vérifie que l'article appartient bien au panier de l'utilisateur
         if (!$cart || $cart->getUser()?->getId() !== $user->getId()) {
-            // item does not belong to user's cart; ignore
             return;
         }
 
-        $cart->removeItem($item);
+        $cart->removeItem($article);
         $cart->setUpdatedAt(new \DateTimeImmutable());
-        $this->em->remove($item);
+        $this->em->remove($article);
         $this->em->flush();
     }
 
+    /**
+     * Met à jour la quantité d'un article dans le panier.
+     * Supprime l'article si la quantité est inférieure ou égale à zéro.
+     * Ignore l'opération si la quantité dépasse le stock disponible.
+     */
     public function updateItemQuantity(User $user, int $itemId, int $quantity): void
     {
-        $item = $this->em->getRepository(CartItem::class)->find($itemId);
-        if (!$item) {
+        $article = $this->em->getRepository(CartItem::class)->find($itemId);
+
+        if (!$article) {
             return;
         }
 
-        $cart = $item->getCart();
+        $cart = $article->getCart();
+
+        // Vérifie que l'article appartient bien au panier de l'utilisateur
         if (!$cart || $cart->getUser()?->getId() !== $user->getId()) {
             return;
         }
 
+        // Supprime l'article si la quantité demandée est nulle ou négative
         if ($quantity <= 0) {
             $this->removeItemById($user, $itemId);
             return;
         }
 
-        // validate against stock
-        $product = $item->getProduct();
-        $available = $product?->getStock();
-        $available = $available === null ? PHP_INT_MAX : $available;
-        if ($quantity > $available) {
-            // cannot set quantity beyond stock
+        // Vérifie que la quantité ne dépasse pas le stock disponible
+        $produit = $article->getProduct();
+        $stockDisponible = $produit?->getStock();
+        $stockDisponible = $stockDisponible === null ? PHP_INT_MAX : $stockDisponible;
+
+        if ($quantity > $stockDisponible) {
             return;
         }
 
-        $item->setQuantity($quantity);
+        $article->setQuantity($quantity);
         $cart->setUpdatedAt(new \DateTimeImmutable());
         $this->em->flush();
     }
 
     /**
-     * Prepare cart for checkout: validate prices and non-empty
-     * Returns array with status and message or prepared data
-     */
-    /**
-     * Prepare cart for checkout: validate prices and non-empty
-     * Returns array with status and message or prepared data
+     * Prépare le panier pour le passage en caisse :
+     * vérifie que le panier n'est pas vide et recalcule les prix si nécessaire.
      *
      * @return array{ok: bool, total?: float, cart?: Cart, message?: string}
      */
     public function prepareCheckout(User $user): array
     {
         $cart = $this->getCartWithItems($user);
-        $items = $cart->getItems();
+        $articles = $cart->getItems();
 
-        if ($items->isEmpty()) {
+        if ($articles->isEmpty()) {
             return ['ok' => false, 'message' => 'Panier vide'];
         }
 
         $total = 0.0;
-        foreach ($items as $item) {
-            $product = $item->getProduct();
-            if (!$product) {
+
+        foreach ($articles as $article) {
+            $produit = $article->getProduct();
+
+            if (!$produit) {
                 return ['ok' => false, 'message' => 'Produit introuvable dans le panier'];
             }
 
-            // Validate unit price hasn't been tampered with
-            $currentPrice = (float) $product->getPrice();
-            $storedUnit = (float) $item->getUnitPrice();
-            if (abs($currentPrice - $storedUnit) > 0.001) {
-                // update stored price to current and continue
-                $item->setUnitPrice((string) $product->getPrice());
+            // Met à jour le prix unitaire stocké si le prix du produit a changé
+            $prixActuel = (float) $produit->getPrice();
+            $prixStocke = (float) $article->getUnitPrice();
+
+            if (abs($prixActuel - $prixStocke) > 0.001) {
+                $article->setUnitPrice((string) $produit->getPrice());
             }
 
-            $total += $item->getSubtotal();
+            $total += $article->getSubtotal();
         }
 
-        // taxes/discounts can be applied here
+        // Les taxes et remises peuvent être appliquées ici
         return ['ok' => true, 'total' => $total, 'cart' => $cart];
     }
 
+    /**
+     * Confirme le paiement d'une commande et vide automatiquement le panier.
+     * Doit être appelée une fois le paiement validé avec succès.
+     */
+    public function confirmPayment(User $user): void
+    {
+        $this->clear($user);
+    }
+
+    /**
+     * Calcule le montant total du panier.
+     */
     public function getCartTotal(Cart $cart): float
     {
         $total = 0.0;
-        foreach ($cart->getItems() as $item) {
-            $total += (float) $item->getSubtotal();
+
+        foreach ($cart->getItems() as $article) {
+            $total += (float) $article->getSubtotal();
         }
+
         return $total;
     }
 
+    /**
+     * Retourne le nombre total d'articles dans le panier (toutes quantités confondues).
+     */
     public function getCartItemCount(User $user): int
     {
         $cart = $this->getCartWithItems($user);
         $count = 0;
-        foreach ($cart->getItems() as $item) {
-            $count += $item->getQuantity() ?? 0;
+
+        foreach ($cart->getItems() as $article) {
+            $count += $article->getQuantity() ?? 0;
         }
+
         return $count;
     }
 }

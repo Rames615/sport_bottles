@@ -7,7 +7,6 @@ use App\Entity\User;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Stripe\Webhook;
-use Stripe\PaymentIntent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,40 +35,40 @@ final class StripeController extends AbstractController
             return $this->redirectToRoute('app_cartindex');
         }
 
-        // Get actual cart total from CartService
         $checkoutResult = $this->cartService->prepareCheckout($user);
         if (!$checkoutResult['ok']) {
             $this->addFlash('error', $checkoutResult['message'] ?? 'Panier vide ou invalide');
             return $this->redirectToRoute('app_cartindex');
         }
 
-        $cart = $checkoutResult['cart'];
-        $totalAmount = (int) round($checkoutResult['total'] * 100); // Convert to cents
+        $cart  = $checkoutResult['cart'];
+        $total = (int) round($checkoutResult['total'] * 100);
 
         $order = new Order();
         $order->setUser($user);
-        $order->setTotalAmount($totalAmount);
+        $order->setTotalAmount($total);
         $order->setStatus('pending');
         $order->setCreatedAt(new \DateTimeImmutable());
 
         $em->persist($order);
         $em->flush();
 
-        // ✅ On utilise directement .env
-        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+        $stripeSecret = $_ENV['STRIPE_SECRET_KEY'] ?? null;
+        if (!$stripeSecret) {
+            $this->addFlash('error', 'Configuration Stripe manquante. Contactez l\'administrateur.');
+            return $this->redirectToRoute('app_cartindex');
+        }
+        Stripe::setApiKey($stripeSecret);
 
-        // Build line items from cart
         $lineItems = [];
         foreach ($cart->getItems() as $item) {
             $product = $item->getProduct();
             if ($product) {
                 $lineItems[] = [
                     'price_data' => [
-                        'currency' => 'eur',
-                        'product_data' => [
-                            'name' => $product->getDesignation(),
-                        ],
-                        'unit_amount' => (int) round((float) $item->getUnitPrice() * 100),
+                        'currency'     => 'eur',
+                        'product_data' => ['name' => $product->getDesignation()],
+                        'unit_amount'  => (int) round((float) $item->getUnitPrice() * 100),
                     ],
                     'quantity' => $item->getQuantity(),
                 ];
@@ -78,18 +77,10 @@ final class StripeController extends AbstractController
 
         $session = Session::create([
             'payment_method_types' => ['card'],
-            'line_items' => $lineItems,
-            'mode' => 'payment',
-            'success_url' => $this->generateUrl(
-                'stripe_success',
-                [],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            ) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => $this->generateUrl(
-                'stripe_cancel',
-                [],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            ),
+            'line_items'           => $lineItems,
+            'mode'                 => 'payment',
+            'success_url'          => $this->generateUrl('stripe_success', [], UrlGeneratorInterface::ABSOLUTE_URL) . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'           => $this->generateUrl('stripe_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
         ]);
 
         $order->setStripeSessionId($session->id);
@@ -102,63 +93,63 @@ final class StripeController extends AbstractController
     public function success(Request $request, EntityManagerInterface $em): Response
     {
         $sessionId = $request->query->get('session_id');
-
+    
         if (!$sessionId) {
             return $this->redirectToRoute('app_home');
         }
-
-        $order = $em->getRepository(Order::class)
-            ->findOneBy(['stripeSessionId' => $sessionId]);
-
+    
+        $order = $em->getRepository(Order::class)->findOneBy(['stripeSessionId' => $sessionId]);
+    
         if (!$order) {
-            throw $this->createNotFoundException();
+            throw $this->createNotFoundException('Commande introuvable.');
         }
-
-        // If order is already paid (webhook processed quickly), redirect to completion
-        if ($order->getStatus() === 'paid') {
-            return $this->redirectToRoute('stripe_payment_complete', ['orderId' => $order->getId()]);
+    
+        // Sync status with Stripe right now (one-time, on page load)
+        $stripeSecret = $_ENV['STRIPE_SECRET_KEY'] ?? null;
+        if ($stripeSecret) {
+            Stripe::setApiKey($stripeSecret);
+            try {
+                $stripeSession = Session::retrieve($sessionId);
+                if ($stripeSession->payment_status === 'paid' && $order->getStatus() !== 'paid') {
+                    $order->setStatus('paid');
+                    $em->flush();
+                }
+            } catch (\Exception $e) {
+                // Non-blocking: the JS polling will catch it
+            }
         }
-
-        // Otherwise show polling page waiting for webhook
+    
+        // Always render the template — JS polling handles the rest
         return $this->render('stripe/success.html.twig', [
-            'order' => $order,
+            'order'     => $order,
             'sessionId' => $sessionId,
         ]);
     }
-
-    #[Route('/stripe/payment-complete/{orderId}', name: 'stripe_payment_complete')]
-    public function paymentComplete(int $orderId, EntityManagerInterface $em): RedirectResponse
+     
+    // Endpoint pour le webhook Stripe (POST) et health check (GET)
+    #[Route('/stripe/payment-complete/{id}', name: 'stripe_payment_complete')]
+    public function paymentComplete(Order $order, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
-        if (!$user instanceof User) {
-            return $this->redirectToRoute('app_home');
+    
+        // Clear cart using user from order (session may be lost after Stripe redirect)
+        $userFromOrder = ($user instanceof User) ? $user : $order->getUser();
+    
+        if ($userFromOrder instanceof User) {
+            $this->cartService->clear($userFromOrder);
         }
-
-        $order = $em->getRepository(Order::class)->find($orderId);
-        if (!$order || $order->getUser()?->getId() !== $user->getId()) {
-            return $this->redirectToRoute('app_home');
-        }
-
-        // Only process if order is actually paid
-        if ($order->getStatus() === 'paid') {
-            // Clear the user's cart
-            $this->cartService->clear($user);
-
-            // Add success flash message
-            $this->addFlash('success', 'Merci d\'avoir passé commande sur le site Sports Bottles. Votre paiement a été confirmé.');
-        }
-
+    
+        $this->addFlash('success', 'Merci pour votre commande ! Paiement confirmé.');
         return $this->redirectToRoute('app_home');
     }
-
+    
     #[Route('/stripe/order-status/{sessionId}', name: 'stripe_order_status', methods: ['GET'])]
     public function orderStatus(string $sessionId, EntityManagerInterface $em): Response
     {
-        $order = $em->getRepository(Order::class)
-            ->findOneBy(['stripeSessionId' => $sessionId]);
+        $order = $em->getRepository(Order::class)->findOneBy(['stripeSessionId' => $sessionId]);
 
         if (!$order) {
-            return $this->json(['ok' => false, 'message' => 'Order not found'], 404);
+            return $this->json(['ok' => false, 'message' => 'Commande introuvable'], 404);
         }
 
         return $this->json(['ok' => true, 'status' => $order->getStatus()]);
@@ -170,59 +161,71 @@ final class StripeController extends AbstractController
         return $this->render('stripe/cancel.html.twig');
     }
 
-    #[Route('/stripe/webhook', name: 'stripe_webhook', methods: ['POST'])]
+    #[Route('/stripe/webhook', name: 'stripe_webhook', methods: ['POST', 'GET'])]
     public function webhook(Request $request, EntityManagerInterface $em, \Psr\Log\LoggerInterface $logger): Response
     {
-        $payload = $request->getContent();
-        $sigHeader = $request->headers->get('Stripe-Signature');
+        // Health check pour les tests locaux (Stripe CLI, etc.)
+        if ($request->getMethod() === 'GET') {
+            $logger->info('Stripe webhook health check (GET)');
+            return new Response('Webhook endpoint OK', 200);
+        }
+
+        $payload        = $request->getContent();
+        $sigHeader      = $request->headers->get('Stripe-Signature');
         $endpointSecret = $_ENV['STRIPE_WEBHOOK_SECRET'] ?? null;
 
-        $logger->info('Stripe webhook received', ['hasSig' => $sigHeader !== null, 'endpointSecretSet' => (bool) $endpointSecret]);
+        $logger->info('Stripe webhook reçu', ['signature' => $sigHeader]);
+        $logger->debug('Payload brut webhook', ['payload' => $payload]);
 
         try {
             if ($endpointSecret) {
-                $event = Webhook::constructEvent(
-                    $payload,
-                    $sigHeader,
-                    $endpointSecret
-                );
+                $event = Webhook::constructEvent($payload, $sigHeader, $endpointSecret);
             } else {
-                // Fallback: try to decode payload without signature (useful for local testing only)
-                $event = json_decode($payload);
+                $logger->warning('STRIPE_WEBHOOK_SECRET absent — traitement sans vérification de signature');
+                $event = json_decode($payload, true);
                 if (!$event) {
-                    throw new \RuntimeException('Invalid payload');
+                    throw new \RuntimeException('Payload invalide');
                 }
             }
+        } catch (\UnexpectedValueException | \DomainException $e) {
+            $logger->error('Webhook Stripe invalide : ' . $e->getMessage());
+            return new Response('Webhook invalide', 400);
         } catch (\Exception $e) {
-            $logger->error('Invalid Stripe webhook: ' . $e->getMessage());
-            return new Response('Invalid webhook', 400);
+            $logger->error('Erreur lors du traitement du webhook Stripe : ' . $e->getMessage());
+            return new Response('Erreur serveur', 500);
         }
 
-        // Handle checkout.session.completed
         $type = is_object($event) && isset($event->type) ? $event->type : ($event['type'] ?? null);
-        $logger->info('Stripe event type', ['type' => $type]);
+        $logger->info('Stripe event', ['type' => $type, 'id' => is_object($event) ? $event->id ?? null : ($event['id'] ?? null)]);
 
-        if ($type === 'checkout.session.completed' || ($event->type ?? null) === 'checkout.session.completed') {
+        if ($type === 'checkout.session.completed') {
             $session = is_object($event) ? $event->data->object : $event['data']['object'];
+            $order   = $em->getRepository(Order::class)->findOneBy(['stripeSessionId' => $session->id]);
 
-            $logger->info('checkout.session.completed received', ['session_id' => $session->id ?? null]);
+            if ($order && $order->getStatus() !== 'paid') {
+                $order->setStatus('paid');
+                $em->flush();
+                $logger->info('Commande payée via webhook', ['order_id' => $order->getId()]);
+            }
+        }
 
-            $order = $em->getRepository(Order::class)
-                ->findOneBy(['stripeSessionId' => $session->id]);
+        if ($type === 'payment_intent.payment_failed') {
+            $pi = is_object($event) ? $event->data->object : $event['data']['object'];
+            $logger->warning('Paiement échoué', ['payment_intent' => $pi->id ?? ($pi['id'] ?? null)]);
 
-            if (!$order) {
-                $logger->warning('Order not found for session', ['session_id' => $session->id ?? null]);
-            } else {
-                if ($order->getStatus() !== 'paid') {
-                    $order->setStatus('paid');
-                    $em->flush();
-                    $logger->info('Order status updated to paid', ['order_id' => $order->getId()]);
-                } else {
-                    $logger->info('Order already paid', ['order_id' => $order->getId()]);
+            if (isset($pi->metadata) || isset($pi['metadata'])) {
+                $metadata = is_object($pi) ? $pi->metadata : $pi['metadata'];
+                if (!empty($metadata['order_id'])) {
+                    $order = $em->getRepository(Order::class)->find($metadata['order_id']);
+                    if ($order) {
+                        $order->setStatus('failed');
+                        $em->flush();
+                        $logger->info('Commande marquée failed via webhook', ['order_id' => $order->getId()]);
+                    }
                 }
             }
         }
 
-        return new Response('Webhook handled', 200);
+        return new Response('Webhook traité', 200);
     }
 }
