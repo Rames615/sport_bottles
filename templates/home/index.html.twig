@@ -39,14 +39,14 @@
 		</a>
 	</section>
 
-	<!-- Best Sellers Section -->
+	<!-- Promotions Section -->
 	<section class="bestsellers-section" id="products">
 		<div class="container-main">
-			<h2 class="section-title">Best Sellers</h2>
+			<h2 class="section-title">🔥 Nos promotions du moment</h2>
 			<div class="products-grid">
 				{% for product in bottles %}
 					<div class="product-card">
-						<div class="product-badge">Best Seller</div>
+						<div class="product-badge text-center">En promotion</div>
 						<div class="product-image-wrapper">
 							{% if product.imgPath %}
 								<img src="{{ asset('products_images/' ~ product.category.slug ~ '/' ~ product.imgPath) }}" alt="{{ product.designation }}" class="product-image" onerror="this.src='{{ asset('images/placeholder.png') }}'">

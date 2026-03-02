@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande confirmée — Sports Bottles{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+<style>
+    @keyframes popIn {
+        0%   { transform: scale(0); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeUp {
+        0%   { opacity: 0; transform: translateY(16px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fall {
+        0%   { opacity: 1; transform: translateY(-10px) rotate(0deg); }
+        100% { opacity: 0; transform: translateY(130px) rotate(360deg); }
+    }
+    .pop-in  { animation: popIn  .5s cubic-bezier(.175,.885,.32,1.275) both; }
+    .fade-up { animation: fadeUp .45s ease both; }
+    .delay-1 { animation-delay: .15s; }
+    .delay-2 { animation-delay: .25s; }
+    .delay-3 { animation-delay: .35s; }
+    .delay-4 { animation-delay: .45s; }
+
+    .btn-primary-green {
+        background: linear-gradient(135deg,#1a8a5a,#34d18a);
+        border: none;
+        color: #fff;
+        transition: opacity .2s, transform .2s;
+    }
+    .btn-primary-green:hover {
+        opacity: .92;
+        transform: translateY(-2px);
+        color: #fff;
+    }
+    .dot {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0;
+        animation: fall linear forwards;
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center"
+     style="min-height:100vh;padding-top:80px;padding-bottom:60px;">
+    <div class="col-12 col-md-8 col-lg-5">
+
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden position-relative">
+
+            <!-- Accent bar -->
+            <div style="height:5px;background:linear-gradient(90deg,#1a8a5a,#34d18a);"></div>
+
+            <!-- Confetti container -->
+            <div id="confetti" class="position-absolute top-0 start-0 w-100 h-100"
+                 style="pointer-events:none;overflow:hidden;"></div>
+
+            <div class="card-body p-4 p-md-5 text-center">
+
+                <!-- Animated check -->
+                <div class="pop-in rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow-sm"
+                     style="width:88px;height:88px;background:linear-gradient(135deg,#1a8a5a,#34d18a);">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <path d="M10 20L17 27L30 13" stroke="white" stroke-width="3.5"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <h1 class="fw-bold h3 mb-1 fade-up delay-1" style="color:#0f1923;">Commande confirmée !</h1>
+                <p class="text-muted mb-4 fade-up delay-2">
+                    Votre paiement a été accepté. Vous recevrez<br>une confirmation par e-mail.
+                </p>
+
+                <!-- Order summary box -->
+                <div class="rounded-3 text-start mb-4 fade-up delay-3"
+                     style="background:#f7f9fb;border:1px solid #e8edf2;padding:20px 24px;">
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted small">Référence</span>
+                        <span class="fw-semibold small">Commande #{{ order.id }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted small">Date</span>
+                        <span class="fw-semibold small">{{ order.createdAt|date('d/m/Y à H:i') }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                        <span class="text-muted small">Statut</span>
+                        <span class="badge rounded-pill bg-success" style="font-size:.8rem;">
+                            <i class="bi bi-check-circle-fill me-1"></i>Payé
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pt-3 mt-1">
+                        <span class="fw-bold" style="color:#0f1923;">Total payé</span>
+                        <span class="fw-bold fs-5" style="color:#1a8a5a;">
+                            {{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} €
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="fade-up delay-4">
+                    <a href="{{ path('app_home') }}"
+                       class="btn btn-primary-green w-100 rounded-3 py-3 fw-semibold mb-2">
+                        <i class="bi bi-house-fill me-2"></i>Retour à l'accueil
+                    </a>
+                    {#
+                    <a href="{{ path('app_orders') }}"
+                       class="btn btn-outline-success w-100 rounded-3 py-2 fw-semibold">
+                        <i class="bi bi-bag-check me-2"></i>Voir mes commandes
+                    </a>
+                    #}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="text-center mt-3 text-muted small">
+            <i class="bi bi-shield-lock-fill text-success me-1"></i>
+            Paiement sécurisé par <strong>Stripe</strong>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    const colors = ['#1a8a5a','#34d18a','#fbbf24','#60a5fa','#f472b6','#a78bfa'];
+    const wrap   = document.getElementById('confetti');
+    for (let i = 0; i < 32; i++) {
+        const d = document.createElement('div');
+        d.className = 'dot';
+        const size = Math.random() * 8 + 5;
+        Object.assign(d.style, {
+            width:            size + 'px',
+            height:           size + 'px',
+            background:       colors[Math.floor(Math.random() * colors.length)],
+            left:             Math.random() * 100 + '%',
+            top:              Math.random() * 40 + '%',
+            animationDuration: (Math.random() * 1.4 + 0.7) + 's',
+            animationDelay:   (Math.random() * 0.5) + 's',
+        });
+        wrap.appendChild(d);
+    }
+})();
+</script>
+
+{% endblock %}

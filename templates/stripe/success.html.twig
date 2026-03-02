@@ -1,111 +1,145 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiement terminé — Sports Bottles{% endblock %}
+{% block title %}Paiement en cours — Sports Bottles{% endblock %}
 
 {% block body %}
-<div class="container" style="margin-top:100px;">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <!-- Success Alert -->
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <h4 class="alert-heading"><i class="bi bi-check-circle"></i> Merci pour votre commande!</h4>
-                <p>Votre commande a été créée et le paiement est en cours de traitement.</p>
-            </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-            <!-- Order Details Card -->
-            <div class="card p-4 mt-3">
-                <h5><i class="bi bi-info-circle"></i> Détails de votre commande</h5>
-                <hr>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <p><strong>Référence:</strong></p>
-                        <p class="text-muted">Commande #{{ order.id }}</p>
+<div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;padding-top:80px;padding-bottom:60px;">
+    <div class="col-12 col-md-8 col-lg-6">
+
+        <!-- Status card -->
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+            <!-- Top accent bar -->
+            <div style="height:5px;background:linear-gradient(90deg,#1a8a5a,#34d18a);"></div>
+
+            <div class="card-body p-4 p-md-5">
+
+                <!-- Animated spinner / check area -->
+                <div class="text-center mb-4">
+                    <div id="status-icon"
+                         class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                         style="width:80px;height:80px;background:#e8f5e9;">
+                        <div class="spinner-border text-success" role="status" style="width:2rem;height:2rem;">
+                            <span class="visually-hidden">Chargement...</span>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <p><strong>Montant:</strong></p>
-                        <p class="text-muted">{{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} €</p>
+                    <h2 class="fw-bold h4 mb-1" style="color:#0f1923;">Vérification du paiement</h2>
+                    <p class="text-muted small mb-0">Veuillez patienter, nous confirmons votre paiement…</p>
+                </div>
+
+                <!-- Order details -->
+                <div class="rounded-3 p-3 mb-4" style="background:#f7f9fb;border:1px solid #e8edf2;">
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted small">Référence</span>
+                        <span class="fw-semibold small">Commande #{{ order.id }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted small">Montant</span>
+                        <span class="fw-semibold small">{{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center py-2">
+                        <span class="text-muted small">Statut</span>
+                        <span id="order-status"
+                              class="badge rounded-pill {% if order.status == 'paid' %}bg-success{% else %}bg-warning text-dark{% endif %}"
+                              style="font-size:.8rem;">
+                            {{ order.status }}
+                        </span>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Statut:</strong></p>
-                        <p><span id="order-status" class="badge bg-warning">{{ order.status }}</span></p>
-                    </div>
+                <!-- Success message (hidden until paid) -->
+                <div id="validation-message" class="alert alert-success rounded-3 d-flex align-items-center gap-2 mb-4"
+                     style="display:none!important;">
+                    <i class="bi bi-check-circle-fill fs-5"></i>
+                    <span>Paiement confirmé ! Redirection en cours…</span>
                 </div>
 
-                <!-- Validation Message (shown when paid) -->
-                <div id="validation-message" style="display:none;" class="alert alert-success mt-3">
-                    <i class="bi bi-check-circle-fill"></i> Paiement confirmé! Votre commande est validée.
+                <!-- Timeout message (shown after max attempts) -->
+                <div id="timeout-message" class="alert alert-warning rounded-3 d-flex align-items-center gap-2 mb-4"
+                     style="display:none!important;">
+                    <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                    <span>La confirmation prend du temps. Vérifiez vos e-mails ou <a href="{{ path('app_home') }}">retournez à l'accueil</a>.</span>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="mt-4">
-                    <a href="{{ path('app_home') }}" class="btn btn-primary">
-                        <i class="bi bi-house"></i> Retour à l'accueil
+                <!-- Back link -->
+                <div class="text-center">
+                    <a href="{{ path('app_home') }}" class="text-muted small text-decoration-none">
+                        <i class="bi bi-house me-1"></i>Retour à l'accueil
                     </a>
                 </div>
             </div>
+        </div>
+
+        <!-- Stripe badge -->
+        <div class="text-center mt-3 text-muted small">
+            <i class="bi bi-shield-lock-fill text-success me-1"></i>
+            Paiement sécurisé par <strong>Stripe</strong>
         </div>
     </div>
 </div>
 
 <script>
-    (function() {
-        const sessionId = '{{ sessionId }}';
-        const orderId = {{ order.id }};
-        const statusEl = document.getElementById('order-status');
-        const messageEl = document.getElementById('validation-message');
+(function () {
+    const sessionId  = '{{ sessionId }}';
+    const orderId    = {{ order.id }};
+    const statusEl   = document.getElementById('order-status');
+    const iconEl     = document.getElementById('status-icon');
+    const messageEl  = document.getElementById('validation-message');
+    const timeoutEl  = document.getElementById('timeout-message');
 
-        // If order already paid, redirect immediately
-        if (statusEl && statusEl.textContent.trim() === 'paid') {
-            statusEl.classList.remove('bg-warning');
-            statusEl.classList.add('bg-success');
-            messageEl.style.display = 'block';
-            // Redirect to payment complete route after 2 seconds
-            setTimeout(() => {
-                window.location.href = `/stripe/payment-complete/${orderId}`;
-            }, 2000);
-            return;
-        }
+    function markPaid() {
+        // Swap spinner for check icon
+        iconEl.style.background = '#e8f5e9';
+        iconEl.innerHTML = '<i class="bi bi-check-circle-fill text-success" style="font-size:2.2rem;"></i>';
 
-        // Poll endpoint every 3 seconds for up to 20 times (~1 minute)
-        let attempts = 0;
-        const maxAttempts = 20;
-        const interval = 3000;
+        statusEl.textContent = 'paid';
+        statusEl.classList.remove('bg-warning', 'text-dark');
+        statusEl.classList.add('bg-success');
 
-        async function pollStatus() {
-            if (!sessionId) return;
-            try {
-                const res = await fetch(`/stripe/order-status/${encodeURIComponent(sessionId)}`);
-                if (!res.ok) return;
-                const data = await res.json();
-                if (data.ok && data.status) {
-                    statusEl.textContent = data.status;
-                    if (data.status === 'paid') {
-                        statusEl.classList.remove('bg-warning');
-                        statusEl.classList.add('bg-success');
-                        messageEl.style.display = 'block';
-                        clearInterval(pollTimer);
-                        // Redirect to payment complete route
-                        setTimeout(() => {
-                            window.location.href = `/stripe/payment-complete/${orderId}`;
-                        }, 1500);
-                    }
-                }
-            } catch (e) {
-                // ignore and continue polling
-            }
-            attempts++;
-            if (attempts >= maxAttempts) {
+        messageEl.style.setProperty('display', 'flex', 'important');
+
+        setTimeout(() => {
+            window.location.href = '/payment/complete/' + orderId;
+        }, 1800);
+    }
+
+    // Already paid on page load
+    if (statusEl.textContent.trim() === 'paid') {
+        markPaid();
+        return;
+    }
+
+    // Poll every 3s, max 20 attempts (~1 minute)
+    let attempts = 0;
+    const maxAttempts = 20;
+
+    const pollTimer = setInterval(async () => {
+        attempts++;
+
+        try {
+            const res  = await fetch('/payment/order-status/' + encodeURIComponent(sessionId));
+            if (!res.ok) return;
+            const data = await res.json();
+
+            if (data.ok && data.status === 'paid') {
                 clearInterval(pollTimer);
+                markPaid();
             }
+        } catch (e) {
+            // Network error — continue polling
         }
 
-        const pollTimer = setInterval(pollStatus, interval);
-    })();
+        if (attempts >= maxAttempts) {
+            clearInterval(pollTimer);
+            // Replace spinner with warning icon
+            iconEl.style.background = '#fff8e1';
+            iconEl.innerHTML = '<i class="bi bi-exclamation-triangle-fill text-warning" style="font-size:2rem;"></i>';
+            timeoutEl.style.setProperty('display', 'flex', 'important');
+        }
+    }, 3000);
+})();
 </script>
 
-<!-- Bootstrap Icons CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 {% endblock %}

@@ -46,10 +46,13 @@ class Product
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $temperature = null;
 
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Promotion::class, cascade: ['remove'])]
+    private Collection $promotions;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->stock = 0;
+        $this->promotions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,5 +181,64 @@ class Product
         $this->temperature = $temperature;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Promotion>
+     */
+    public function getPromotions(): Collection
+    {
+        return $this->promotions;
+    }
+
+    public function addPromotion(Promotion $promotion): static
+    {
+        if (!$this->promotions->contains($promotion)) {
+            $this->promotions->add($promotion);
+            $promotion->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromotion(Promotion $promotion): static
+    {
+        if ($this->promotions->removeElement($promotion)) {
+            if ($promotion->getProduct() === $this) {
+                $promotion->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    public function getActivePromotion(): ?Promotion
+    {
+        foreach ($this->promotions as $promotion) {
+            if ($promotion->isCurrentlyActive()) {
+                return $promotion;
+            }
+        }
+
+        return null;
+    }
+
+    public function getFinalPrice(): float
+    {
+        $basePrice = (float) $this->price;
+
+        $promotion = $this->getActivePromotion();
+
+        if ($promotion) {
+            return $promotion->calculateDiscountedPrice($basePrice);
+        }
+
+        return $basePrice;
+    }
+
+    public function hasActivePromotion(): bool
+    {
+        return $this->getActivePromotion() !== null;
     }
 }

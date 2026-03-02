@@ -31,6 +31,9 @@ class Order
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(length: 50)]
+    private ?string $reference = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,4 +98,24 @@ class Order
 
         return $this;
     }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): static
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+     public function __construct()
+    {
+        $this->reference = 'ORD-' . strtoupper(bin2hex(random_bytes(5)));
+        $this->status = 'pending';
+        $this->createdAt = new \DateTimeImmutable();
+    }  
 }
+ 
