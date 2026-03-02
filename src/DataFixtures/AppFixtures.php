@@ -53,6 +53,8 @@ class AppFixtures extends Fixture
             ['designation'=>'Bouteille sans BPA','description'=>'Couleur dégradée, moderne et tendance.','price'=>'11.20','imgPath'=>'degrade_pink_sans_bpa.png','capacity'=>'1L','temperature'=>null,'category'=>'sans-bpa'],
         ];
 
+        $products = [];
+        $i = 0;
         foreach ($productsData as $pd) {
             $p = new \App\Entity\Product();
             $p->setDesignation($pd['designation']);
@@ -64,6 +66,41 @@ class AppFixtures extends Fixture
             $p->setCategory($categories[$pd['category']]);
             $p->setStock(100); // Set stock to 100 for all products
             $manager->persist($p);
+
+            // keep reference for promotions
+            $products[] = $p;
+            $this->addReference('product_' . $i, $p);
+            $i++;
+        }
+
+        $manager->flush();
+
+        // create a few active promotions for the front page
+        $promoData = [
+            ['ref' => 'product_0', 'type' => \App\Entity\Promotion::TYPE_PERCENTAGE, 'value' => 20, 'title' => '20% sur bouteille verre', 'description' => 'Offre spéciale sur notre bouteille en verre.', 'durationDays' => 10, 'imgPath'=>'bpa_free_transparent.jpeg'],
+            ['ref' => 'product_3', 'type' => \App\Entity\Promotion::TYPE_FIXED, 'value' => 5, 'title' => '5€ de réduction inox', 'description' => 'Économisez 5€ sur la bouteille inox.', 'durationDays' => 14, 'imgPath'=>'glass_forest_green.png'],
+            ['ref' => 'product_6', 'type' => \App\Entity\Promotion::TYPE_PERCENTAGE, 'value' => 15, 'title' => 'Promotion isothermique', 'description' => '-15% sur modèle isothermique', 'durationDays' => 7, 'imgPath'=>'inox_gray.png'],
+            ['ref' => 'product_9', 'type' => \App\Entity\Promotion::TYPE_FIXED, 'value' => 3, 'title' => 'Réduction Sans BPA', 'description' => '3€ offerts sur les bouteilles sans BPA.', 'durationDays' => 12, 'imgPath'=>'isothermic_forest_green.png'],
+            ['ref' => 'product_1', 'type' => \App\Entity\Promotion::TYPE_PERCENTAGE, 'value' => 10, 'title' => '10% sur verre teinté', 'description' => 'Profitez de 10% de réduction sur notre bouteille en verre teinté.', 'durationDays' => 5, 'imgPath'=>'verre.png'],
+            ['ref' => 'product_4', 'type' => \App\Entity\Promotion::TYPE_FIXED, 'value' => 7, 'title' => '7€ de réduction inox', 'description' => 'Offre exceptionnelle : 7€ de réduction sur notre bouteille en acier inoxydable.', 'durationDays' => 20, 'imgPath'=>'isothermique_red.png'],
+        ];
+
+        foreach ($promoData as $pd) {
+            $promo = new \App\Entity\Promotion();
+            // retrieve product reference (class required by current Doctrine version)
+            /** @var \App\Entity\Product $product */
+            $product = $this->getReference($pd['ref'], \App\Entity\Product::class);
+            $promo->setProduct($product);
+            $promo->setDiscountType($pd['type']);
+            $promo->setDiscountValue($pd['value']);
+            $promo->setTitle($pd['title']);
+            $promo->setDescription($pd['description']);
+            $promo->setImgPath($pd['imgPath']);
+            $promo->setIsActive(true);
+            $start = new \DateTimeImmutable();
+            $promo->setStartAt($start);
+            $promo->setEndAt($start->modify('+' . $pd['durationDays'] . ' days'));
+            $manager->persist($promo);
         }
 
         $manager->flush();

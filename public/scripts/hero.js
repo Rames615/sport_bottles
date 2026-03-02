@@ -28,7 +28,8 @@ function showTemporaryMessage(message, type = 'success') {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.btn-add-cart[data-product-id]');
+    // Select both old (.btn-add-cart) and new (.btn-add-promotion) add to cart buttons
+    const buttons = document.querySelectorAll('.btn-add-cart[data-product-id], .btn-add-promotion[data-product-id]');
     const csrf = getCsrfToken();
     const cooldown = new Set();
 

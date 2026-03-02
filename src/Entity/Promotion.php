@@ -47,6 +47,9 @@ class Promotion
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imgPath = null;
+
     #[ORM\ManyToOne(inversedBy: 'promotions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
@@ -148,6 +151,18 @@ class Promotion
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function getImgPath(): ?string
+    {
+        return $this->imgPath;
+    }
+
+    public function setImgPath(?string $imgPath): static
+    {
+        $this->imgPath = $imgPath;
+
+        return $this;
     }
 
     public function getProduct(): ?Product

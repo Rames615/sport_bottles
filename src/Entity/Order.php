@@ -34,6 +34,9 @@ class Order
     #[ORM\Column(length: 50)]
     private ?string $reference = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $shippingAddress = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -116,6 +119,18 @@ class Order
         $this->reference = 'ORD-' . strtoupper(bin2hex(random_bytes(5)));
         $this->status = 'pending';
         $this->createdAt = new \DateTimeImmutable();
-    }  
+    }
+
+     public function getShippingAddress(): ?string
+     {
+         return $this->shippingAddress;
+     }
+
+     public function setShippingAddress(string $shippingAddress): static
+     {
+         $this->shippingAddress = $shippingAddress;
+
+         return $this;
+     }  
 }
  

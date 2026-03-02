@@ -50,10 +50,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
     private Collection $totalAmount;
 
+    /**
+     * @var Collection<int, ShippingAddress>
+     */
+    #[ORM\OneToMany(targetEntity: ShippingAddress::class, mappedBy: 'user', cascade: ['remove'])]
+    private Collection $shippingAddresses;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->totalAmount = new ArrayCollection();
+        $this->shippingAddresses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -201,6 +208,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($totalAmount->getUser() === $this) {
                 $totalAmount->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ShippingAddress>
+     */
+    public function getShippingAddresses(): Collection
+    {
+        return $this->shippingAddresses;
+    }
+
+    public function addShippingAddress(ShippingAddress $shippingAddress): static
+    {
+        if (!$this->shippingAddresses->contains($shippingAddress)) {
+            $this->shippingAddresses->add($shippingAddress);
+            $shippingAddress->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShippingAddress(ShippingAddress $shippingAddress): static
+    {
+        if ($this->shippingAddresses->removeElement($shippingAddress)) {
+            if ($shippingAddress->getUser() === $this) {
+                $shippingAddress->setUser(null);
             }
         }
 

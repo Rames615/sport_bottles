@@ -134,7 +134,7 @@
                         <span class="fw-bold fs-4" style="color:#1a8a5a;">{{ total|number_format(2, ',', ' ') }} €</span>
                     </div>
 
-                    <form action="{{ path('checkout_pay') }}" method="post">
+                    <form action="{{ path('checkout_confirm_post') }}" method="post">
                         <input type="hidden" name="_token" value="{{ csrf_token('checkout_pay') }}">
                         <button type="submit" class="btn w-100 fw-semibold py-3 mb-2 rounded-3 text-white"
                                 style="background:linear-gradient(135deg,#1a8a5a,#34d18a);border:none;font-size:1rem;transition:opacity .2s;"
