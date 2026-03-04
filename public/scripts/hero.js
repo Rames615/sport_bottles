@@ -1,8 +1,8 @@
-// Hero/add-to-cart behaviour
-// - attach to buttons with class .btn-add-cart
-// - POST to /panier/add-ajax/{id} with CSRF token
-// - update the cart badge (#cart-count-badge)
-// - prevent double clicks with a small cooldown
+// Cart add behavior for product cards
+// - Only handles .btn-add-cart buttons (regular products)
+// - NOT .btn-add-promotion buttons (promotions submit their forms normally)
+// - Prevents double clicks with a cooldown per product
+// - Updates cart badge with AJAX response
 
 function getCsrfToken() {
     const meta = document.querySelector('meta[name="csrf-cart-token"]');
@@ -10,8 +10,8 @@ function getCsrfToken() {
 }
 
 function showTemporaryMessage(message, type = 'success') {
-    // Simple temporary on-screen message using alert() fallback
-    // For production you may want to integrate a UI toast component
+    // Simple temporary on-screen message
+    // Falls back to alert() if UI toast cannot be created
     try {
         const el = document.createElement('div');
         el.className = `hero-toast alert alert-${type}`;
@@ -28,8 +28,9 @@ function showTemporaryMessage(message, type = 'success') {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Select both old (.btn-add-cart) and new (.btn-add-promotion) add to cart buttons
-    const buttons = document.querySelectorAll('.btn-add-cart[data-product-id], .btn-add-promotion[data-product-id]');
+    // ONLY select .btn-add-cart buttons (product cards)
+    // DO NOT select .btn-add-promotion buttons (they submit forms normally)
+    const buttons = document.querySelectorAll('.btn-add-cart[data-product-id]');
     const csrf = getCsrfToken();
     const cooldown = new Set();
 
@@ -37,11 +38,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buttons.forEach(btn => {
         btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
             const id = btn.dataset.productId;
             if (!id) return;
 
-            // prevent multiple quick clicks on same product
-            if (cooldown.has(id)) return;
+            // Prevent multiple quick clicks on same product
+            if (cooldown.has(id)) {
+                e.preventDefault();
+                return;
+            }
+
             cooldown.add(id);
             setTimeout(() => cooldown.delete(id), 800);
 
@@ -59,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await resp.json();
 
                 if (resp.ok && data.ok) {
-                    // update cart badge
+                    // Update cart badge
                     const badge = document.getElementById('cart-count-badge');
                     if (badge) {
                         if (data.count && parseInt(data.count) > 0) {
@@ -75,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     showTemporaryMessage(msg, 'danger');
                 }
             } catch (err) {
+                console.error('Error adding to cart:', err);
                 showTemporaryMessage('Erreur réseau', 'danger');
             } finally {
                 btn.disabled = false;
@@ -82,3 +91,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+

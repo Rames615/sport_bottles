@@ -1,127 +1,65 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}Nos Produits - Boutique
-{% endblock %}
+{% block title %}Nos Produits{% endblock %}
 
 {% block body %}
+{# ajouter le margin top plus que le hauter de bar nav #}
+    <div class="container-fluid mt-5 p-5">
+        {# Products Header #}
+        <div class="products-header mb-4">
+            <div>
+                <h1 class="products-title">Nos Produits</h1>
+                <p class="text-muted">{{ allProducts|length }} produit(s) disponible(s)</p>
+            </div>
+            
+            {# Filters & Sort Controls #}
+            <div class="products-controls">
+                {# Category Filter #}
+                <div class="form-group mb-0">
+                    <select id="categoryFilter" class="form-select form-select-sm" style="min-width: 180px;">
+                        <option value="">Toutes les catégories</option>
+                        {% for category in categories %}
+                            <option value="{{ category.name }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-	<section class="products-section">
-		<div
-			class="products-container">
+                {# Price Range Filter #}
+                <div class="form-group mb-0">
+                    <select id="priceFilter" class="form-select form-select-sm" style="min-width: 150px;">
+                        <option value="">Tous les prix</option>
+                        <option value="0-50">0 - 50 €</option>
+                        <option value="50-100">50 - 100 €</option>
+                        <option value="100-500">100 - 500 €</option>
+                        <option value="500+">500 € +</option>
+                    </select>
+                </div>
 
-			{# =======================
-			           FILTERS SIDEBAR
-			           ======================= #}
-			<aside class="filters-sidebar" id="filtersSidebar">
-				<h3 class="filters-title">Filtrer</h3>
+                {# Sort #}
+                <div class="form-group mb-0">
+                    <select id="sortFilter" class="form-select form-select-sm" style="min-width: 150px;">
+                        <option value="">Trier par</option>
+                        <option value="name-asc">Nom (A-Z)</option>
+                        <option value="name-desc">Nom (Z-A)</option>
+                        <option value="price-asc">Prix (croissant)</option>
+                        <option value="price-desc">Prix (décroissant)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
-				<div class="filter-group">
-					<div class="filter-group-title">Capacité</div>
-					<div class="filter-option">
-						<input type="checkbox" value="500ml" class="capacity-filter">
-						500 ml
-					</div>
-					<div class="filter-option">
-						<input type="checkbox" value="750ml" class="capacity-filter">
-						750 ml
-					</div>
-					<div class="filter-option">
-						<input type="checkbox" value="1L" class="capacity-filter">
-						1 Litre
-					</div>
-				</div>
-
-				{# <div class="filter-group">
-					<div class="filter-group-title">Usage</div>
-					<div class="filter-option">
-						<input type="checkbox" value="sport" class="usage-filter">
-						Sport
-					</div>
-					<div class="filter-option">
-						<input type="checkbox" value="hiking" class="usage-filter">
-						Randonnée
-					</div>
-					<div class="filter-option">
-						<input type="checkbox" value="office" class="usage-filter">
-						Bureau
-					</div>
-					<div class="filter-option">
-						<input type="checkbox" value="kids" class="usage-filter">
-						Enfants
-					</div>
-				</div> #}
-
-				<div class="filter-group">
-					<div class="filter-group-title">Maintien Température</div>
-					<div class="filter-option">
-						<input type="checkbox" value="12h" class="temperature-filter">
-						12h
-					</div>
-					<div class="filter-option">
-						<input type="checkbox" value="24h" class="temperature-filter">
-						24h
-					</div>
-					<div class="filter-option">
-						<input type="checkbox" value="48h" class="temperature-filter">
-						48h
-					</div>
-				</div>
-
-				<div class="filter-button-group">
-					<button id="applyFiltersBtn" class="btn btn-success">Appliquer</button>
-					<button id="resetFiltersBtn" class="btn btn-secondary">Réinitialiser</button>
-				</div>
-			</aside>
-
-			{# =======================
-			           MAIN CONTENT
-			           ======================= #}
-			<div class="products-main">
-				<button class="filters-toggle" id="filtersToggle" aria-label="Afficher les filtres">
-					⚙️ Filtrer les produits
-				</button>
-
-				<div class="category-tabs">
-					<button class="category-tab active" data-category="all">
-						Tous les produits
-					</button>
-					{% for category in categories %}
-						<button class="category-tab" data-category="{{ category.slug }}">
-							{{ category.name }}
-						</button>
-					{% endfor %}
-				</div>
-
-				{# ===== ALL PRODUCTS ===== #}
-				<div class="category-section active" data-category="all">
-					<div class="products-grid">
-						{% for product in allProducts %}
-							{% include 'product/_card.html.twig' with { product: product } %}
-						{% endfor %}
-					</div>
-					<p class="empty-category" hidden>Aucun produit ne correspond aux filtres.</p>
-				</div>
-
-				{# ===== PER CATEGORY ===== #}
-				{% for slug, data in productsByCategory %}
-					<div class="category-section" data-category="{{ slug }}">
-						<h3>{{ data.category.name }}</h3>
-
-						<div class="products-grid">
-							{% for product in data.products %}
-								{% include 'product/_card.html.twig' with { product: product } %}
-							{% endfor %}
-						</div>
-
-						<p class="empty-category" hidden>La catégorie est vide</p>
-					</div>
-				{% endfor %}
-
-			</div>
-		</div>
-	</section>
-	{% block javascripts %}
-        <script src="{{ asset('scripts/product.js') }}" defer></script>
-    {% endblock %}
-
+        {# Products Grid #}
+        {% if allProducts is not empty %}
+            <div class="products-grid">
+                {% for product in allProducts %}
+                    {% include 'product/_card.html.twig' with {'product': product} only %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Aucun produit trouvé</h4>
+                <p>Veuillez vérifier les filtres appliqués et réessayer.</p>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

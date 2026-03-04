@@ -1,60 +1,131 @@
 <div class="product-card" 
-	 data-category="{{ product.category? product.category.name : 'Uncategorized' }}" 
-	 data-price="{{ product.price }}" 
-	 data-capacity="{{ product.capacity }}" 
-	 data-temperature="{{ product.temperature }}">
-	
-	<div class="product-image-wrapper">
-		{% if product.imgPath %}
-			<img 
-				src="{{ asset('products_images/'  ~ product.category.slug ~ '/' ~ product.imgPath) }}" 
-				alt="{{ product.designation }}"
-				class="product-image"
-				onerror="this.src='{{ asset('images/placeholder.png') }}'">
-		{% else %}
-			<img 
-				src="{{ asset('images/placeholder.png') }}" 
-				alt="{{ product.designation }}"
-				class="product-image">
-		{% endif %}
-	</div>
+     data-product-id="{{ product.id }}"
+     data-category="{{ product.category ? product.category.name : 'Uncategorized' }}" 
+     data-price="{{ product.price }}" 
+     data-capacity="{{ product.capacity }}" 
+     data-temperature="{{ product.temperature }}">
 
-	<div class="product-info">
-		<h3 class="product-name">{{ product.designation }}</h3>
-		
-		{# Use slice to truncate description since `truncate` filter is not available #}
-		{% if product.description is defined and product.description|length > 100 %}
-			<p class="product-description">{{ product.description|slice(0, 100) ~ '...' }}</p>
-		{% else %}
-			<p class="product-description">{{ product.description }}</p>
-		{% endif %}
-		
-		<div class="product-specs">
-			<div class="product-spec-item">
-				<strong>Capacité:</strong> {{ product.capacity }}
-			</div>
-			{% if product.temperature %}
-				<div class="product-spec-item">
-					<strong>Température:</strong> {{ product.temperature }}
-				</div>
-			{% endif %}
-			{% if product.category %}
-				<div class="product-spec-item">
-					<strong>Catégorie:</strong> {{ product.category.name }}
-				</div>
-			{% endif %}
-		</div>
+    {# ============================================
+       IMAGE SECTION
+       ============================================ #}
+    <div class="product-image-wrapper">
+        {% if product.imgPath %}
+            <img src="{{ asset('products_images/' ~ product.category.slug ~ '/' ~ product.imgPath) }}" 
+                 alt="{{ product.designation }}" 
+                 class="product-image" 
+                 onerror="this.src='{{ asset('images/placeholder.png') }}'">
+        {% else %}
+            <img src="{{ asset('images/placeholder.png') }}" 
+                 alt="Image placeholder pour {{ product.designation }}" 
+                 class="product-image">
+        {% endif %}
+    </div>
 
-		<p class="product-price">{{ product.price|number_format(2, ',', ' ') }} €</p>
-		
-		<div class="product-actions">
-			<form method="post" action="{{ path('app_cartadd', {id: product.id}) }}" style="display:inline" class="add-to-cart-form">
-				<input type="hidden" name="_token" value="{{ csrf_token('cart_add') }}">
-				<button type="submit" class="btn-add-cart" title="Ajouter {{ product.designation }} au panier">Ajouter au panier</button>
-			</form>
-			<button class="btn-details" data-product-id="{{ product.id }}">
-				Voir détails
-			</button>
-		</div>
-	</div>
+    {# ============================================
+       INFO SECTION
+       ============================================ #}
+    <div class="product-info">
+        
+        {# Product Name #}
+        <h3 class="product-name">{{ product.designation }}</h3>
+
+        {# Product Specs Summary #}
+        <div class="product-specs">
+            {% if product.capacity %}
+                <div class="product-spec-item">
+                    <strong>Capacité:</strong>
+                    <span>{{ product.capacity }}</span>
+                </div>
+            {% endif %}
+            
+            {% if product.temperature %}
+                <div class="product-spec-item">
+                    <strong>Température:</strong>
+                    <span>{{ product.temperature }}</span>
+                </div>
+            {% endif %}
+            
+            {% if product.category %}
+                <div class="product-spec-item">
+                    <strong>Catégorie:</strong>
+                    <span>{{ product.category.name }}</span>
+                </div>
+            {% endif %}
+        </div>
+
+        {# Product Price #}
+        <p class="product-price mb-3">
+            {{ product.price|number_format(2, ',', ' ') }} €
+        </p>
+
+        {# ============================================
+           ACTIONS BUTTONS
+           ============================================ #}
+        <div class="product-actions">
+            {# Show More Button #}
+            <button type="button"
+                    class="btn-show-more" 
+                    data-product-id="{{ product.id }}"
+                    title="Afficher plus de détails sur {{ product.designation }}">
+                <i class="fas fa-chevron-down"></i> Voir plus
+            </button>
+        </div>
+
+        {# ============================================
+           EXPANDED DETAILS SECTION (Hidden by default)
+           ============================================ #}
+        <div class="product-details-expanded" data-product-id="{{ product.id }}">
+            
+            {# Full Description #}
+            {% if product.description is defined and product.description|length > 0 %}
+                <div class="product-full-description">
+                    <h4 class="details-section-title">Description</h4>
+                    <p>{{ product.description }}</p>
+                </div>
+            {% endif %}
+
+            {# Full Specs #}
+            {% if product.capacity or product.temperature or product.category %}
+                <div class="product-full-specs">
+                    <h4 class="details-section-title">Caractéristiques</h4>
+                    <ul>
+                        {% if product.capacity %}
+                            <li>
+                                <strong>Capacité:</strong>
+                                <span>{{ product.capacity }}</span>
+                            </li>
+                        {% endif %}
+                        
+                        {% if product.temperature %}
+                            <li>
+                                <strong>Maintien température:</strong>
+                                <span>{{ product.temperature }}</span>
+                            </li>
+                        {% endif %}
+                        
+                        {% if product.category %}
+                            <li>
+                                <strong>Catégorie:</strong>
+                                <span>{{ product.category.name }}</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {# Add to Cart Button in Expanded Section #}
+            <div class="product-expanded-actions">
+                <form method="post" 
+                      action="{{ path('app_cartadd', {id: product.id}) }}" 
+                      class="add-to-cart-form-expanded">
+                    <input type="hidden" name="_token" value="{{ csrf_token('cart_add') }}">
+                    <button type="submit" 
+                            class="btn-add-promotion-compact" 
+                            title="Ajouter {{ product.designation }} au panier">
+                        <i class="fas fa-shopping-cart"></i> Ajouter au panier
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

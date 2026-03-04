@@ -138,10 +138,13 @@
 										</div>
 									</div>
 
-									<button class="btn-add-promotion" data-product-id="{{ product.id }}" title="Ajouter {{ product.designation }} au panier">
-										<span class="btn-icon">🛒</span>
-										Ajouter au panier
-									</button>
+									<form method="post" action="{{ path('app_cartadd', {id: product.id}) }}" class="add-to-cart-form-promo">
+										<input type="hidden" name="_token" value="{{ csrf_token('cart_add') }}">
+										<button type="submit" class="btn-add-promotion" data-product-id="{{ product.id }}" title="Ajouter {{ product.designation }} au panier">
+											<span class="btn-icon">🛒</span>
+											Ajouter au panier
+										</button>
+									</form>
 								</div>
 							</div>
 						{% endif %}
