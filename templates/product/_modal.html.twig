@@ -1,65 +1,149 @@
-{# Produit Modal Réutilisable - Affiche les détails complets du produit #}
+{# ============================================================
+   components/product_modal.html.twig
+   Reusable product modal — Bootstrap 5, no inline JS.
+   Requires: modal.js (imported at the bottom of this file)
+   ============================================================ #}
 
-<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+<div class="modal fade" id="productModal" tabindex="-1"
+     aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0 rounded-4">
-            
-            {# Header avec fermeture #}
-            <div class="modal-header bg-light rounded-top-4 border-0 px-4 py-3">
-                <h5 class="modal-title fw-bold" id="productModalLabel">Détails du produit</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg">
+
+            {# ── Header ─────────────────────────────────────────── #}
+            <div class="modal-header border-0 px-4 py-3"
+                 style="background-color:#f8faf9; border-bottom:1px solid #e2ede9 !important;">
+                <h5 class="modal-title fw-semibold fs-6 text-dark" id="productModalLabel"
+                    style="font-family:'Playfair Display',Georgia,serif; letter-spacing:-0.01em;">
+                    Détails du produit
+                </h5>
+                <button type="button"
+                        class="btn-close rounded-circle opacity-100 p-2"
+                        style="background-color:rgba(31,122,99,0.1); background-size:0.7em;"
+                        data-bs-dismiss="modal" aria-label="Fermer">
+                </button>
             </div>
 
-            {# Contenu modal #}
-            <div class="modal-body p-4 p-md-5">
-                
+            {# ── Body ────────────────────────────────────────────── #}
+            <div class="modal-body px-4 px-md-5 py-4">
+
                 {# Image #}
-                <div class="mb-4">
-                    <img id="modalProductImage" src="" alt="Produit" 
-                         class="img-fluid rounded-3" style="max-height: 400px; width: 100%; object-fit: contain;">
+                <div class="rounded-3 overflow-hidden mb-4 border"
+                     style="background-color:#f8faf9; border-color:#e2ede9 !important;">
+                    <img id="modalProductImage" src="" alt="Produit"
+                         class="d-block w-100 object-fit-contain p-3"
+                         style="max-height:320px;">
                 </div>
 
-                {# Nom du produit #}
-                <h2 id="modalProductName" class="h4 fw-bold mb-3" style="color: #0f1923;"></h2>
+                {# Nom #}
+                <h2 id="modalProductName" class="fw-bold mb-3 lh-sm"
+                    style="font-family:'Playfair Display',Georgia,serif;
+                           font-size:1.5rem; color:#0f1923; letter-spacing:-0.02em;">
+                </h2>
 
                 {# Prix #}
-                <div class="d-flex align-items-baseline gap-3 mb-4">
-                    <span id="modalProductPrice" class="h3 fw-bold" style="color: #1F7A63;"></span>
-                    <span class="text-muted text-decoration-line-through small"></span>
+                <div class="d-flex align-items-baseline gap-3 mb-4 px-3 py-2 rounded-end-2"
+                     style="background-color:#e8f5f1; border-left:3px solid #1F7A63;">
+                    <span id="modalProductPrice" class="fw-bold lh-1"
+                          style="font-family:'Playfair Display',Georgia,serif;
+                                 font-size:1.75rem; color:#1F7A63;">
+                    </span>
+                    <span id="modalProductOldPrice"
+                          class="text-muted text-decoration-line-through small">
+                    </span>
                 </div>
 
-                {# Description complète #}
-                <div class="mb-4 pb-4 border-bottom">
-                    <h5 class="fw-bold mb-3" style="text-transform: uppercase; letter-spacing: 0.5px; color: #212529;">
-                        <i class="fas fa-info-circle me-2" style="color: #1F7A63;"></i> Description
-                    </h5>
-                    <p id="modalProductDescription" class="text-dark" style="line-height: 1.6; text-align: justify;"></p>
+                {# Description #}
+                <div class="mb-4 pb-4" style="border-bottom:1px solid #e2ede9;">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="d-flex align-items-center justify-content-center rounded-2 flex-shrink-0"
+                              style="width:1.5rem; height:1.5rem;
+                                     background-color:#e8f5f1; color:#1F7A63; font-size:0.6rem;">
+                            <i class="fas fa-info fa-xs"></i>
+                        </span>
+                        <span class="text-uppercase fw-semibold"
+                              style="font-size:0.68rem; letter-spacing:0.1em; color:#6b7f79;">
+                            Description
+                        </span>
+                    </div>
+                    <p id="modalProductDescription" class="mb-0"
+                       style="font-size:0.9375rem; line-height:1.75;
+                              color:#3a4a45; text-align:justify;">
+                    </p>
                 </div>
 
                 {# Caractéristiques #}
-                <div class="mb-4">
-                    <h5 class="fw-bold mb-3" style="text-transform: uppercase; letter-spacing: 0.5px; color: #212529;">
-                        <i class="fas fa-cogs me-2" style="color: #1F7A63;"></i> Caractéristiques
-                    </h5>
-                    <div id="modalProductSpecs" class="row g-3">
-                        {# Sera rempli par JavaScript #}
+                <div class="mb-2">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="d-flex align-items-center justify-content-center rounded-2 flex-shrink-0"
+                              style="width:1.5rem; height:1.5rem;
+                                     background-color:#e8f5f1; color:#1F7A63; font-size:0.6rem;">
+                            <i class="fas fa-cog fa-xs"></i>
+                        </span>
+                        <span class="text-uppercase fw-semibold"
+                              style="font-size:0.68rem; letter-spacing:0.1em; color:#6b7f79;">
+                            Caractéristiques
+                        </span>
+                    </div>
+                    <div id="modalProductSpecs" class="row g-2">
+                        {# Populated by modal.js — openProductModal() #}
                     </div>
                 </div>
+
             </div>
 
-            {# Footer avec bouton d'action #}
-            <div class="modal-footer bg-light rounded-bottom-4 border-0 px-4 py-3 d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary fw-semibold" data-bs-dismiss="modal">
-                    <i class="fas fa-arrow-left me-2"></i> Retour
+            {# ── Footer ──────────────────────────────────────────── #}
+            <div class="modal-footer border-0 px-4 py-3 gap-2"
+                 style="background-color:#f8faf9; border-top:1px solid #e2ede9 !important;">
+
+                <button type="button"
+                        class="btn btn-light fw-medium border d-inline-flex align-items-center gap-2"
+                        style="font-size:0.875rem; color:#6b7f79;
+                               border-color:#e2ede9 !important; border-radius:0.5rem;"
+                        data-bs-dismiss="modal">
+                    <i class="fas fa-arrow-left fa-xs"></i> Retour
                 </button>
-                <form id="modalAddToCartForm" method="post" class="w-100">
+
+                <form id="modalAddToCartForm" method="post" class="flex-grow-1">
                     <input type="hidden" name="_token" id="modalCsrfToken" value="">
-                    <button type="submit" class="btn w-100 fw-semibold" 
-                            style="background: linear-gradient(135deg, #1F7A63 0%, #1a5c4a 100%); color: white; border: none; padding: 0.625rem 1rem;">
-                        <i class="fas fa-shopping-cart me-2"></i> Ajouter au panier
+                    <button type="submit"
+                            class="btn w-100 fw-semibold d-flex align-items-center justify-content-center gap-2"
+                            style="background:linear-gradient(135deg,#1F7A63 0%,#145444 100%);
+                                   color:white; border:none; border-radius:0.625rem;
+                                   padding:0.75rem 1.5rem; font-size:0.9375rem;
+                                   box-shadow:0 4px 14px rgba(31,122,99,0.28);
+                                   transition:transform 0.18s ease, box-shadow 0.18s ease;">
+                        <i class="fas fa-shopping-cart"></i> Ajouter au panier
                     </button>
                 </form>
+
             </div>
+
         </div>
     </div>
 </div>
+
+{# ── Import modal.js ─────────────────────────────────────────
+   Adjust path to match your asset setup:
+   • Symfony AssetMapper  → {{ asset('assets/js/modal.js') }}
+   • Webpack Encore       → {{ asset('build/modal.js') }}
+   • Plain public folder  → /js/modal.js
+   ─────────────────────────────────────────────────────────── #}
+<script src="{{ asset('assets/js/modal.js') }}" defer></script>
+
+
+{# ============================================================
+   USAGE — call openProductModal() from any page template:
+
+   <button onclick="openProductModal({
+       name:        '{{ product.name        | e('js') }}',
+       image:       '{{ asset(product.image) | e('js') }}',
+       price:       '{{ product.price        | e('js') }}',
+       oldPrice:    '{{ product.oldPrice     | e('js') }}',
+       description: '{{ product.description  | e('js') }}',
+       csrfToken:   '{{ csrf_token('add_to_cart') }}',
+       cartUrl:     '{{ path('cart_add', { id: product.id }) }}',
+       specs:       {{ product.specs | json_encode | raw }}
+   })">
+       Voir le produit
+   </button>
+   ============================================================ #}
