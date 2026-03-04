@@ -12,11 +12,11 @@
                 <p class="text-muted">{{ allProducts|length }} produit(s) disponible(s)</p>
             </div>
             
-            {# Filters & Sort Controls #}
+            {# Filters & Sort Controls - Using Bootstrap form-select #}
             <div class="products-controls">
                 {# Category Filter #}
-                <div class="form-group mb-0">
-                    <select id="categoryFilter" class="form-select form-select-sm" style="min-width: 180px;">
+                <div>
+                    <select id="categoryFilter" class="form-select form-select-sm" aria-label="Filtrer par catégorie">
                         <option value="">Toutes les catégories</option>
                         {% for category in categories %}
                             <option value="{{ category.name }}">{{ category.name }}</option>
@@ -25,8 +25,8 @@
                 </div>
 
                 {# Price Range Filter #}
-                <div class="form-group mb-0">
-                    <select id="priceFilter" class="form-select form-select-sm" style="min-width: 150px;">
+                <div>
+                    <select id="priceFilter" class="form-select form-select-sm" aria-label="Filtrer par prix">
                         <option value="">Tous les prix</option>
                         <option value="0-50">0 - 50 €</option>
                         <option value="50-100">50 - 100 €</option>
@@ -36,8 +36,8 @@
                 </div>
 
                 {# Sort #}
-                <div class="form-group mb-0">
-                    <select id="sortFilter" class="form-select form-select-sm" style="min-width: 150px;">
+                <div>
+                    <select id="sortFilter" class="form-select form-select-sm" aria-label="Trier les produits">
                         <option value="">Trier par</option>
                         <option value="name-asc">Nom (A-Z)</option>
                         <option value="name-desc">Nom (Z-A)</option>
@@ -64,9 +64,5 @@
     </div>
 
     {# Include Product Modal #}
-    {# Dans votre layout ou template produit #}
 {% include 'product/_modal.html.twig' %}
-
-{# importer le script product.js #}
-<script src="{{ asset('scripts/product.js') }}" defer></script>
 {% endblock %}

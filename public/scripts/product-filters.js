@@ -6,67 +6,97 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryFilter = document.getElementById('categoryFilter');
     const priceFilter = document.getElementById('priceFilter');
     const sortFilter = document.getElementById('sortFilter');
-    const productCards = document.querySelectorAll('.product-card');
     const productsGrid = document.querySelector('.products-grid');
+    if (!productsGrid) return;
+    const productCards = Array.from(productsGrid.querySelectorAll('.product-card'));
+    const collator = new Intl.Collator('fr', { sensitivity: 'base' });
+
+    productCards.forEach((card, index) => {
+        card.dataset.originalIndex = String(index);
+    });
 
     // Fonction principale de filtrage et tri
     function filterAndSort() {
-        const categoryValue = categoryFilter?.value.toLowerCase() || '';
+        const categoryValue = normalize(categoryFilter?.value || '');
         const priceValue = priceFilter?.value || '';
         const sortValue = sortFilter?.value || '';
-
-        let visibleCards = [];
+        const visibleCards = [];
+        const hiddenCards = [];
 
         // Filtrer les produits
         productCards.forEach(card => {
             let shouldShow = true;
+            const cardCategory = normalize(card.getAttribute('data-category') || '');
+            const cardPrice = parsePrice(card.getAttribute('data-price'));
 
             // Filtre catégorie
             if (categoryValue) {
-                const cardCategory = card.getAttribute('data-category').toLowerCase();
                 shouldShow = shouldShow && cardCategory === categoryValue;
             }
 
             // Filtre prix
             if (priceValue && shouldShow) {
-                const cardPrice = parseFloat(card.getAttribute('data-price'));
                 shouldShow = shouldShow && filterByPriceRange(cardPrice, priceValue);
             }
 
             card.style.display = shouldShow ? 'flex' : 'none';
             if (shouldShow) {
                 visibleCards.push(card);
+            } else {
+                hiddenCards.push(card);
             }
         });
 
         // Trier les produits visibles
-        if (sortValue && visibleCards.length > 0) {
-            visibleCards.sort((a, b) => {
-                switch (sortValue) {
-                    case 'name-asc':
-                        return a.querySelector('.product-name').textContent
-                            .localeCompare(b.querySelector('.product-name').textContent);
-                    case 'name-desc':
-                        return b.querySelector('.product-name').textContent
-                            .localeCompare(a.querySelector('.product-name').textContent);
-                    case 'price-asc':
-                        return parseFloat(a.getAttribute('data-price')) - parseFloat(b.getAttribute('data-price'));
-                    case 'price-desc':
-                        return parseFloat(b.getAttribute('data-price')) - parseFloat(a.getAttribute('data-price'));
-                    default:
-                        return 0;
-                }
-            });
+        visibleCards.sort((a, b) => compareCards(a, b, sortValue));
+        hiddenCards.sort((a, b) => Number(a.dataset.originalIndex) - Number(b.dataset.originalIndex));
 
-            // Réordonner les cartes dans le DOM
-            visibleCards.forEach(card => {
-                productsGrid.appendChild(card);
-            });
-        }
+        // Réordonner les cartes dans le DOM
+        const fragment = document.createDocumentFragment();
+        visibleCards.forEach(card => {
+            card.style.display = 'flex';
+            fragment.appendChild(card);
+        });
+        hiddenCards.forEach(card => {
+            card.style.display = 'none';
+            fragment.appendChild(card);
+        });
+        productsGrid.appendChild(fragment);
 
         // Afficher le message "aucun produit"
         const visibleCount = visibleCards.length;
         updateNoProductsMessage(visibleCount);
+    }
+
+    function compareCards(a, b, sortValue) {
+        const nameA = normalize(a.querySelector('.product-name')?.textContent || '');
+        const nameB = normalize(b.querySelector('.product-name')?.textContent || '');
+        const priceA = parsePrice(a.getAttribute('data-price'));
+        const priceB = parsePrice(b.getAttribute('data-price'));
+        const indexA = Number(a.dataset.originalIndex);
+        const indexB = Number(b.dataset.originalIndex);
+
+        switch (sortValue) {
+            case 'name-asc':
+                return collator.compare(nameA, nameB) || indexA - indexB;
+            case 'name-desc':
+                return collator.compare(nameB, nameA) || indexA - indexB;
+            case 'price-asc':
+                return (priceA - priceB) || indexA - indexB;
+            case 'price-desc':
+                return (priceB - priceA) || indexA - indexB;
+            default:
+                return indexA - indexB;
+        }
+    }
+
+    function normalize(value) {
+        return String(value).trim().toLowerCase();
+    }
+
+    function parsePrice(value) {
+        const parsed = Number.parseFloat(String(value).replace(',', '.'));
+        return Number.isFinite(parsed) ? parsed : 0;
     }
 
     // Fonction pour filtrer par gamme de prix
@@ -87,13 +117,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Afficher/masquer le message aucun produit
     function updateNoProductsMessage(count) {
-        let noProductsDiv = document.querySelector('.no-products');
+        let noProductsDiv = document.querySelector('.no-products-message');
 
         if (count === 0) {
             if (!noProductsDiv) {
                 noProductsDiv = document.createElement('div');
-                noProductsDiv.className = 'no-products';
-                noProductsDiv.innerHTML = '<p>Aucun produit ne correspond à vos critères de recherche.</p>';
+                noProductsDiv.className = 'no-products-message alert alert-info';
+                noProductsDiv.innerHTML = '<p class="mb-0">Aucun produit ne correspond à vos critères de recherche.</p>';
                 productsGrid.appendChild(noProductsDiv);
             }
             noProductsDiv.style.display = 'block';
@@ -114,4 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (sortFilter) {
         sortFilter.addEventListener('change', filterAndSort);
     }
+
+    filterAndSort();
 });
