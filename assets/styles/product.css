@@ -176,57 +176,7 @@
     width: 100%;
 }
 
-.btn-add-cart,
-.btn-show-more {
-    padding: 0.625rem 1rem;
-    font-size: 0.85rem;
-    font-weight: 500;
-    border: none;
-    border-radius: 0.35rem;
-    cursor: pointer;
-    transition: var(--transition);
-    text-align: center;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    flex: 1;
-}
-
-.btn-add-cart {
-    background: linear-gradient(135deg, var(--primary-color) 0%, #1a5c4a 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(31, 122, 99, 0.2);
-}
-
-.btn-add-cart:hover {
-    background: linear-gradient(135deg, var(--primary-color) 0%, #1ca055 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(31, 122, 99, 0.35);
-}
-
-.btn-add-cart:active {
-    transform: translateY(0);
-    box-shadow: 0 4px 12px rgba(31, 122, 99, 0.25);
-}
-
-.btn-show-more {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
-}
-
-.btn-show-more:hover {
-    background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.35);
-}
-
-.btn-show-more:active {
-    transform: translateY(0);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25);
-}
+/* Buttons now use Bootstrap classes in Twig templates (btn, btn-info, btn-success). */
 
 /* ============================================
    EXPANDED DETAILS SECTION - REMOVED (Using Modal Now)

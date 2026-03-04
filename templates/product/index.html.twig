@@ -67,11 +67,6 @@
     {# Dans votre layout ou template produit #}
 {% include 'product/_modal.html.twig' %}
 
-{# Pour ouvrir le modal depuis un bouton produit #}
-{# ✅ Correct — dans la boucle {% for product in products %} #}
-{# <button class="btn-open-modal"
-        data-product-name="{{ product.name | e('html_attr') }}"
-        data-product-image="{{ asset(product.imagePath) | e('html_attr') }}"
-        data-product-specs="{{ product.specs | json_encode | e('html_attr') }}">
-        Voir le produit</button> #}
+{# importer le script product.js #}
+<script src="{{ asset('scripts/product.js') }}" defer></script>
 {% endblock %}

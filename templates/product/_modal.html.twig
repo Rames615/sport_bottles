@@ -96,22 +96,16 @@
                  style="background-color:#f8faf9; border-top:1px solid #e2ede9 !important;">
 
                 <button type="button"
-                        class="btn btn-light fw-medium border d-inline-flex align-items-center gap-2"
-                        style="font-size:0.875rem; color:#6b7f79;
-                               border-color:#e2ede9 !important; border-radius:0.5rem;"
+                        class="btn btn-outline-secondary"
                         data-bs-dismiss="modal">
                     <i class="fas fa-arrow-left fa-xs"></i> Retour
                 </button>
 
                 <form id="modalAddToCartForm" method="post" class="flex-grow-1">
                     <input type="hidden" name="_token" id="modalCsrfToken" value="">
+                    <input type="hidden" name="product_id" id="modalProductId" value="">
                     <button type="submit"
-                            class="btn w-100 fw-semibold d-flex align-items-center justify-content-center gap-2"
-                            style="background:linear-gradient(135deg,#1F7A63 0%,#145444 100%);
-                                   color:white; border:none; border-radius:0.625rem;
-                                   padding:0.75rem 1.5rem; font-size:0.9375rem;
-                                   box-shadow:0 4px 14px rgba(31,122,99,0.28);
-                                   transition:transform 0.18s ease, box-shadow 0.18s ease;">
+                            class="btn btn-success w-100 fw-semibold d-flex align-items-center justify-content-center gap-2">
                         <i class="fas fa-shopping-cart"></i> Ajouter au panier
                     </button>
                 </form>
@@ -122,13 +116,8 @@
     </div>
 </div>
 
-{# ── Import modal.js ─────────────────────────────────────────
-   Adjust path to match your asset setup:
-   • Symfony AssetMapper  → {{ asset('assets/js/modal.js') }}
-   • Webpack Encore       → {{ asset('build/modal.js') }}
-   • Plain public folder  → /js/modal.js
-   ─────────────────────────────────────────────────────────── #}
-<script src="{{ asset('assets/js/modal.js') }}" defer></script>
+{# NOTE: product-modal.js is loaded globally by base.html.twig
+   No need to load it again here to avoid duplication #}
 
 
 {# ============================================================

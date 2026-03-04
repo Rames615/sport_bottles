@@ -1,40 +1,27 @@
-/**
- * modal.js — Product Modal Controller
- *
- * Reads product data from data-attributes on .btn-open-modal buttons.
- * No inline JS needed in Twig templates.
- *
- * Usage in Twig:
- *   <button class="btn-open-modal"
- *           data-product-name="..."
- *           data-product-image="..."
- *           data-product-price="..."
- *           data-product-old-price="..."
- *           data-product-description="..."
- *           data-product-specs='[{"label":"...","value":"..."}]'
- *           data-csrf-token="..."
- *           data-cart-url="...">
- *       Voir le produit
- *   </button>
- */
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn-open-modal');
+        const btn = e.target.closest('.btn-show-more');
         if (!btn) return;
 
-        openProductModal({
+        const productData = {
             name:        btn.dataset.productName        ?? '',
             image:       btn.dataset.productImage       ?? '',
             price:       btn.dataset.productPrice       ?? '',
             oldPrice:    btn.dataset.productOldPrice    ?? '',
             description: btn.dataset.productDescription ?? '',
+            capacity:    btn.dataset.productCapacity    ?? '',
+            temperature: btn.dataset.productTemperature ?? '',
+            category:    btn.dataset.productCategory    ?? '',
             csrfToken:   btn.dataset.csrfToken          ?? '',
             cartUrl:     btn.dataset.cartUrl            ?? '',
+            productId:   btn.dataset.productId          ?? '',
             specs:       _parseSpecs(btn.dataset.productSpecs),
-        });
+        };
+        console.log('Product data from button:', productData);
+        openProductModal(productData);
     });
 });
 
@@ -55,12 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {string}   [product.cartUrl]
  */
 function openProductModal(product) {
+    console.log('openProductModal called with:', product);
     _setImage(product);
     _setName(product.name);
     _setPrice(product.price, product.oldPrice);
     _setDescription(product.description);
-    _setSpecs(product.specs);
-    _setCartForm(product.csrfToken, product.cartUrl);
+    const specs = _buildSpecs(product);
+    console.log('Built specs:', specs);
+    _setSpecs(specs);
+    _setCartForm(product.csrfToken, product.cartUrl, product.productId);
     _show();
 }
 
@@ -133,12 +123,30 @@ function _setSpecs(specs) {
     });
 }
 
-function _setCartForm(csrfToken, cartUrl) {
+function _setCartForm(csrfToken, cartUrl, productId) {
     const form       = document.getElementById('modalAddToCartForm');
     const tokenInput = document.getElementById('modalCsrfToken');
+    const productIdInput = document.getElementById('modalProductId');
 
-    if (form && cartUrl)          form.action      = cartUrl;
+    if (form && cartUrl)          form.action = cartUrl;
     if (tokenInput && csrfToken)  tokenInput.value = csrfToken;
+    if (productIdInput && productId) productIdInput.value = productId;
+}
+
+function _buildSpecs(product) {
+    const specs = [];
+    
+    if (product.capacity) {
+        specs.push({ label: 'Capacité', value: product.capacity });
+    }
+    if (product.temperature) {
+        specs.push({ label: 'Température', value: product.temperature });
+    }
+    if (product.category) {
+        specs.push({ label: 'Catégorie', value: product.category });
+    }
+    
+    return specs;
 }
 
 function _show() {

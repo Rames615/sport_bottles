@@ -64,7 +64,7 @@
         <div class="product-actions">
             {# Show More Button - Opens Modal #}
             <button type="button"
-                    class="btn-show-more" 
+                    class="btn btn-show-more btn-info w-100" 
                     data-product-id="{{ product.id }}"
                     data-product-name="{{ product.designation }}"
                     data-product-price="{{ product.price }}"
@@ -73,6 +73,8 @@
                     data-product-temperature="{{ product.temperature }}"
                     data-product-category="{{ product.category ? product.category.name : '' }}"
                     data-product-image="{% if product.imgPath %}{{ asset('products_images/' ~ product.category.slug ~ '/' ~ product.imgPath) }}{% else %}{{ asset('images/placeholder.png') }}{% endif %}"
+                    data-csrf-token="{{ csrf_token('cart_add') }}"
+                    data-cart-url="{{ path('app_cartadd', { id: product.id }) }}"
                     data-bs-toggle="modal" 
                     data-bs-target="#productModal"
                     title="Afficher plus de détails sur {{ product.designation }}">
