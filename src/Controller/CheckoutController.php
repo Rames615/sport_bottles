@@ -24,7 +24,8 @@ final class CheckoutController extends AbstractController
     ) {}
 
     /**
-     * Display shipping address form
+     * STEP 1 — Display and handle the shipping address form.
+     * On success, stores the address ID in session and redirects to step 2.
      */
     #[Route('/shipping', name: 'shipping', methods: ['GET', 'POST'])]
     public function shipping(Request $request, EntityManagerInterface $em): Response|RedirectResponse
@@ -44,31 +45,29 @@ final class CheckoutController extends AbstractController
 
         $shippingAddress = new ShippingAddress();
         $form = $this->createForm(ShippingAddressType::class, $shippingAddress);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // Set user and save address
             $shippingAddress->setUser($user);
             $shippingAddress->setUpdatedAt(new \DateTimeImmutable());
             $em->persist($shippingAddress);
             $em->flush();
 
-            // Store shipping address ID in session for next step
             $request->getSession()->set('shipping_address_id', $shippingAddress->getId());
 
-            // Redirect to confirmation page
             return $this->redirectToRoute('checkout_confirm');
         }
 
         return $this->render('checkout/shipping.html.twig', [
-            'form' => $form,
-            'cart' => $result['cart'],
+            'form'  => $form,
+            'cart'  => $result['cart'],
             'total' => $result['total'],
         ]);
     }
 
     /**
-     * Displays the order confirmation page with cart summary before payment.
+     * STEP 2 — Order summary / confirmation page.
+     * Requires a shipping address in session (set in step 1).
      */
     #[Route('/confirm', name: 'confirm', methods: ['GET'])]
     public function confirm(Request $request): Response|RedirectResponse
@@ -86,7 +85,6 @@ final class CheckoutController extends AbstractController
             return $this->redirectToRoute('app_cartindex');
         }
 
-        // Get shipping address from session
         $shippingAddressId = $request->getSession()->get('shipping_address_id');
         if (!$shippingAddressId) {
             return $this->redirectToRoute('checkout_shipping');
@@ -99,88 +97,115 @@ final class CheckoutController extends AbstractController
     }
 
     /**
-     * Confirms the order, marks it as paid, and redirects to home page.
-     * 
-     * This method:
-     * 1. Validates the user is authenticated
-     * 2. Verifies CSRF token for security
-     * 3. Prepares and validates the checkout
-     * 4. Retrieves the shipping address from session
-     * 5. Creates the Order entity
-     * 6. Updates Order status to 'paid'
-     * 7. Persists and saves changes to database
-     * 8. Clears the cart
-     * 9. Adds a success flash message
-     * 10. Redirects to home page
+     * STEP 2 (POST) — Confirm order without Stripe (direct "paid" status).
+     * Used when payment is handled outside Stripe (e.g. bank transfer confirmed manually).
+     *
+     * Flow:
+     *   1. Validates user & CSRF token
+     *   2. Validates cart
+     *   3. Retrieves & verifies shipping address from session
+     *   4. Creates Order with status "paid"
+     *   5. Clears cart and session, then redirects home
      */
     #[Route('/confirm', name: 'confirm_post', methods: ['POST'])]
     public function confirmOrder(Request $request, EntityManagerInterface $em): RedirectResponse
     {
-        // Validate user is authenticated
         $user = $this->getUser();
         if (!$user instanceof User) {
             throw $this->createAccessDeniedException();
         }
 
-        // Verify CSRF token for security
         if (!$this->isCsrfTokenValid('checkout_pay', $request->request->get('_token'))) {
             $this->addFlash('error', 'Token de sécurité invalide.');
             return $this->redirectToRoute('checkout_confirm');
         }
 
-        // Prepare checkout and validate cart
         $result = $this->cartService->prepareCheckout($user);
         if (!$result['ok']) {
             $this->addFlash('error', $result['message'] ?? 'Panier vide ou invalide.');
             return $this->redirectToRoute('app_cartindex');
         }
 
-        // Retrieve shipping address ID from session
         $shippingAddressId = $request->getSession()->get('shipping_address_id');
         if (!$shippingAddressId) {
             return $this->redirectToRoute('checkout_shipping');
         }
 
-        // Get the shipping address and verify ownership
         $shippingAddress = $em->getRepository(ShippingAddress::class)->find($shippingAddressId);
         if (!$shippingAddress || $shippingAddress->getUser() !== $user) {
             $this->addFlash('error', 'Adresse de livraison invalide.');
             return $this->redirectToRoute('checkout_shipping');
         }
 
-        // Extract cart and total amount
-        $cart = $result['cart'];
         $total = (int) round($result['total'] * 100);
 
-        // Create Order entity
         $order = new Order();
         $order->setUser($user);
         $order->setTotalAmount($total);
+        $order->setStatus('paid');
         $order->setCreatedAt(new \DateTimeImmutable());
         $order->setShippingAddress((string) $shippingAddress);
-
-        // Update the "status" field to "paid"
-        $order->setStatus('paid');
-
-        // Persist the order to database
         $em->persist($order);
         $em->flush();
 
-        // Clear the cart after successful order
         $this->cartService->clear($user);
-
-        // Clear session data
         $request->getSession()->remove('shipping_address_id');
 
-        // Add success flash message
         $this->addFlash('success', 'Votre commande a été confirmée avec succès.');
-
-        // Redirect to home page
         return $this->redirectToRoute('app_home');
     }
 
     /**
-     * Creates the Stripe Checkout session and redirects the user to Stripe.
+     * STEP 3 — Payment method selection page.
+     *
+     * Displays the payment-method.html.twig template which offers:
+     *   - Credit/debit card (redirects to Stripe via checkout_pay)
+     *   - Digital wallets (Apple Pay, Google Pay, PayPal — UI only, wired to Stripe)
+     *   - Bank transfer (wired to checkout_confirm_post)
+     *
+     * Requires a shipping address in session (set in step 1).
+     */
+    #[Route('/method', name: 'method', methods: ['GET'])]
+    public function method(Request $request, EntityManagerInterface $em): Response|RedirectResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $result = $this->cartService->prepareCheckout($user);
+
+        if (!$result['ok']) {
+            $this->addFlash('error', $result['message'] ?? 'Votre panier est vide.');
+            return $this->redirectToRoute('app_cartindex');
+        }
+
+        // Require a shipping address from the previous step
+        $shippingAddressId = $request->getSession()->get('shipping_address_id');
+        if (!$shippingAddressId) {
+            return $this->redirectToRoute('checkout_shipping');
+        }
+
+        // Verify address still belongs to this user
+        $shippingAddress = $em->getRepository(ShippingAddress::class)->find($shippingAddressId);
+        if (!$shippingAddress || $shippingAddress->getUser() !== $user) {
+            $this->addFlash('error', 'Adresse de livraison introuvable. Veuillez la resaisir.');
+            return $this->redirectToRoute('checkout_shipping');
+        }
+
+        return $this->render('payment/payment-method.html.twig', [
+            'cart'            => $result['cart'],
+            'total'           => $result['total'],
+            'shippingAddress' => $shippingAddress,
+        ]);
+    }
+
+    /**
+     * STEP 4 — Create Stripe Checkout session and redirect to Stripe.
+     *
+     * Called by the "Carte bancaire" button in payment-method.html.twig.
+     * Requires shipping address in session (set in step 1).
      */
     #[Route('/pay', name: 'pay', methods: ['POST'])]
     public function pay(Request $request, EntityManagerInterface $em): RedirectResponse|Response
@@ -203,23 +228,20 @@ final class CheckoutController extends AbstractController
             return $this->redirectToRoute('app_cartindex');
         }
 
-        // Get shipping address from session
         $shippingAddressId = $request->getSession()->get('shipping_address_id');
         if (!$shippingAddressId) {
             return $this->redirectToRoute('checkout_shipping');
         }
 
-        $cart  = $result['cart'];
-        $total = (int) round($result['total'] * 100);
-
-        // Get shipping address
         $shippingAddress = $em->getRepository(ShippingAddress::class)->find($shippingAddressId);
         if (!$shippingAddress || $shippingAddress->getUser() !== $user) {
             $this->addFlash('error', 'Adresse de livraison invalide.');
             return $this->redirectToRoute('checkout_shipping');
         }
 
-        // Create the order in DB with status "pending"
+        $cart  = $result['cart'];
+        $total = (int) round($result['total'] * 100);
+
         $order = new Order();
         $order->setUser($user);
         $order->setTotalAmount($total);
@@ -263,7 +285,6 @@ final class CheckoutController extends AbstractController
         $order->setStripeSessionId($session->id);
         $em->flush();
 
-        // Clear session data
         $request->getSession()->remove('shipping_address_id');
 
         return new RedirectResponse($session->url);

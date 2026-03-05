@@ -1,0 +1,915 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Méthode de paiement — Sports Bottles{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg:        #0d1117;
+    --surface:   #161b22;
+    --surface2:  #1c2333;
+    --border:    rgba(255,255,255,0.08);
+    --border-active: rgba(52,209,138,0.6);
+    --green:     #34d18a;
+    --green-dim: #1a8a5a;
+    --text:      #e6edf3;
+    --muted:     #7d8590;
+    --error:     #f85149;
+    --radius:    14px;
+    --mono:      'DM Mono', monospace;
+    --sans:      'DM Sans', sans-serif;
+    --display:   'Syne', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+}
+
+/* ── Page wrapper ── */
+.pm-page {
+    min-height: 100vh;
+    padding: 110px 16px 60px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 32px;
+}
+
+/* ── Left column ── */
+.pm-left {
+    width: 100%;
+    max-width: 460px;
+}
+
+/* ── Right column (order summary) ── */
+.pm-right {
+    width: 100%;
+    max-width: 320px;
+    position: sticky;
+    top: 110px;
+}
+
+/* ── Section title ── */
+.pm-section-title {
+    font-family: var(--display);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.5px;
+    margin-bottom: 24px;
+}
+.pm-section-title small {
+    font-size: .85rem;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    margin-top: 2px;
+    font-family: var(--sans);
+    letter-spacing: 0;
+}
+
+/* ── Method tabs ── */
+.method-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+}
+.method-tab {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, transform .15s;
+    user-select: none;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: .8rem;
+    font-weight: 500;
+}
+.method-tab:hover {
+    border-color: rgba(52,209,138,.3);
+    background: var(--surface2);
+    color: var(--text);
+    transform: translateY(-1px);
+}
+.method-tab.active {
+    border-color: var(--green);
+    background: rgba(52,209,138,.06);
+    color: var(--green);
+}
+.method-tab .tab-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/* ── Card preview (3D flip) ── */
+.card-scene {
+    perspective: 1000px;
+    width: 100%;
+    height: 200px;
+    margin-bottom: 28px;
+}
+.card-3d {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .65s cubic-bezier(.4,0,.2,1);
+}
+.card-3d.flipped { transform: rotateY(180deg); }
+
+.card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+/* Front */
+.card-front {
+    background: linear-gradient(135deg, #1a2a3a 0%, #0f1923 50%, #162030 100%);
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 24px 60px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.card-front::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(52,209,138,.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+.card-chip {
+    width: 42px; height: 32px;
+    background: linear-gradient(135deg, #d4a843, #f0c860, #b8942a);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+}
+.card-chip::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(0,0,0,.25);
+    border-radius: 3px;
+}
+.card-number-display {
+    font-family: var(--mono);
+    font-size: 1.3rem;
+    letter-spacing: 4px;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+.card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.card-label { font-size: .6rem; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; }
+.card-value { font-family: var(--mono); font-size: .9rem; color: #fff; }
+.card-brand-logo { font-size: 1.8rem; }
+
+/* Back */
+.card-back {
+    background: linear-gradient(135deg, #111820 0%, #0d1520 100%);
+    border: 1px solid rgba(255,255,255,.08);
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+}
+.card-stripe-black {
+    background: #1a1a1a;
+    height: 48px;
+    margin-top: 32px;
+}
+.card-cvv-row {
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+.card-cvv-box {
+    background: #fff;
+    color: #000;
+    font-family: var(--mono);
+    font-size: .95rem;
+    padding: 6px 20px;
+    border-radius: 4px;
+    min-width: 60px;
+    text-align: center;
+    letter-spacing: 4px;
+}
+.card-cvv-label { font-size: .7rem; color: var(--muted); }
+
+/* ── Form panel ── */
+.pm-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+}
+
+.form-group { margin-bottom: 18px; }
+.form-label {
+    display: block;
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 7px;
+}
+.form-control-dark {
+    width: 100%;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: .95rem;
+    padding: 13px 16px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    appearance: none;
+}
+.form-control-dark::placeholder { color: var(--muted); }
+.form-control-dark:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(52,209,138,.12);
+}
+.form-control-dark.error {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(248,81,73,.1);
+}
+.input-icon-wrap {
+    position: relative;
+}
+.input-icon-wrap .form-control-dark { padding-right: 44px; }
+.input-icon-wrap .input-icon {
+    position: absolute;
+    right: 14px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.error-msg { font-size: .75rem; color: var(--error); margin-top: 5px; display: none; }
+.error-msg.show { display: block; }
+
+/* ── Pay button ── */
+.btn-pay {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--green-dim), var(--green));
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: .3px;
+    cursor: pointer;
+    transition: opacity .2s, transform .15s, box-shadow .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(52,209,138,.2);
+    margin-top: 24px;
+}
+.btn-pay:hover { opacity: .92; transform: translateY(-1px); box-shadow: 0 12px 32px rgba(52,209,138,.3); }
+.btn-pay:active { transform: scale(.98); }
+.btn-pay:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+/* ── Security strip ── */
+.security-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+.security-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: .73rem;
+    color: var(--muted);
+}
+.security-item i { color: var(--green); }
+
+/* ── Alternative methods panels ── */
+.alt-panel { display: none; }
+.alt-panel.active { display: block; }
+
+.wallet-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: border-color .2s, background .2s, transform .15s;
+    margin-bottom: 12px;
+    text-decoration: none;
+}
+.wallet-btn:hover {
+    border-color: var(--green);
+    background: rgba(52,209,138,.05);
+    color: var(--text);
+    transform: translateY(-1px);
+}
+.wallet-btn.apple  { border-color: rgba(255,255,255,.2); }
+.wallet-btn.google { border-color: rgba(255,255,255,.2); }
+.wallet-btn.paypal { border-color: rgba(0,112,243,.35); }
+
+.divider-or {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: .78rem;
+    margin: 20px 0;
+}
+.divider-or::before, .divider-or::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* ── Order summary (right column) ── */
+.summary-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.summary-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: .95rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.summary-body { padding: 18px 22px; }
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+.summary-item:last-child { margin-bottom: 0; }
+.summary-item-name { font-size: .88rem; color: var(--text); }
+.summary-item-qty  { font-size: .75rem; color: var(--muted); margin-top: 2px; }
+.summary-item-price { font-size: .88rem; font-weight: 600; color: var(--text); white-space: nowrap; }
+.summary-divider { border-color: var(--border); margin: 16px 0; }
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: .88rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+}
+.summary-total-label { font-family: var(--display); font-weight: 700; font-size: 1rem; color: var(--text); }
+.summary-total-amount { font-family: var(--display); font-weight: 800; font-size: 1.4rem; color: var(--green); }
+
+.badge-secure {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(52,209,138,.08);
+    border: 1px solid rgba(52,209,138,.2);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: .72rem;
+    color: var(--green);
+    margin-top: 16px;
+    width: 100%;
+    justify-content: center;
+}
+
+/* ── Accepted cards row ── */
+.accepted-cards {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.card-logo {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: .7rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: .5px;
+}
+.card-logo.visa    { color: #1a72c7; border-color: rgba(26,114,199,.3); }
+.card-logo.mc      { color: #eb001b; border-color: rgba(235,0,27,.3); }
+.card-logo.amex    { color: #007bc1; border-color: rgba(0,123,193,.3); }
+.card-logo.cb      { color: var(--green); border-color: rgba(52,209,138,.3); }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .pm-page { flex-direction: column; align-items: center; }
+    .pm-right { position: static; max-width: 460px; }
+}
+@media (max-width: 480px) {
+    .card-number-display { font-size: 1rem; letter-spacing: 2px; }
+    .pm-panel { padding: 20px; }
+    .form-row { grid-template-columns: 1fr; }
+}
+
+/* Animations */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.pm-left, .pm-right { animation: slideIn .45s ease both; }
+.pm-right { animation-delay: .1s; }
+</style>
+
+<div class="pm-page">
+
+    <!-- ═══ LEFT COLUMN ═══ -->
+    <div class="pm-left">
+
+        <h1 class="pm-section-title">
+            Paiement sécurisé
+            <small>Choisissez votre méthode de paiement</small>
+        </h1>
+
+        <!-- Method tabs -->
+        <div class="method-tabs">
+            <button class="method-tab active" data-method="card" onclick="switchMethod('card', this)">
+                <span class="tab-icon"><i class="bi bi-credit-card-2-front-fill"></i></span>
+                Carte bancaire
+            </button>
+            <button class="method-tab" data-method="wallet" onclick="switchMethod('wallet', this)">
+                <span class="tab-icon"><i class="bi bi-phone-fill"></i></span>
+                Wallet
+            </button>
+            <button class="method-tab" data-method="transfer" onclick="switchMethod('transfer', this)">
+                <span class="tab-icon"><i class="bi bi-bank2"></i></span>
+                Virement
+            </button>
+        </div>
+
+        <!-- ══ CARD METHOD ══ -->
+        <div id="method-card" class="alt-panel active">
+
+            <!-- 3D Card preview -->
+            <div class="card-scene">
+                <div class="card-3d" id="card3d">
+                    <!-- Front -->
+                    <div class="card-face card-front">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="card-chip"></div>
+                            <div id="card-brand-display" class="card-brand-logo" style="color:rgba(255,255,255,.3);">
+                                <i class="bi bi-credit-card"></i>
+                            </div>
+                        </div>
+                        <div id="card-number-display" class="card-number-display">
+                            •••• &nbsp;•••• &nbsp;•••• &nbsp;••••
+                        </div>
+                        <div class="card-bottom">
+                            <div>
+                                <div class="card-label">Titulaire</div>
+                                <div class="card-value" id="card-name-display">VOTRE NOM</div>
+                            </div>
+                            <div>
+                                <div class="card-label">Expire</div>
+                                <div class="card-value" id="card-exp-display">MM/AA</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Back -->
+                    <div class="card-face card-back">
+                        <div class="card-stripe-black"></div>
+                        <div class="card-cvv-row">
+                            <span class="card-cvv-label">CVV</span>
+                            <div class="card-cvv-box" id="card-cvv-display">•••</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accepted cards -->
+            <div class="accepted-cards">
+                <span class="card-logo visa">VISA</span>
+                <span class="card-logo mc">MASTERCARD</span>
+                <span class="card-logo amex">AMEX</span>
+                <span class="card-logo cb">CB</span>
+            </div>
+
+            <!-- Card form -->
+            <div class="pm-panel">
+                <form id="card-form" novalidate>
+                    <input type="hidden" name="_token" value="{{ csrf_token('checkout_pay') }}">
+
+                    <div class="form-group">
+                        <label class="form-label">Numéro de carte</label>
+                        <div class="input-icon-wrap">
+                            <input type="text" id="card-number" class="form-control-dark"
+                                   placeholder="0000 0000 0000 0000"
+                                   maxlength="19" autocomplete="cc-number"
+                                   inputmode="numeric">
+                            <span class="input-icon" id="card-icon"><i class="bi bi-credit-card"></i></span>
+                        </div>
+                        <div class="error-msg" id="err-number">Numéro de carte invalide.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Titulaire de la carte</label>
+                        <input type="text" id="card-name" class="form-control-dark"
+                               placeholder="Jean Dupont"
+                               autocomplete="cc-name">
+                        <div class="error-msg" id="err-name">Veuillez saisir le nom du titulaire.</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Date d'expiration</label>
+                            <input type="text" id="card-exp" class="form-control-dark"
+                                   placeholder="MM/AA" maxlength="5"
+                                   autocomplete="cc-exp" inputmode="numeric">
+                            <div class="error-msg" id="err-exp">Date invalide.</div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">CVV / CVC</label>
+                            <div class="input-icon-wrap">
+                                <input type="password" id="card-cvv" class="form-control-dark"
+                                       placeholder="•••" maxlength="4"
+                                       autocomplete="cc-csc" inputmode="numeric">
+                                <span class="input-icon"><i class="bi bi-shield-lock"></i></span>
+                            </div>
+                            <div class="error-msg" id="err-cvv">CVV invalide.</div>
+                        </div>
+                    </div>
+
+                    <!-- Save card toggle -->
+                    <div class="d-flex align-items-center gap-3 mt-4"
+                         style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
+                        <div style="flex:1;">
+                            <div style="font-size:.88rem;font-weight:600;color:var(--text);">Sauvegarder cette carte</div>
+                            <div style="font-size:.75rem;color:var(--muted);">Pour vos prochains achats</div>
+                        </div>
+                        <label style="position:relative;display:inline-block;width:42px;height:24px;cursor:pointer;">
+                            <input type="checkbox" id="save-card" style="opacity:0;width:0;height:0;">
+                            <span id="toggle-track" style="position:absolute;inset:0;background:var(--border);border-radius:12px;transition:background .2s;"></span>
+                            <span id="toggle-thumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.3);"></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-pay" id="btn-pay">
+                        <i class="bi bi-lock-fill"></i>
+                        Payer
+                        <span id="pay-amount">{{ total|number_format(2, ',', ' ') }} €</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ══ WALLET METHOD ══ -->
+        <div id="method-wallet" class="alt-panel">
+            <div class="pm-panel">
+                <p style="font-size:.85rem;color:var(--muted);margin-bottom:20px;line-height:1.6;">
+                    Payez en un clic avec votre portefeuille numérique. Aucune saisie de carte requise.
+                </p>
+
+                <button class="wallet-btn apple" onclick="handleWalletPay('Apple Pay')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    Payer avec Apple Pay
+                </button>
+
+                <button class="wallet-btn google" onclick="handleWalletPay('Google Pay')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    Payer avec Google Pay
+                </button>
+
+                <button class="wallet-btn paypal" onclick="handleWalletPay('PayPal')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#009cde">
+                        <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
+                    </svg>
+                    Payer avec PayPal
+                </button>
+
+                <div class="divider-or">ou utiliser une carte</div>
+                <button class="wallet-btn" onclick="switchMethod('card', document.querySelector('[data-method=card]'))">
+                    <i class="bi bi-credit-card-fill"></i>
+                    Payer par carte bancaire
+                </button>
+            </div>
+        </div>
+
+        <!-- ══ TRANSFER METHOD ══ -->
+        <div id="method-transfer" class="alt-panel">
+            <div class="pm-panel">
+                <p style="font-size:.85rem;color:var(--muted);margin-bottom:22px;line-height:1.6;">
+                    Effectuez un virement bancaire. Votre commande sera validée dès réception du paiement (1–2 jours ouvrés).
+                </p>
+
+                <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:20px;">
+                    <div style="margin-bottom:14px;">
+                        <div class="form-label" style="margin-bottom:4px;">IBAN</div>
+                        <div style="font-family:var(--mono);font-size:.9rem;color:var(--text);letter-spacing:1px;">
+                            FR76 3000 6000 0112 3456 7890 189
+                            <button onclick="copyIBAN()" style="background:none;border:none;color:var(--green);cursor:pointer;margin-left:8px;font-size:.8rem;">
+                                <i class="bi bi-clipboard" id="copy-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <div class="form-label" style="margin-bottom:4px;">BIC / SWIFT</div>
+                        <div style="font-family:var(--mono);font-size:.9rem;color:var(--text);">AGRIFRPP</div>
+                    </div>
+                    <div>
+                        <div class="form-label" style="margin-bottom:4px;">Référence à indiquer</div>
+                        <div style="font-family:var(--mono);font-size:.9rem;color:var(--green);">
+                            SB-{{ 'now'|date('YmdHis') }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start gap-3 mt-3"
+                     style="background:rgba(52,209,138,.05);border:1px solid rgba(52,209,138,.15);border-radius:10px;padding:14px 16px;">
+                    <i class="bi bi-info-circle-fill" style="color:var(--green);margin-top:2px;flex-shrink:0;"></i>
+                    <p style="font-size:.8rem;color:var(--muted);margin:0;line-height:1.5;">
+                        Votre commande sera réservée pendant <strong style="color:var(--text);">72 heures</strong>.
+                        Passé ce délai, elle sera automatiquement annulée si le paiement n'est pas reçu.
+                    </p>
+                </div>
+
+                <form action="{{ path('checkout_pay') }}" method="post" style="margin-top:20px;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('checkout_pay') }}">
+                    <input type="hidden" name="payment_method" value="transfer">
+                    <button type="submit" class="btn-pay">
+                        <i class="bi bi-bank2"></i>
+                        Confirmer la commande par virement
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Security strip -->
+        <div class="security-strip mt-3">
+            <div class="security-item"><i class="bi bi-shield-check-fill"></i> SSL 256-bit</div>
+            <div class="security-item"><i class="bi bi-patch-check-fill"></i> 3D Secure</div>
+            <div class="security-item"><i class="bi bi-lock-fill"></i> PCI DSS</div>
+            <div class="security-item"><i class="bi bi-stripe" style="color:#635bff;"></i> Powered by Stripe</div>
+        </div>
+    </div>
+
+    <!-- ═══ RIGHT COLUMN — Order summary ═══ -->
+    <div class="pm-right">
+        <div class="summary-box">
+            <div class="summary-header">
+                <i class="bi bi-bag-check-fill" style="color:var(--green);"></i>
+                Votre commande
+            </div>
+            <div class="summary-body">
+                {% for item in cart.items %}
+                <div class="summary-item">
+                    <div>
+                        <div class="summary-item-name">{{ item.product.designation }}</div>
+                        <div class="summary-item-qty">Qté : {{ item.quantity }}</div>
+                    </div>
+                    <div class="summary-item-price">{{ item.subtotal|number_format(2, ',', ' ') }} €</div>
+                </div>
+                {% endfor %}
+
+                <hr class="summary-divider">
+
+                <div class="summary-row">
+                    <span>Sous-total</span>
+                    <span>{{ total|number_format(2, ',', ' ') }} €</span>
+                </div>
+                <div class="summary-row">
+                    <span>Livraison</span>
+                    <span style="color:var(--green);">Gratuite</span>
+                </div>
+                <div class="summary-row">
+                    <span>TVA (20%)</span>
+                    <span>incluse</span>
+                </div>
+
+                <div class="summary-total">
+                    <span class="summary-total-label">Total</span>
+                    <span class="summary-total-amount">{{ total|number_format(2, ',', ' ') }} €</span>
+                </div>
+
+                <div class="badge-secure">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    Paiement 100% sécurisé
+                </div>
+            </div>
+        </div>
+
+        <!-- Back link -->
+        <div class="text-center mt-3">
+            <a href="{{ path('checkout_confirm') }}"
+               style="font-size:.8rem;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:5px;">
+                <i class="bi bi-arrow-left"></i> Modifier ma commande
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ── Method switcher ──
+function switchMethod(method, btn) {
+    document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.alt-panel').forEach(p => p.classList.remove('active'));
+
+    document.querySelector('[data-method=' + method + ']').classList.add('active');
+    document.getElementById('method-' + method).classList.add('active');
+}
+
+// ── Card 3D preview logic ──
+const card3d    = document.getElementById('card3d');
+const numInput  = document.getElementById('card-number');
+const nameInput = document.getElementById('card-name');
+const expInput  = document.getElementById('card-exp');
+const cvvInput  = document.getElementById('card-cvv');
+
+const numDisplay  = document.getElementById('card-number-display');
+const nameDisplay = document.getElementById('card-name-display');
+const expDisplay  = document.getElementById('card-exp-display');
+const cvvDisplay  = document.getElementById('card-cvv-display');
+const brandIcon   = document.getElementById('card-brand-display');
+const cardIcon    = document.getElementById('card-icon');
+
+function detectBrand(num) {
+    const v = num.replace(/\s/g, '');
+    if (/^4/.test(v))         return { label: 'VISA',       icon: 'bi-credit-card-2-front', color: '#1a72c7' };
+    if (/^5[1-5]/.test(v))    return { label: 'MC',         icon: 'bi-circle-half',          color: '#eb001b' };
+    if (/^3[47]/.test(v))     return { label: 'AMEX',       icon: 'bi-credit-card',           color: '#007bc1' };
+    if (/^6(?:011|5)/.test(v))return { label: 'DISCOVER',   icon: 'bi-credit-card',           color: '#f76f20' };
+    return null;
+}
+
+numInput.addEventListener('input', function () {
+    let v = this.value.replace(/\D/g, '').slice(0, 16);
+    this.value = v.replace(/(.{4})/g, '$1 ').trim();
+
+    const brand = detectBrand(v);
+    if (brand) {
+        brandIcon.innerHTML = `<span style="font-size:.85rem;font-weight:800;letter-spacing:1px;color:${brand.color}">${brand.label}</span>`;
+        cardIcon.innerHTML  = `<i class="${brand.icon}" style="color:${brand.color}"></i>`;
+    } else {
+        brandIcon.innerHTML = '<i class="bi bi-credit-card" style="color:rgba(255,255,255,.3)"></i>';
+        cardIcon.innerHTML  = '<i class="bi bi-credit-card"></i>';
+    }
+
+    const padded = v.padEnd(16, '•');
+    numDisplay.innerHTML = padded.slice(0,4) + ' &nbsp;' + padded.slice(4,8) + ' &nbsp;' + padded.slice(8,12) + ' &nbsp;' + padded.slice(12,16);
+});
+
+nameInput.addEventListener('input', function () {
+    nameDisplay.textContent = this.value.toUpperCase() || 'VOTRE NOM';
+});
+
+expInput.addEventListener('input', function () {
+    let v = this.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+    this.value = v;
+    expDisplay.textContent = v || 'MM/AA';
+});
+
+// Flip card for CVV
+cvvInput.addEventListener('focus', () => card3d.classList.add('flipped'));
+cvvInput.addEventListener('blur',  () => card3d.classList.remove('flipped'));
+cvvInput.addEventListener('input', function () {
+    cvvDisplay.textContent = this.value ? '•'.repeat(this.value.length) : '•••';
+});
+
+// ── Toggle save card ──
+const saveCard    = document.getElementById('save-card');
+const toggleTrack = document.getElementById('toggle-track');
+const toggleThumb = document.getElementById('toggle-thumb');
+saveCard.addEventListener('change', function () {
+    toggleTrack.style.background = this.checked ? 'var(--green)' : 'var(--border)';
+    toggleThumb.style.transform  = this.checked ? 'translateX(18px)' : 'translateX(0)';
+});
+
+// ── Form validation & submit ──
+document.getElementById('card-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valid = true;
+
+    const num  = numInput.value.replace(/\s/g, '');
+    const name = nameInput.value.trim();
+    const exp  = expInput.value;
+    const cvv  = cvvInput.value;
+
+    const showErr = (id, show) => {
+        const el = document.getElementById(id);
+        el.classList.toggle('show', show);
+        const input = el.previousElementSibling.querySelector ? el.previousElementSibling.querySelector('input') || el.previousElementSibling : el.previousElementSibling;
+        input.classList.toggle('error', show);
+    };
+
+    if (num.length < 13 || num.length > 19) { valid = false; document.getElementById('err-number').classList.add('show'); numInput.classList.add('error'); }
+    else { document.getElementById('err-number').classList.remove('show'); numInput.classList.remove('error'); }
+
+    if (!name) { valid = false; document.getElementById('err-name').classList.add('show'); nameInput.classList.add('error'); }
+    else { document.getElementById('err-name').classList.remove('show'); nameInput.classList.remove('error'); }
+
+    const expOk = /^(0[1-9]|1[0-2])\/\d{2}$/.test(exp);
+    if (!expOk) { valid = false; document.getElementById('err-exp').classList.add('show'); expInput.classList.add('error'); }
+    else { document.getElementById('err-exp').classList.remove('show'); expInput.classList.remove('error'); }
+
+    if (cvv.length < 3) { valid = false; document.getElementById('err-cvv').classList.add('show'); cvvInput.classList.add('error'); }
+    else { document.getElementById('err-cvv').classList.remove('show'); cvvInput.classList.remove('error'); }
+
+    if (!valid) return;
+
+    // All valid — submit to Stripe checkout
+    const btn = document.getElementById('btn-pay');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Traitement en cours…';
+
+    // Redirect to Stripe checkout
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ path('checkout_pay') }}';
+    const token = document.createElement('input');
+    token.type = 'hidden'; token.name = '_token';
+    token.value = '{{ csrf_token('checkout_pay') }}';
+    form.appendChild(token);
+    document.body.appendChild(form);
+    form.submit();
+});
+
+// ── Wallet pay placeholder ──
+function handleWalletPay(method) {
+    alert(method + ' : intégration disponible via Stripe Elements ou le SDK natif.');
+}
+
+// ── Copy IBAN ──
+function copyIBAN() {
+    navigator.clipboard.writeText('FR7630006000011234567890189').then(() => {
+        const icon = document.getElementById('copy-icon');
+        icon.className = 'bi bi-clipboard-check';
+        icon.style.color = 'var(--green)';
+        setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 2000);
+    });
+}
+</script>
+
+{% endblock %}
