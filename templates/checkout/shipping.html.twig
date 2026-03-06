@@ -54,7 +54,7 @@
                                     type="text"
                                     id="shipping_address_fullName"
                                     name="{{ form.fullName.vars.full_name }}"
-                                    class="form-control form-control-lg {% if form.fullName.vars.errors|length > 0 %}is-invalid{% endif %}"
+                                    class="form-control form-control-md {% if form.fullName.vars.errors|length > 0 %}is-invalid{% endif %}"
                                     value="{{ form.fullName.vars.value ?? '' }}"
                                     placeholder="Jean Dupont"
                                     required
@@ -78,7 +78,7 @@
                                     type="text"
                                     id="shipping_address_address"
                                     name="{{ form.address.vars.full_name }}"
-                                    class="form-control form-control-lg {% if form.address.vars.errors|length > 0 %}is-invalid{% endif %}"
+                                    class="form-control form-control-md {% if form.address.vars.errors|length > 0 %}is-invalid{% endif %}"
                                     value="{{ form.address.vars.value ?? '' }}"
                                     placeholder="123 Rue de la Paix"
                                     required
@@ -102,7 +102,7 @@
                                     type="text"
                                     id="shipping_address_city"
                                     name="{{ form.city.vars.full_name }}"
-                                    class="form-control form-control-lg {% if form.city.vars.errors|length > 0 %}is-invalid{% endif %}"
+                                    class="form-control form-control-md {% if form.city.vars.errors|length > 0 %}is-invalid{% endif %}"
                                     value="{{ form.city.vars.value ?? '' }}"
                                     placeholder="Paris"
                                     required
@@ -126,7 +126,7 @@
                                     type="text"
                                     id="shipping_address_postalCode"
                                     name="{{ form.postalCode.vars.full_name }}"
-                                    class="form-control form-control-lg {% if form.postalCode.vars.errors|length > 0 %}is-invalid{% endif %}"
+                                    class="form-control form-control-md {% if form.postalCode.vars.errors|length > 0 %}is-invalid{% endif %}"
                                     value="{{ form.postalCode.vars.value ?? '' }}"
                                     placeholder="75001"
                                     maxlength="5"
@@ -151,7 +151,7 @@
                                     type="text"
                                     id="shipping_address_country"
                                     name="{{ form.country.vars.full_name }}"
-                                    class="form-control form-control-lg {% if form.country.vars.errors|length > 0 %}is-invalid{% endif %}"
+                                    class="form-control form-control-md {% if form.country.vars.errors|length > 0 %}is-invalid{% endif %}"
                                     value="{{ form.country.vars.value ?? '' }}"
                                     placeholder="France"
                                     required
@@ -175,7 +175,7 @@
                                     type="tel"
                                     id="shipping_address_phone"
                                     name="{{ form.phone.vars.full_name }}"
-                                    class="form-control form-control-lg {% if form.phone.vars.errors|length > 0 %}is-invalid{% endif %}"
+                                    class="form-control form-control-md {% if form.phone.vars.errors|length > 0 %}is-invalid{% endif %}"
                                     value="{{ form.phone.vars.value ?? '' }}"
                                     placeholder="+33 6 12 34 56 78"
                                     required

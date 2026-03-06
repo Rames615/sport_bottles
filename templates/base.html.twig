@@ -16,6 +16,11 @@
 		
 		<!-- Font Awesome Icons -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEZSMUkrQ6usKGgiToZdeNQvQBKALuBuxmuP3w1b0xhopsWIcGMaYNFtatX3v4vpJtqiiZYg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		 
+        {# Google Fonts #}
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 		
 		<!-- Global Variables and Typography -->
 		<link rel="stylesheet" href="{{ asset('styles/variables.css') }}">
@@ -23,6 +28,10 @@
 		<!-- Global UI Components -->
 		<link rel="stylesheet" href="{{ asset('styles/ui-components.css') }}">
 		
+		
+		
+		{% block stylesheets %}
+
 		<!-- Section Specific Styles -->
 		<link rel="stylesheet" href="{{ asset('styles/nav.css') }}">
 		<link rel="stylesheet" href="{{ asset('styles/hero-section.css') }}">
@@ -34,8 +43,9 @@
 		<link rel="stylesheet" href="{{ asset('styles/login.css') }}">
 		<link rel="stylesheet" href="{{ asset('styles/registration.css') }}">
 		<link rel="stylesheet" href="{{ asset('styles/cart.css') }}">
+		<link rel="stylesheet" href="{{ asset('styles/payment.css') }}">
 		
-		{% block stylesheets %}{% endblock %}
+		{% endblock %}
 
 		{% block importmap %}
 			{{ importmap('app') }}
