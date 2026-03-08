@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Entity\User;
+use App\Service\MailerService;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Stripe\Webhook;
@@ -19,6 +20,7 @@ final class StripeController extends AbstractController
 {
     public function __construct(
         private \App\Service\CartService $cartService,
+        private MailerService $mailerService,
     ) {}
 
     #[Route('/stripe/checkout', name: 'stripe_checkout')]
@@ -113,6 +115,23 @@ final class StripeController extends AbstractController
                 if ($stripeSession->payment_status === 'paid' && $order->getStatus() !== 'paid') {
                     $order->setStatus('paid');
                     $em->flush();
+
+                    // Send order confirmation email (fallback if webhook hasn't fired yet)
+                    try {
+                        $items = [];
+                        $lineItems = Session::allLineItems($sessionId, ['limit' => 100]);
+                        foreach ($lineItems->data as $li) {
+                            $items[] = [
+                                'name'      => $li->description,
+                                'quantity'  => $li->quantity,
+                                'unitPrice' => $li->price->unit_amount / 100,
+                                'subtotal'  => $li->amount_total / 100,
+                            ];
+                        }
+                        $this->mailerService->sendOrderConfirmation($order, $items);
+                    } catch (\Exception $e) {
+                        // Non-blocking: email failure shouldn't break the success page
+                    }
                 }
             } catch (\Exception $e) {
                 // Non-blocking: the JS polling will catch it
@@ -200,12 +219,34 @@ final class StripeController extends AbstractController
 
         if ($type === 'checkout.session.completed') {
             $session = is_object($event) ? $event->data->object : $event['data']['object'];
-            $order   = $em->getRepository(Order::class)->findOneBy(['stripeSessionId' => $session->id]);
+            $sessionId = is_object($session) ? $session->id : $session['id'];
+            $order   = $em->getRepository(Order::class)->findOneBy(['stripeSessionId' => $sessionId]);
 
             if ($order && $order->getStatus() !== 'paid') {
                 $order->setStatus('paid');
                 $em->flush();
                 $logger->info('Commande payée via webhook', ['order_id' => $order->getId()]);
+
+                // Send order confirmation email with line items from Stripe
+                try {
+                    $items = [];
+                    $stripeSecret = $_ENV['STRIPE_SECRET_KEY'] ?? null;
+                    if ($stripeSecret) {
+                        Stripe::setApiKey($stripeSecret);
+                        $lineItems = Session::allLineItems($sessionId, ['limit' => 100]);
+                        foreach ($lineItems->data as $li) {
+                            $items[] = [
+                                'name'      => $li->description,
+                                'quantity'  => $li->quantity,
+                                'unitPrice' => $li->price->unit_amount / 100,
+                                'subtotal'  => $li->amount_total / 100,
+                            ];
+                        }
+                    }
+                    $this->mailerService->sendOrderConfirmation($order, $items);
+                } catch (\Exception $e) {
+                    $logger->error('Failed to send order confirmation email from webhook', ['exception' => $e->getMessage()]);
+                }
             }
         }
 

@@ -1,111 +1,167 @@
+{# templates/partials/_navbar.html.twig  (or paste directly into base.html.twig) #}
+
 <!-- Bootstrap Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-	<div class="container-fluid ps-4 pe-4">
-		<a class="navbar-brand" href="{{ path('app_home') }}">
-			<img src="{{ asset('logo.png') }}" alt="Eco-Bottle Logo" style="height: 40px; margin-right: 8px;">
-			<span>Sports Bottles</span>
-		</a>
+    <div class="container-fluid ps-4 pe-4">
 
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+        {# ── Brand / Logo ─────────────────────────────────────────── #}
+        <a class="navbar-brand" href="{{ path('app_home') }}">
+            <img src="{{ asset('logo.png') }}" alt="Sports Bottles Logo" style="height: 40px; margin-right: 8px;">
+            <span>Sports Bottles</span>
+        </a>
 
-		<div class="collapse navbar-collapse" id="navbarNav">
-			<ul class="navbar-nav ms-auto">
-				<li class="nav-item">
-					<a class="nav-link" href="{{ path('app_home') }}">
-						<span class="nav-icon">🏠</span>
-						Accueil
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{{ path('app_product') }}">
-						<span class="nav-icon">📦</span>
-						Produits
-					</a>
-				</li>
-				{% if app.user %}
-					<li class="nav-item">
-						<a class="nav-link position-relative" href="{{ path('app_cartindex') }}">
-							<span class="nav-icon">🛒</span>
-							<span class="d-none d-md-inline">Panier</span>
-							{% if cart_item_count is defined %}
-								{% set cartCount = cart_item_count(app.user) %}
-								{% if cartCount > 0 %}
-									<span id="cart-count-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem; min-width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; padding: 0 4px;">
-										{{ cartCount }}
-									</span>
-								{% else %}
-									<span id="cart-count-badge" style="display:none"></span>
-								{% endif %}
-							{% endif %}
-						</a>
-					</li>
-				{% endif %}
-				{% if app.user %}
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<span class="nav-icon">👤</span>
-							{{ app.user.userIdentifier }}
-						</a>
-						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-							<li>
-								<a class="dropdown-item" href="#">Mon Profil</a>
-							</li>
-							<li>
-								<a class="dropdown-item" href="#">Mes Commandes</a>
-							</li>
-							<li><hr class="dropdown-divider"></li>
-							<li>
-								<a class="dropdown-item" href="{{ logout_path() }}">Se Déconnecter</a>
-							</li>
-						</ul>
-					</li>
-				{% else %}
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<span class="nav-icon">🔐</span>
-							Se connecter
-						</a>
-						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="loginDropdown">
-							<li>
-								<a class="dropdown-item" href="{{ path('app_login') }}">
-									👤 Connexion User
-								</a>
-							</li>
-							<li>
-								<a class="dropdown-item" href="{{ path('admin') }}">
-									🛠️ Connexion Admin
-								</a>
-							</li>
-						</ul>
-					</li>
-				{% endif %}
-			</ul>
-		</div>
-	</div>
+        {# ── Mobile toggler ───────────────────────────────────────── #}
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+
+                {# 1. Produits #}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_product') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                             class="me-1 mb-1" viewBox="0 0 16 16">
+                            <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                        </svg>
+                        Produits
+                    </a>
+                </li>
+
+                {# 2. Contactez-nous #}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_contact') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                             class="me-1 mb-1" viewBox="0 0 16 16">
+                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/>
+                        </svg>
+                        Contactez-nous
+                    </a>
+                </li>
+
+                {# 3. Panier (logged-in only) #}
+                {% if app.user %}
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="{{ path('app_cartindex') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="me-1 mb-1" viewBox="0 0 16 16">
+                            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                        <span class="d-none d-md-inline">Panier</span>
+                        {% if cart_item_count is defined %}
+                            {% set cartCount = cart_item_count(app.user) %}
+                            {% if cartCount > 0 %}
+                                <span id="cart-count-badge"
+                                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                      style="font-size: 0.65rem; min-width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; padding: 0 4px;">
+                                    {{ cartCount }}
+                                </span>
+                            {% else %}
+                                <span id="cart-count-badge" style="display:none"></span>
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </li>
+                {% endif %}
+
+                {# 4. Separator #}
+                <li class="nav-item d-none d-lg-block">
+                    <span class="nav-link px-0" style="opacity:.25; cursor:default;">|</span>
+                </li>
+
+                {# 5. User dropdown (logged-in) / Login dropdown (guest) #}
+                {% if app.user %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#"
+                       id="userDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-secondary"
+                              style="width:28px; height:28px; font-size:13px; font-weight:600; flex-shrink:0;">
+                            {{ app.user.userIdentifier|first|upper }}
+                        </span>
+                        <span class="d-none d-md-inline">{{ app.user.userIdentifier }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <h6 class="dropdown-header text-truncate" style="max-width:200px;">
+                                {{ app.user.userIdentifier }}
+                            </h6>
+                        </li>
+                        <li><hr class="dropdown-divider my-1"></li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                     class="me-2 text-muted" viewBox="0 0 16 16">
+                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.029 10 8 10c-2.029 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                                </svg>
+                                Mon Profil
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                     class="me-2 text-muted" viewBox="0 0 16 16">
+                                    <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                </svg>
+                                Mes Commandes
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider my-1"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="{{ logout_path() }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                     class="me-2" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                </svg>
+                                Se Déconnecter
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {% else %}
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#"
+                       id="loginDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                             class="me-1 mb-1" viewBox="0 0 16 16">
+                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.029 10 8 10c-2.029 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                        </svg>
+                        Se connecter
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="loginDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ path('app_login') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                     class="me-2 text-muted" viewBox="0 0 16 16">
+                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4z"/>
+                                </svg>
+                                Connexion
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ path('admin') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                     class="me-2 text-muted" viewBox="0 0 16 16">
+                                    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                                </svg>
+                                Espace Admin
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
 </nav>
 
-<script>
-	// Bootstrap handles navbar toggling automatically
-// Wait for both DOM and Bootstrap to be ready
-window.addEventListener('load', function () { // Close navbar when clicking on a non-dropdown link (mobile)
-const navLinks = document.querySelectorAll('.navbar-collapse .nav-link:not(.dropdown-toggle)');
-const navbarCollapse = document.querySelector('.navbar-collapse');
-
-if (navbarCollapse && navLinks.length > 0) {
-navLinks.forEach(link => {
-link.addEventListener('click', function () { // Use Bootstrap's collapse if available, otherwise just hide
-if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
-const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-if (bsCollapse) {
-bsCollapse.hide();
-}
-} else { // Fallback: manually toggle class
-navbarCollapse.classList.remove('show');
-}
-});
-});
-}
-});
-</script>
+<script src="{{ asset('scripts/navbar.js') }}"></script>

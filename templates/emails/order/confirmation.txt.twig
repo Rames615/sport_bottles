@@ -1,0 +1,34 @@
+{#
+  Plain-text fallback — no HTML here at all.
+  Email clients that cannot render HTML display this version instead.
+#}
+COMMANDE CONFIRMÉE
+==================
+
+Bonjour,
+
+Merci pour votre commande sur SportBottles !
+Votre paiement a été confirmé avec succès.
+
+Référence : {{ order.reference }}
+Date :      {{ order.createdAt|date('d/m/Y à H:i') }}
+Statut :    Payée
+{% if order.shippingAddress %}Livraison : {{ order.shippingAddress }}{% endif %}
+
+{% if items is defined and items|length > 0 %}
+DÉTAIL DE VOTRE COMMANDE
+-------------------------
+{% for item in items %}
+- {{ item.name }}  x{{ item.quantity }}  {{ item.unitPrice|number_format(2, ',', ' ') }} €  = {{ item.subtotal|number_format(2, ',', ' ') }} €
+{% endfor %}
+
+TOTAL : {{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} €
+{% else %}
+Total : {{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} €
+{% endif %}
+
+---
+Si vous avez des questions, contactez-nous à contact@sportsbottles.fr
+
+À très bientôt,
+L'équipe SportBottles

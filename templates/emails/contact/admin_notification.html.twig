@@ -1,0 +1,52 @@
+{# templates/emails/contact/admin_notification.html.twig #}
+{% extends 'emails/layout.html.twig' %}
+
+{% block header_title %}Nouveau message de contact
+{% endblock %}
+
+{% block body %}
+	<p>
+		Vous avez reçu un nouveau message via le formulaire de contact
+		    le
+		<strong>{{ receivedAt|date('d/m/Y') }}</strong>
+		à
+		<strong>{{ receivedAt|date('H:i') }}</strong>.
+	</p>
+
+	<table class="info-table">
+		<tr>
+			<td>Nom</td>
+			<td>
+				<strong>{{ name }}</strong>
+			</td>
+		</tr>
+		<tr>
+			<td>Email</td>
+			<td>
+				<a href="mailto:{{ sender_email }}">{{ sender_email }}</a>
+			</td>
+		</tr>
+		{% if subject %}
+			<tr>
+				<td>Sujet</td>
+				<td>{{ subject }}</td>
+			</tr>
+		{% endif %}
+	</table>
+
+	<p>
+		<strong>Message :</strong>
+	</p>
+	<div class="msg-block">
+		<p>{{ message|nl2br }}</p>
+	</div>
+
+	<hr class="divider">
+
+	<p style="text-align: center;">
+		<a href="mailto:{{ sender_email }}?subject=Re%3A%20{{ (subject ?: 'Votre message')|url_encode }}" class="email-btn">
+			&#9993; Répondre à
+			{{ name }}
+		</a>
+	</p>
+{% endblock %}

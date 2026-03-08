@@ -1,0 +1,36 @@
+{# templates/emails/contact/user_confirmation.html.twig #}
+{% extends 'emails/layout.html.twig' %}
+
+{% block header_title %}Message bien reçu !{% endblock %}
+
+{% block body %}
+  <p>Bonjour <strong>{{ name }}</strong>,</p>
+
+  <p>
+    Nous avons bien reçu votre message et nous vous répondrons
+    dans les <strong>24 à 48 heures</strong> ouvrées.
+    Voici un récapitulatif de ce que vous nous avez envoyé :
+  </p>
+
+  {% if subject %}
+  <table class="info-table">
+    <tr>
+      <td>Sujet</td>
+      <td>{{ subject }}</td>
+    </tr>
+  </table>
+  {% endif %}
+
+  <div class="msg-block">
+    <p>{{ message|nl2br }}</p>
+  </div>
+
+  <hr class="divider">
+
+  <p>
+    Si vous souhaitez ajouter des précisions, répondez simplement à cet email
+    et nous l'inclurons dans votre dossier.
+  </p>
+
+  <p>À très bientôt,<br><strong>L'équipe SportBottles</strong></p>
+{% endblock %}

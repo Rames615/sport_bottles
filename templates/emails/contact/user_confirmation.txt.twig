@@ -1,0 +1,19 @@
+{# templates/emails/contact/user_confirmation.txt.twig #}
+{#
+  Plain-text fallback — no HTML here at all.
+  Email clients that cannot render HTML display this version instead.
+#}
+Bonjour {{ name }},
+
+Nous avons bien reçu votre message et vous répondrons dans les 24 à 48 heures ouvrées.
+
+{% if subject %}Sujet : {{ subject }}
+
+{% endif %}Votre message :
+{{ message }}
+
+---
+Si vous souhaitez ajouter des précisions, répondez simplement à cet email.
+
+À très bientôt,
+L'équipe SportBottles

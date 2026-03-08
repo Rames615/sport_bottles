@@ -1,0 +1,20 @@
+{# templates/emails/contact/admin_notification.txt.twig #}
+{#
+  Plain-text fallback — no HTML here at all.
+  Email clients that cannot render HTML display this version instead.
+#}
+NOUVEAU MESSAGE DE CONTACT
+==========================
+
+Reçu le {{ receivedAt|date('d/m/Y à H:i') }}
+
+Nom :   {{ name }}
+Email : {{ sender_email }}
+Sujet : {{ subject ?: '(non renseigné)' }}
+
+MESSAGE
+-------
+{{ message }}
+
+---
+Répondre directement à : {{ sender_email }}
