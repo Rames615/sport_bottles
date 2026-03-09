@@ -28,9 +28,64 @@
     line-height: 1;
 }
 
+.admin-section-card {
+    border: 0;
+    border-radius: .9rem;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+}
+
+.section-title {
+    font-weight: 700;
+    margin-bottom: .25rem;
+}
+
+.section-subtitle {
+    color: #6c757d;
+    margin-bottom: 1rem;
+    font-size: .95rem;
+}
+
+.stats-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+}
+
+.stat-item {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: .7rem;
+    padding: .75rem .9rem;
+    background: #fff;
+}
+
+.stat-label {
+    display: block;
+    color: #6c757d;
+    font-size: .85rem;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.chart-wrapper {
+    position: relative;
+    min-height: 280px;
+}
+
 @media (max-width: 768px) {
     .admin-dashboard {
         margin-top: 60px;
+    }
+
+    .stats-list {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-wrapper {
+        min-height: 240px;
     }
 }
 </style>
@@ -38,7 +93,13 @@
 {% endblock %}
 
 {% block body %}
-<div class="container admin-dashboard">
+<div class="container admin-dashboard" id="adminDashboardData"
+    data-user-count="{{ userCount }}"
+    data-product-count="{{ productCount }}"
+    data-category-count="{{ categoryCount }}"
+    data-cart-count="{{ cartCount }}"
+    data-order-count="{{ orderCount }}"
+    data-promotion-count="{{ promotionCount }}">
     <h1 class="mb-4">Tableau de bord</h1>
 
      {# Composant réutilisable #}
@@ -124,12 +185,56 @@
         </div>
     </div>
 
-    {# Ajouter la section pour les graphiques et statistiques détaillées #}
-    <div class="row">
-        <div class="col-12 col-lg-6 mb-4">
-            <div class="card p-3 h-100">
-                <h5>Ventes par catégorie</h5>
-                <canvas id="salesByCategoryChart" height="200"></canvas> 
+    {% set totalEntities = userCount + productCount + categoryCount + cartCount + orderCount + promotionCount %}
+    {% set conversionRate = cartCount > 0 ? ((orderCount / cartCount) * 100) : 0 %}
+    {% set productPerCategory = categoryCount > 0 ? (productCount / categoryCount) : 0 %}
 
-</div>
+    <div class="row g-4">
+        <div class="col-12 col-xl-7">
+            <div class="card admin-section-card p-3 p-md-4 h-100">
+                <h5 class="section-title">Repartition generale</h5>
+                <p class="section-subtitle">Vue d'ensemble des entites de la plateforme.</p>
+                <div class="chart-wrapper">
+                    <canvas id="overviewChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-5">
+            <div class="card admin-section-card p-3 p-md-4 h-100">
+                <h5 class="section-title">Statistiques detaillees</h5>
+                <p class="section-subtitle">Indicateurs operationnels rapides.</p>
+
+                <div class="stats-list mb-4">
+                    <div class="stat-item">
+                        <span class="stat-label">Total entites</span>
+                        <span class="stat-value">{{ totalEntities }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Ratio commandes/paniers</span>
+                        <span class="stat-value">{{ conversionRate|number_format(1, ',', ' ') }} %</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Produits par categorie</span>
+                        <span class="stat-value">{{ productPerCategory|number_format(1, ',', ' ') }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Promotions actives (total)</span>
+                        <span class="stat-value">{{ promotionCount }}</span>
+                    </div>
+                </div>
+
+                <div class="chart-wrapper">
+                    <canvas id="funnelChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+{{ parent() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('scripts/dashboard.js') }}"></script>
 {% endblock %}

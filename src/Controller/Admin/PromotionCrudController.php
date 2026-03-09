@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 
 /**
  * @extends AbstractCrudController<Promotion>
@@ -49,12 +50,19 @@ class PromotionCrudController extends AbstractCrudController
         $endAt = DateTimeField::new('endAt')->setLabel('Fin');
         $isActive = BooleanField::new('isActive')->setLabel('Active');
         $product = AssociationField::new('product')->setLabel('Produit');
+        $image = ImageField::new('imgPath')
+            ->setLabel('Image')
+            ->setBasePath('products_images/promotion')
+            ->setUploadDir('public/products_images/promotion')
+            ->setUploadedFileNamePattern('[slug]-[timestamp].[extension]')
+            ->setRequired(false);
         $createdAt = DateTimeField::new('createdAt')->setLabel('Creee le')->onlyOnIndex();
 
         if (in_array($pageName, [Crud::PAGE_NEW, Crud::PAGE_EDIT])) {
             return [
                 $title,
                 $description,
+                $image,
                 $product,
                 $discountType,
                 $discountValue,
@@ -64,6 +72,6 @@ class PromotionCrudController extends AbstractCrudController
             ];
         }
 
-        return [$id, $title, $product, $discountType, $discountValue, $startAt, $endAt, $isActive, $createdAt];
+        return [$id, $title, $image, $product, $discountType, $discountValue, $startAt, $endAt, $isActive, $createdAt];
     }
 }

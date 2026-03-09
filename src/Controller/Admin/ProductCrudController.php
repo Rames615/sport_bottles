@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -47,8 +48,9 @@ class ProductCrudController extends AbstractCrudController
             ImageField::new('imgPath')
                 ->setLabel('Image')
                 ->setBasePath('products_images')
-                ->setUploadDir('public/products_images/uploads')
-                ->setUploadedFileNamePattern('uploads/[slug]-[timestamp].[extension]')
+                // upload images in respective categories if category is set, otherwise upload to main products_images directory
+                ->setUploadDir('public/products_images')
+                ->setUploadedFileNamePattern('[slug]-[timestamp].[extension]')
                 ->setRequired(false),
         ];
     }

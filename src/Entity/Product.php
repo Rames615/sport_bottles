@@ -241,4 +241,9 @@ class Product
     {
         return $this->getActivePromotion() !== null;
     }
+
+    public function __toString(): string
+    {
+        return $this->designation ?? '';
+    }
 }
