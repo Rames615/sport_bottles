@@ -247,7 +247,7 @@ final class StripeController extends AbstractController
                 } catch (\Exception $e) {
                     $logger->error('Failed to send order confirmation email from webhook', ['exception' => $e->getMessage()]);
                 }
-            }
+            };
         }
 
         if ($type === 'payment_intent.payment_failed') {
