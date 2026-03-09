@@ -11,7 +11,7 @@
     Votre paiement a été confirmé avec succès.
   </p>
 
-  <table class="meta">
+  <table class="table">
     <tr>
       <td>Référence</td>
       <td><strong>{{ order.reference }}</strong></td>
@@ -22,7 +22,7 @@
     </tr>
     <tr>
       <td>Statut</td>
-      <td><span style="color:#16a34a;font-weight:600;">Payée</span></td>
+      <td><span class="text-success fw-bold">Payée</span></td>
     </tr>
     {% if order.shippingAddress %}
     <tr>
@@ -36,38 +36,38 @@
   <hr class="divider">
   <p><strong>Détail de votre commande :</strong></p>
 
-  <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+  <table class="table">
     <thead>
-      <tr style="border-bottom:2px solid #e5e7eb;">
-        <th style="text-align:left;padding:8px 4px;font-size:13px;color:#6b7280;">Produit</th>
-        <th style="text-align:center;padding:8px 4px;font-size:13px;color:#6b7280;">Qté</th>
-        <th style="text-align:right;padding:8px 4px;font-size:13px;color:#6b7280;">Prix unit.</th>
-        <th style="text-align:right;padding:8px 4px;font-size:13px;color:#6b7280;">Sous-total</th>
+      <tr>
+        <th>Produit</th>
+        <th style="text-align:center;">Qté</th>
+        <th style="text-align:right;">Prix unit.</th>
+        <th style="text-align:right;">Sous-total</th>
       </tr>
     </thead>
     <tbody>
       {% for item in items %}
-      <tr style="border-bottom:1px solid #f3f4f6;">
-        <td style="padding:10px 4px;font-size:14px;color:#111827;">{{ item.name }}</td>
-        <td style="padding:10px 4px;font-size:14px;color:#111827;text-align:center;">{{ item.quantity }}</td>
-        <td style="padding:10px 4px;font-size:14px;color:#111827;text-align:right;">{{ item.unitPrice|number_format(2, ',', ' ') }} €</td>
-        <td style="padding:10px 4px;font-size:14px;color:#111827;text-align:right;">{{ item.subtotal|number_format(2, ',', ' ') }} €</td>
+      <tr>
+        <td>{{ item.name }}</td>
+        <td style="text-align:center;">{{ item.quantity }}</td>
+        <td style="text-align:right;">{{ item.unitPrice|number_format(2, ',', ' ') }} EUR</td>
+        <td style="text-align:right;">{{ item.subtotal|number_format(2, ',', ' ') }} EUR</td>
       </tr>
       {% endfor %}
     </tbody>
     <tfoot>
-      <tr style="border-top:2px solid #e5e7eb;">
-        <td colspan="3" style="padding:12px 4px;font-size:15px;font-weight:700;text-align:right;">Total</td>
-        <td style="padding:12px 4px;font-size:15px;font-weight:700;text-align:right;color:#0ea5e9;">{{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} €</td>
+      <tr>
+        <td colspan="3" style="text-align:right;"><strong>Total</strong></td>
+        <td style="text-align:right;"><strong>{{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} EUR</strong></td>
       </tr>
     </tfoot>
   </table>
   {% else %}
   <hr class="divider">
-  <table class="meta">
+  <table class="table">
     <tr>
       <td>Total</td>
-      <td><strong style="color:#0ea5e9;">{{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} €</strong></td>
+      <td><strong>{{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} EUR</strong></td>
     </tr>
   </table>
   {% endif %}

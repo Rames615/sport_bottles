@@ -13,7 +13,7 @@
 		<strong>{{ receivedAt|date('H:i') }}</strong>.
 	</p>
 
-	<table class="info-table">
+	<table class="table">
 		<tr>
 			<td>Nom</td>
 			<td>
@@ -37,14 +37,14 @@
 	<p>
 		<strong>Message :</strong>
 	</p>
-	<div class="msg-block">
+	<div class="alert">
 		<p>{{ message|nl2br }}</p>
 	</div>
 
 	<hr class="divider">
 
-	<p style="text-align: center;">
-		<a href="mailto:{{ sender_email }}?subject=Re%3A%20{{ (subject ?: 'Votre message')|url_encode }}" class="email-btn">
+	<p class="text-center">
+		<a href="mailto:{{ sender_email }}?subject=Re%3A%20{{ (subject ?: 'Votre message')|url_encode }}" class="btn btn-primary">
 			&#9993; Répondre à
 			{{ name }}
 		</a>
