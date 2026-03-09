@@ -5,12 +5,15 @@
      data-capacity="{{ product.capacity }}" 
      data-temperature="{{ product.temperature }}">
 
+    {% set categorySlug = product.category ? product.category.slug : null %}
+    {% set productImagePath = (product.imgPath and categorySlug) ? asset('products_images/' ~ categorySlug ~ '/' ~ product.imgPath) : asset('images/placeholder.png') %}
+
     {# ============================================
        IMAGE SECTION
        ============================================ #}
     <div class="product-image-wrapper">
-        {% if product.imgPath %}
-            <img src="{{ asset('products_images/' ~ product.category.slug ~ '/' ~ product.imgPath) }}" 
+        {% if product.imgPath and categorySlug %}
+            <img src="{{ productImagePath }}" 
                  alt="{{ product.designation }}" 
                  class="product-image" 
                  onerror="this.src='{{ asset('images/placeholder.png') }}'">
@@ -72,7 +75,7 @@
                     data-product-capacity="{{ product.capacity }}"
                     data-product-temperature="{{ product.temperature }}"
                     data-product-category="{{ product.category ? product.category.name : '' }}"
-                    data-product-image="{% if product.imgPath %}{{ asset('products_images/' ~ product.category.slug ~ '/' ~ product.imgPath) }}{% else %}{{ asset('images/placeholder.png') }}{% endif %}"
+                    data-product-image="{{ productImagePath }}"
                     data-csrf-token="{{ csrf_token('cart_add') }}"
                     data-cart-url="{{ path('app_cartadd', { id: product.id }) }}"
                     data-bs-toggle="modal" 

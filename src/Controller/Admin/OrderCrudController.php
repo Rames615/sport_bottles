@@ -25,8 +25,8 @@ class OrderCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Order')
-            ->setEntityLabelInPlural('Orders')
+            ->setEntityLabelInSingular('Commande')
+            ->setEntityLabelInPlural('Commandes')
             ->setDefaultSort(['createdAt' => 'DESC']);
     }
 
@@ -34,15 +34,17 @@ class OrderCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
-            AssociationField::new('user')->setLabel('User'),
+            TextField::new('reference')->setLabel('Reference')->hideOnForm(),
+            AssociationField::new('user')->setLabel('Client'),
+            TextField::new('shippingAddress')->setLabel('Adresse de livraison'),
             MoneyField::new('totalAmount')->setCurrency('EUR')->setStoredAsCents(true),
             ChoiceField::new('status')->setChoices([
-                'Pending' => 'pending',
-                'Paid' => 'paid',
-                'Cancelled' => 'cancelled',
+                'En attente' => 'pending',
+                'Paye' => 'paid',
+                'Annulee' => 'cancelled',
             ]),
             TextField::new('stripeSessionId')->onlyOnDetail(),
-            DateTimeField::new('createdAt')->setLabel('Created At'),
+            DateTimeField::new('createdAt')->setLabel('Creee le'),
         ];
     }
 }
