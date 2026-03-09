@@ -45,16 +45,8 @@
                             <div class="row align-items-center">
 
                                 <div class="col-md-3 text-center">
-                                    {% set categorySlug = item.product.category ? item.product.category.slug : null %}
-                                    {% set hasNestedImagePath = item.product.imgPath and ('/' in item.product.imgPath) %}
-                                    {% set imagePath = item.product.imgPath
-                                        ? (hasNestedImagePath
-                                            ? 'products_images/' ~ item.product.imgPath
-                                            : (categorySlug
-                                                ? 'products_images/' ~ categorySlug ~ '/' ~ item.product.imgPath
-                                                : 'products_images/' ~ item.product.imgPath))
-                                        : 'logo.png'
-                                    %}
+                                    {% set imageFileName = item.product.imgPath ? (item.product.imgPath|split('/')|last) : null %}
+                                    {% set imagePath = imageFileName ? 'products_images/' ~ imageFileName : 'logo.png' %}
 
                                     <img src="{{ asset(imagePath) }}"
                                          alt="{{ item.product.designation }}"

@@ -5,16 +5,8 @@
      data-capacity="{{ product.capacity }}" 
      data-temperature="{{ product.temperature }}">
 
-    {% set categorySlug = product.category ? product.category.slug : null %}
-    {% set hasNestedImagePath = product.imgPath and ('/' in product.imgPath) %}
-    {% set productImagePath = product.imgPath
-        ? (hasNestedImagePath
-            ? asset('products_images/' ~ product.imgPath)
-            : (categorySlug
-                ? asset('products_images/' ~ categorySlug ~ '/' ~ product.imgPath)
-                : asset('products_images/' ~ product.imgPath)))
-        : asset('images/placeholder.png')
-    %}
+    {% set imageFileName = product.imgPath ? (product.imgPath|split('/')|last) : null %}
+    {% set productImagePath = imageFileName ? asset('products_images/' ~ imageFileName) : asset('images/placeholder.png') %}
 
     {# ============================================
        IMAGE SECTION

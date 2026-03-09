@@ -70,10 +70,12 @@
 
 								<div
 									class="promotion-image-wrapper">
-									{# ✅ Utilise promotion.imgPath en priorité, sinon product.imgPath #}
-									{% set imgSrc = promotion.imgPath ?? product.imgPath %}
-									{% if imgSrc %}
-										<img src="{{ asset('products_images/promotion/' ~ imgSrc) }}" alt="{{ product.designation }}" class="promotion-image" onerror="this.src='{{ asset('images/placeholder.png') }}'">
+									{% set promotionImageFile = promotion.imgPath ? (promotion.imgPath|split('/')|last) : null %}
+									{% set productImageFile = product.imgPath ? (product.imgPath|split('/')|last) : null %}
+									{% if promotionImageFile %}
+										<img src="{{ asset('products_images/promotion/' ~ promotionImageFile) }}" alt="{{ product.designation }}" class="promotion-image" onerror="this.src='{{ asset('images/placeholder.png') }}'">
+									{% elseif productImageFile %}
+										<img src="{{ asset('products_images/' ~ productImageFile) }}" alt="{{ product.designation }}" class="promotion-image" onerror="this.src='{{ asset('images/placeholder.png') }}'">
 									{% else %}
 										<img src="{{ asset('images/placeholder.png') }}" alt="{{ product.designation }}" class="promotion-image">
 									{% endif %}
