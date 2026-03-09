@@ -37,13 +37,13 @@ class OrderCrudController extends AbstractCrudController
             TextField::new('reference')->setLabel('Reference')->hideOnForm(),
             AssociationField::new('user')->setLabel('Client'),
             TextField::new('shippingAddress')->setLabel('Adresse de livraison'),
-            MoneyField::new('totalAmount')->setCurrency('EUR')->setStoredAsCents(true),
+            MoneyField::new('totalAmount')->setLabel('Montant total')->setCurrency('EUR')->setStoredAsCents(true),
             ChoiceField::new('status')->setChoices([
                 'En attente' => 'pending',
                 'Paye' => 'paid',
                 'Annulee' => 'cancelled',
-            ]),
-            TextField::new('stripeSessionId')->onlyOnDetail(),
+            ])->setLabel('Statut'),
+            TextField::new('stripeSessionId')->setLabel('Session Stripe')->onlyOnDetail(),
             DateTimeField::new('createdAt')->setLabel('Creee le'),
         ];
     }

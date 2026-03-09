@@ -24,23 +24,32 @@ class PromotionCrudController extends AbstractCrudController
         return Promotion::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Promotion')
+            ->setEntityLabelInPlural('Promotions')
+            ->setDefaultSort(['createdAt' => 'DESC']);
+    }
+
     public function configureFields(string $pageName): iterable
     {
         // common fields for all pages
         $id = IdField::new('id')->onlyOnIndex();
-        $title = TextField::new('title');
-        $description = TextareaField::new('description')->hideOnIndex();
+        $title = TextField::new('title')->setLabel('Titre');
+        $description = TextareaField::new('description')->setLabel('Description')->hideOnIndex();
         $discountType = ChoiceField::new('discountType')
+            ->setLabel('Type de remise')
             ->setChoices([
                 'Pourcentage' => Promotion::TYPE_PERCENTAGE,
                 'Montant fixe' => Promotion::TYPE_FIXED,
             ]);
-        $discountValue = NumberField::new('discountValue');
-        $startAt = DateTimeField::new('startAt');
-        $endAt = DateTimeField::new('endAt');
-        $isActive = BooleanField::new('isActive');
-        $product = AssociationField::new('product');
-        $createdAt = DateTimeField::new('createdAt')->onlyOnIndex();
+        $discountValue = NumberField::new('discountValue')->setLabel('Valeur de remise');
+        $startAt = DateTimeField::new('startAt')->setLabel('Debut');
+        $endAt = DateTimeField::new('endAt')->setLabel('Fin');
+        $isActive = BooleanField::new('isActive')->setLabel('Active');
+        $product = AssociationField::new('product')->setLabel('Produit');
+        $createdAt = DateTimeField::new('createdAt')->setLabel('Creee le')->onlyOnIndex();
 
         if (in_array($pageName, [Crud::PAGE_NEW, Crud::PAGE_EDIT])) {
             return [

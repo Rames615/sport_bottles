@@ -3,9 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 /**
@@ -18,14 +23,33 @@ class ProductCrudController extends AbstractCrudController
         return Product::class;
     }
 
-    /*
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Produit')
+            ->setEntityLabelInPlural('Produits');
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            IdField::new('id')->setLabel('ID')->onlyOnIndex(),
+            TextField::new('designation')->setLabel('Designation'),
+            TextareaField::new('description')->setLabel('Description')->hideOnIndex(),
+            MoneyField::new('price')
+                ->setLabel('Prix')
+                ->setCurrency('EUR')
+                ->setStoredAsCents(false),
+            NumberField::new('stock')->setLabel('Stock'),
+            AssociationField::new('category')->setLabel('Categorie'),
+            TextField::new('capacity')->setLabel('Capacite'),
+            TextField::new('temperature')->setLabel('Temperature'),
+            ImageField::new('imgPath')
+                ->setLabel('Image')
+                ->setBasePath('products_images')
+                ->setUploadDir('public/products_images/uploads')
+                ->setUploadedFileNamePattern('uploads/[slug]-[timestamp].[extension]')
+                ->setRequired(false),
         ];
     }
-    */
 }

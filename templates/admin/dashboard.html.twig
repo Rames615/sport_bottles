@@ -39,13 +39,10 @@
 
 {% block body %}
 <div class="container admin-dashboard">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3">Administration</h1>
-        <div>
-            <a href="/admin" class="btn btn-outline-secondary">EasyAdmin</a>
-            <a href="/" class="btn btn-link">Voir le site</a>
-        </div>
-    </div>
+    <h1 class="mb-4">Tableau de bord</h1>
+
+     {# Composant réutilisable #}
+     {% include 'components/_flash_messages.html.twig' %}
 
     <div class="row admin-cards g-3 mb-4">
         <div class="col-12 col-sm-6 col-lg-4">
@@ -127,12 +124,12 @@
         </div>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">Activite recente</h5>
-            <p class="text-muted">Ajoutez des graphiques, KPI ou enregistrements recents pour enrichir ce tableau de bord.</p>
-        </div>
-    </div>
+    {# Ajouter la section pour les graphiques et statistiques détaillées #}
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-4">
+            <div class="card p-3 h-100">
+                <h5>Ventes par catégorie</h5>
+                <canvas id="salesByCategoryChart" height="200"></canvas> 
 
 </div>
 {% endblock %}
