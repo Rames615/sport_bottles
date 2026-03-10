@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Entity\User;
+use App\Service\MailerService;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +18,7 @@ final class PaymentController extends AbstractController
 {
     public function __construct(
         private \App\Service\CartService $cartService,
+        private MailerService $mailerService,
     ) {}
 
     /**
@@ -47,6 +49,23 @@ final class PaymentController extends AbstractController
                 if ($stripeSession->payment_status === 'paid' && $order->getStatus() !== 'paid') {
                     $order->setStatus('paid');
                     $em->flush();
+
+                    // Send order confirmation email
+                    try {
+                        $items = [];
+                        $lineItems = Session::allLineItems($sessionId, ['limit' => 100]);
+                        foreach ($lineItems->data as $li) {
+                            $items[] = [
+                                'name'      => $li->description,
+                                'quantity'  => $li->quantity,
+                                'unitPrice' => $li->price->unit_amount / 100,
+                                'subtotal'  => $li->amount_total / 100,
+                            ];
+                        }
+                        $this->mailerService->sendOrderConfirmation($order, $items);
+                    } catch (\Exception) {
+                        // Non-blocking: email failure shouldn't break the success page
+                    }
                 }
             } catch (\Exception) {
                 // Non-blocking — JS polling will handle it

@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Service\MailerService;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
 use Stripe\Webhook;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -14,6 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/webhook', name: 'webhook_')]
 final class WebhookController extends AbstractController
 {
+    public function __construct(
+        private readonly MailerService $mailerService,
+    ) {}
     /**
      * Health check (GET) + Stripe event handler (POST).
      */
@@ -76,6 +82,27 @@ final class WebhookController extends AbstractController
             $order->setStatus('paid');
             $em->flush();
             $logger->info('Order marked as paid via webhook', ['order_id' => $order->getId()]);
+
+            // Send order confirmation email with line items from Stripe
+            try {
+                $items = [];
+                $stripeSecret = $_ENV['STRIPE_SECRET_KEY'] ?? null;
+                if ($stripeSecret) {
+                    Stripe::setApiKey($stripeSecret);
+                    $lineItems = Session::allLineItems($sessionId, ['limit' => 100]);
+                    foreach ($lineItems->data as $li) {
+                        $items[] = [
+                            'name'      => $li->description,
+                            'quantity'  => $li->quantity,
+                            'unitPrice' => $li->price->unit_amount / 100,
+                            'subtotal'  => $li->amount_total / 100,
+                        ];
+                    }
+                }
+                $this->mailerService->sendOrderConfirmation($order, $items);
+            } catch (\Exception $e) {
+                $logger->error('Failed to send order confirmation email from webhook', ['exception' => $e->getMessage()]);
+            }
         }
     }
 
