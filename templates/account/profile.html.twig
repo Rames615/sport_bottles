@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+<div class="container mt-5 pt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <h1 class="mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="me-2 mb-1" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.029 10 8 10c-2.029 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                </svg>
+                Mon Profil
+            </h1>
+
+            {# ── Account info ── #}
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Informations du compte</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold text-muted">E-mail</div>
+                        <div class="col-sm-8">{{ app.user.email }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold text-muted">Statut du compte</div>
+                        <div class="col-sm-8">
+                            {% if app.user.isVerified %}
+                                <span class="badge bg-success">Vérifié</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Non vérifié</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 fw-semibold text-muted">Rôle</div>
+                        <div class="col-sm-8">
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                                <span class="badge bg-danger">Administrateur</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Utilisateur</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# ── Shipping addresses ── #}
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Adresses de livraison</h5>
+                </div>
+                <div class="card-body">
+                    {% if app.user.shippingAddresses is not empty %}
+                        {% for addr in app.user.shippingAddresses %}
+                            <div class="{% if not loop.last %}border-bottom pb-3 mb-3{% endif %}">
+                                <p class="fw-semibold mb-1">{{ addr.fullName }}</p>
+                                <p class="mb-1 text-muted">{{ addr.address }}</p>
+                                <p class="mb-1 text-muted">{{ addr.postalCode }} {{ addr.city }}, {{ addr.country }}</p>
+                                <p class="mb-0 text-muted">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                                        <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                                    </svg>
+                                    {{ addr.phone }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted mb-0">Aucune adresse de livraison enregistrée.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# ── Quick links ── #}
+            <div class="d-flex gap-3">
+                <a href="{{ path('app_orders') }}" class="btn btn-outline-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1 mb-1" viewBox="0 0 16 16">
+                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                    Mes Commandes
+                </a>
+                <a href="{{ path('app_product') }}" class="btn btn-outline-secondary">
+                    Continuer mes achats
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -28,6 +28,7 @@ class OrderCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Commande')
             ->setEntityLabelInPlural('Commandes')
             ->setDefaultSort(['createdAt' => 'DESC']);
+            
     }
 
     public function configureFields(string $pageName): iterable
@@ -45,6 +46,8 @@ class OrderCrudController extends AbstractCrudController
             ])->setLabel('Statut'),
             TextField::new('stripeSessionId')->setLabel('Session Stripe')->onlyOnDetail(),
             DateTimeField::new('createdAt')->setLabel('Creee le'),
+            // ajouter le email du client dans la liste des commandes
+            TextField::new('user.email')->setLabel('Email du client')->onlyOnIndex()
         ];
     }
 }

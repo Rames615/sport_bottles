@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Commandes{% endblock %}
+
+{% block body %}
+<div class="container mt-5 pt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <h1 class="mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="me-2 mb-1" viewBox="0 0 16 16">
+                    <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                </svg>
+                Mes Commandes
+            </h1>
+
+            {% if orders is not empty %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle shadow-sm rounded overflow-hidden">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Référence</th>
+                                <th>Date</th>
+                                <th>Montant</th>
+                                <th>Adresse de livraison</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td class="fw-semibold">{{ order.reference }}</td>
+                                    <td>{{ order.createdAt|date('d/m/Y à H:i') }}</td>
+                                    <td class="fw-semibold">{{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} €</td>
+                                    <td class="text-muted small">{{ order.shippingAddress|default('—') }}</td>
+                                    <td>
+                                        {% if order.status == 'paid' %}
+                                            <span class="badge bg-success">Payée</span>
+                                        {% elseif order.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">En attente</span>
+                                        {% elseif order.status == 'cancelled' %}
+                                            <span class="badge bg-danger">Annulée</span>
+                                        {% elseif order.status == 'refunded' %}
+                                            <span class="badge bg-info text-dark">Remboursée</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ order.status|capitalize }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="card shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="text-muted mb-3" viewBox="0 0 16 16">
+                            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                        <h5 class="text-muted">Aucune commande pour le moment</h5>
+                        <p class="text-muted mb-3">Vous n'avez pas encore passé de commande.</p>
+                        <a href="{{ path('app_product') }}" class="btn btn-dark">
+                            Découvrir nos produits
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{{ path('app_profile') }}" class="btn btn-outline-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1 mb-1" viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4z"/>
+                    </svg>
+                    Retour au profil
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

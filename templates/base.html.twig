@@ -89,12 +89,15 @@
 		{% block javascripts %}{% endblock %}
 
 		<script>
-			// Ensure Bootstrap is available after DOM loads
-			document.addEventListener('DOMContentLoaded', function() {
-				// Initialize Bootstrap tooltips and popovers if needed
+			// Re-initialize Bootstrap components after Turbo navigation
+			document.addEventListener('turbo:load', function() {
 				if (typeof bootstrap !== 'undefined') {
-					// Bootstrap navbar should work automatically
-					console.log('Bootstrap loaded successfully');
+					document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function(el) {
+						bootstrap.Dropdown.getOrCreateInstance(el);
+					});
+					document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(el) {
+						bootstrap.Collapse.getOrCreateInstance(el);
+					});
 				}
 			});
 		</script>

@@ -2,14 +2,22 @@
    PRODUCT FILTERS & SORTING
    ============================================ */
 
-document.addEventListener('DOMContentLoaded', function() {
-    const categoryFilter = document.getElementById('categoryFilter');
-    const priceFilter = document.getElementById('priceFilter');
-    const sortFilter = document.getElementById('sortFilter');
-    const productsGrid = document.querySelector('.products-grid');
-    if (!productsGrid) return;
-    const productCards = Array.from(productsGrid.querySelectorAll('.product-card'));
-    const collator = new Intl.Collator('fr', { sensitivity: 'base' });
+(function() {
+    let _controller = null;
+
+    function initFilters() {
+        // Abort previous listeners if re-initializing (Turbo navigation)
+        if (_controller) _controller.abort();
+        _controller = new AbortController();
+        var signal = _controller.signal;
+
+        const categoryFilter = document.getElementById('categoryFilter');
+        const priceFilter = document.getElementById('priceFilter');
+        const sortFilter = document.getElementById('sortFilter');
+        const productsGrid = document.querySelector('.products-grid');
+        if (!productsGrid) return;
+        const productCards = Array.from(productsGrid.querySelectorAll('.product-card'));
+        const collator = new Intl.Collator('fr', { sensitivity: 'base' });
 
     productCards.forEach((card, index) => {
         card.dataset.originalIndex = String(index);
@@ -134,16 +142,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listeners pour les filtres
     if (categoryFilter) {
-        categoryFilter.addEventListener('change', filterAndSort);
+        categoryFilter.addEventListener('change', filterAndSort, { signal: signal });
     }
 
     if (priceFilter) {
-        priceFilter.addEventListener('change', filterAndSort);
+        priceFilter.addEventListener('change', filterAndSort, { signal: signal });
     }
 
     if (sortFilter) {
-        sortFilter.addEventListener('change', filterAndSort);
+        sortFilter.addEventListener('change', filterAndSort, { signal: signal });
     }
 
     filterAndSort();
-});
+    }
+
+    // Turbo-compatible: fires on both initial load and Turbo navigations
+    document.addEventListener('turbo:load', initFilters);
+    // Fallback for non-Turbo page loads
+    document.addEventListener('DOMContentLoaded', initFilters);
+})();

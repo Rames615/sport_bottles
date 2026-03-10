@@ -117,8 +117,17 @@ html {
 }
 
 .navbar .nav-link:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
+  outline: none;
+}
+
+/* Hide Bootstrap dropdown caret (white triangle) */
+.navbar .dropdown-toggle::after {
+  display: none;
+}
+
+/* Remove green focus outline on navbar links */
+.navbar a:focus {
+  outline: none;
 }
 
 @media (max-width: 768px) {
