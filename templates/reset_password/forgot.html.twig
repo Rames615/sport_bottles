@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mot de passe oublié - Sports Bottles{% endblock %}
+
+{% block body %}
+<div class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">Mot de passe oublié</h1>
+                <p class="login-subtitle">
+                    Entrez votre adresse email pour recevoir un lien de réinitialisation
+                </p>
+            </div>
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success" role="alert" aria-live="assertive">
+                    <strong>Succès :</strong> {{ message }}
+                </div>
+            {% endfor %}
+
+            {% for message in app.flashes('danger') %}
+                <div class="alert alert-danger" role="alert" aria-live="assertive">
+                    <strong>Erreur :</strong> {{ message }}
+                </div>
+            {% endfor %}
+
+            {{ form_start(forgotPasswordForm, {attr: {class: 'login-form', novalidate: 'novalidate'}}) }}
+
+                <div class="mb-3">
+                    <label for="{{ forgotPasswordForm.email.vars.id }}" class="form-label required">
+                        Email
+                    </label>
+                    {{ form_widget(forgotPasswordForm.email, {
+                        attr: {
+                            class: 'form-control',
+                            placeholder: 'votre@email.com',
+                            autofocus: true
+                        }
+                    }) }}
+                    {{ form_errors(forgotPasswordForm.email) }}
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 mt-2"
+                        aria-label="Envoyer le lien de réinitialisation">
+                    Envoyer le lien
+                </button>
+
+            {{ form_end(forgotPasswordForm) }}
+
+            <div class="register-section">
+                <p class="register-text">Vous vous souvenez de votre mot de passe ?</p>
+                <a href="{{ path('app_login') }}" class="btn btn-outline-primary w-100"
+                   aria-label="Retour à la connexion">
+                    Retour à la connexion
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

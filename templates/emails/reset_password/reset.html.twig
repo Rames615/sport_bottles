@@ -1,0 +1,35 @@
+{# templates/emails/reset_password/reset.html.twig #}
+{% extends 'emails/layout.html.twig' %}
+
+{% block header_title %}Réinitialisation du mot de passe{% endblock %}
+
+{% block body %}
+  <p>Bonjour,</p>
+
+  <p>
+    Vous avez demandé la réinitialisation de votre mot de passe sur
+    <strong>SportBottles</strong>.
+    Cliquez sur le bouton ci-dessous pour choisir un nouveau mot de passe :
+  </p>
+
+  <div class="text-center" style="margin: 24px 0;">
+    <a href="{{ resetUrl }}" class="btn btn-primary"
+       style="display:inline-block;padding:12px 28px;border-radius:8px;font-weight:700;text-decoration:none;background:#0d6efd;color:#fff;">
+      Réinitialiser mon mot de passe
+    </a>
+  </div>
+
+  <p class="text-muted" style="font-size: 13px;">
+    Ce lien est valable jusqu'au <strong>{{ expiresAt|date('d/m/Y à H:i') }}</strong>.
+    Si vous n'avez pas fait cette demande, ignorez simplement cet email.
+  </p>
+
+  <hr class="divider">
+
+  <p class="text-muted" style="font-size: 13px;">
+    Si le bouton ne fonctionne pas, copiez-collez ce lien dans votre navigateur :<br>
+    <a href="{{ resetUrl }}">{{ resetUrl }}</a>
+  </p>
+
+  <p>À très bientôt,<br><strong>L'équipe SportBottles</strong></p>
+{% endblock %}
