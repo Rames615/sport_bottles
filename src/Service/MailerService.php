@@ -55,13 +55,20 @@ class MailerService
             ->textTemplate('emails/contact/user_confirmation.txt.twig')
             ->context($tplContext);
 
+        // Send admin notification — this is the critical email
         try {
             $this->mailer->send($adminEmail);
-            sleep(1); // Mailtrap free plan: max 1 email/second
+        } catch (TransportExceptionInterface $e) {
+            $this->logger->error('Mailer error (admin notification): ' . $e->getMessage(), ['exception' => $e]);
+            throw new \RuntimeException('Impossible d\'envoyer l\'email. Réessayez plus tard.');
+        }
+
+        // Send visitor confirmation — non-critical, log failures but don't show error
+        try {
+            sleep(2); // Mailtrap free plan: max 1 email/second — 2s to be safe
             $this->mailer->send($confirmEmail);
         } catch (TransportExceptionInterface $e) {
-            $this->logger->error('Mailer error: ' . $e->getMessage(), ['exception' => $e]);
-            throw new \RuntimeException('Impossible d\'envoyer l\'email. Réessayez plus tard.');
+            $this->logger->warning('Mailer error (visitor confirmation): ' . $e->getMessage(), ['exception' => $e]);
         }
     }
 
