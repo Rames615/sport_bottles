@@ -165,22 +165,7 @@ class CartController extends AbstractController
     #[Route('/checkout', name: 'checkout', methods: ['GET'])]
     public function checkout(): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof User) {
-            $this->addFlash('error', 'Vous devez être connecté pour procéder au paiement.');
-            return $this->redirectToRoute('app_login');
-        }
-
-        $result = $this->cartService->prepareCheckout($user);
-        if (!$result['ok']) {
-            $this->addFlash('error', $result['message'] ?? 'Problème lors de la préparation du paiement');
-            return $this->redirectToRoute('app_cartindex');
-        }
-
-        return $this->render('cart/checkout.html.twig', [
-            'cart' => $result['cart'],
-            'total' => $result['total'],
-        ]);
+        return $this->redirectToRoute('checkout_shipping');
     }
 
     #[Route('/clear', name: 'clear', methods: ['POST'])]

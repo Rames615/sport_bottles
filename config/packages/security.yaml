@@ -19,7 +19,7 @@ security:
 
         # Firewall pour webhooks externes (pas de CSRF, pas de session)
         webhook:
-            pattern: ^/webhook/
+            pattern: ^/(webhook/|stripe/webhook)
             stateless: true
             security: false
         main:

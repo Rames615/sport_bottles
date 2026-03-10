@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Form\ProfileFormType;
 use App\Repository\OrderRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -27,6 +30,27 @@ final class AccountController extends AbstractController
 
         return $this->render('account/orders.html.twig', [
             'orders' => $orders,
+        ]);
+    }
+
+    #[Route('/mon-profil/editer', name: 'app_profile_edit')]
+    public function editProfile(Request $request, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm(ProfileFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');
+
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->render('account/edit_profile.html.twig', [
+            'form' => $form,
         ]);
     }
 }
