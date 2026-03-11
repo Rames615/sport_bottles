@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions d'utilisation – Sports Bottles{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0d1b2a;
+            --accent: #1b8fe4;
+            --accent-light: #5db8ff;
+            --surface: #f4f7fb;
+            --text: #1a2535;
+            --muted: #5a6a7e;
+            --white: #ffffff;
+            --border: #dde4ed;
+        }
+        body { background: var(--surface); color: var(--text); line-height: 1.7; font-size: 1rem; }
+        .page-hero { background: linear-gradient(135deg, var(--navy) 0%, #163556 100%); padding: 4rem 2rem 3.5rem; text-align: center; position: relative; overflow: hidden; }
+        .page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(27,143,228,.35) 0%, transparent 70%); }
+        .page-hero .tag { display: inline-block; background: rgba(27,143,228,.18); border: 1px solid rgba(93,184,255,.35); color: var(--accent-light); font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: .35rem .9rem; border-radius: 2rem; margin-bottom: 1.2rem; position: relative; }
+        .page-hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(2rem, 5vw, 3rem); color: var(--white); position: relative; line-height: 1.15; }
+        .page-hero p { color: rgba(255,255,255,.6); margin-top: .75rem; font-size: .95rem; position: relative; }
+        .content-wrap { max-width: 820px; margin: 0 auto; padding: 3.5rem 2rem 5rem; }
+        .legal-card { background: var(--white); border-radius: 16px; border: 1px solid var(--border); padding: 2.8rem 3rem; margin-bottom: 1.75rem; box-shadow: 0 2px 12px rgba(0,0,0,.05); transition: box-shadow .25s; }
+        .legal-card:hover { box-shadow: 0 6px 28px rgba(0,0,0,.09); }
+        .legal-card h2 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.25rem; color: var(--navy); margin-bottom: 1rem; display: flex; align-items: center; gap: .65rem; }
+        .legal-card h2 .num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: var(--white); border-radius: 8px; font-size: .8rem; font-weight: 700; flex-shrink: 0; }
+        .legal-card p { color: var(--muted); font-size: .95rem; margin-bottom: .85rem; }
+        .legal-card p:last-child { margin-bottom: 0; }
+        .legal-card ul { list-style: none; padding: 0; margin: .5rem 0 .85rem; }
+        .legal-card ul li { color: var(--muted); font-size: .95rem; padding: .3rem 0 .3rem 1.4rem; position: relative; }
+        .legal-card ul li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: .85rem; }
+        .update-notice { background: linear-gradient(135deg, rgba(27,143,228,.08), rgba(93,184,255,.06)); border: 1px solid rgba(27,143,228,.2); border-radius: 10px; padding: 1rem 1.4rem; font-size: .88rem; color: var(--muted); text-align: center; margin-bottom: 2.5rem; }
+        .update-notice strong { color: var(--accent); }
+        @media (max-width: 600px) { .legal-card { padding: 1.75rem 1.4rem; } }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+{# ── HERO ── #}
+<section class="page-hero mt-5">
+    <div class="tag">Légal</div>
+    <h1>Conditions d'utilisation</h1>
+    <p>Dernière mise à jour : {{ "now"|date("d F Y") }}</p>
+</section>
+
+{# ── CONTENT ── #}
+<main class="content-wrap">
+    <p class="update-notice">
+        En accédant à notre site, vous acceptez sans réserve les présentes
+        <strong>Conditions Générales d'Utilisation</strong>. Veuillez les lire attentivement.
+    </p>
+
+    <div class="legal-card">
+        <h2><span class="num">1</span>Objet et acceptation</h2>
+        <p>Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités et
+        conditions d'utilisation du site internet www.sportsbottles.fr, ainsi que les droits et obligations
+        des parties dans ce cadre.</p>
+        <p>L'accès et l'utilisation du site impliquent l'acceptation pleine et entière des présentes CGU.
+        Si vous n'acceptez pas ces conditions, nous vous invitons à ne pas utiliser notre site.</p>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">2</span>Accès au site</h2>
+        <p>Le site est accessible gratuitement depuis tout endroit à tout utilisateur disposant d'un accès à
+        Internet. Tous les frais nécessaires pour l'accès aux services (matériel informatique, connexion
+        Internet…) sont à la charge de l'utilisateur.</p>
+        <p>Sports Bottles se réserve le droit de modifier, interrompre, à tout moment sans préavis et sans
+        indemnité, l'accès temporaire ou définitif à tout ou partie du site.</p>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">3</span>Propriété intellectuelle</h2>
+        <p>L'ensemble du contenu présent sur le site (textes, images, vidéos, logos, icônes, sons,
+        logiciels…) est protégé par le droit de la propriété intellectuelle et appartient exclusivement
+        à Sports Bottles ou à ses partenaires.</p>
+        <p>Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des
+        éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation
+        écrite préalable.</p>
+        <ul>
+            <li>La marque "Sports Bottles" est une marque déposée.</li>
+            <li>Tout usage non autorisé constitue une contrefaçon sanctionnée par le Code de la propriété intellectuelle.</li>
+            <li>Les liens hypertextes vers notre site sont autorisés sous réserve d'accord préalable.</li>
+        </ul>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">4</span>Comportement de l'utilisateur</h2>
+        <p>L'utilisateur s'engage à utiliser le site conformément aux lois et règlements en vigueur. Il est notamment interdit de :</p>
+        <ul>
+            <li>Diffuser des contenus illicites, offensants, diffamatoires ou contraires aux bonnes mœurs.</li>
+            <li>Usurper l'identité d'une autre personne ou entité.</li>
+            <li>Introduire des virus, chevaux de Troie ou tout autre programme malveillant.</li>
+            <li>Tenter d'accéder sans autorisation aux systèmes ou réseaux connectés au site.</li>
+            <li>Collecter des données personnelles d'autres utilisateurs sans leur consentement.</li>
+        </ul>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">5</span>Limitation de responsabilité</h2>
+        <p>Sports Bottles s'efforce de maintenir le site accessible et les informations exactes. Cependant,
+        nous ne garantissons pas l'absence d'erreurs, l'absence de virus ni la disponibilité continue du site.</p>
+        <p>Sports Bottles ne pourra être tenu responsable de tout dommage direct ou indirect résultant de
+        l'utilisation du site, de l'impossibilité d'y accéder, ou de la confiance accordée aux informations
+        qui y sont publiées.</p>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">6</span>Liens hypertextes</h2>
+        <p>Le site peut contenir des liens vers des sites tiers. Ces liens sont fournis à titre informatif.
+        Sports Bottles n'exerce aucun contrôle sur ces sites et décline toute responsabilité quant à leur
+        contenu ou leur politique de confidentialité.</p>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">7</span>Droit applicable et juridiction</h2>
+        <p>Les présentes CGU sont soumises au droit français. En cas de litige, et après tentative de
+        résolution amiable, les tribunaux compétents de Paris seront seuls habilités à connaître dudit litige.</p>
+        <p>Sports Bottles se réserve le droit de modifier les présentes CGU à tout moment. La version
+        applicable est celle en ligne au moment de votre visite.</p>
+    </div>
+</main>
+
+{% endblock %}

@@ -1,0 +1,191 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de retour – Sports Bottles{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0d1b2a;
+            --accent: #1b8fe4;
+            --accent-light: #5db8ff;
+            --surface: #f4f7fb;
+            --text: #1a2535;
+            --muted: #5a6a7e;
+            --white: #ffffff;
+            --border: #dde4ed;
+            --green: #16a34a;
+            --green-light: rgba(34,197,94,.10);
+        }
+        body { background: var(--surface); color: var(--text); line-height: 1.7; font-size: 1rem; }
+        .page-hero { background: linear-gradient(135deg, var(--navy) 0%, #163556 100%); padding: 4rem 2rem 3.5rem; text-align: center; position: relative; overflow: hidden; }
+        .page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(27,143,228,.35) 0%, transparent 70%); }
+        .page-hero .tag { display: inline-block; background: rgba(27,143,228,.18); border: 1px solid rgba(93,184,255,.35); color: var(--accent-light); font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: .35rem .9rem; border-radius: 2rem; margin-bottom: 1.2rem; position: relative; }
+        .page-hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(2rem, 5vw, 3rem); color: var(--white); position: relative; line-height: 1.15; }
+        .page-hero p { color: rgba(255,255,255,.6); margin-top: .75rem; font-size: .95rem; position: relative; }
+        .content-wrap { max-width: 820px; margin: 0 auto; padding: 3.5rem 2rem 5rem; }
+
+        {# ── cards ── #}
+        .legal-card { background: var(--white); border-radius: 16px; border: 1px solid var(--border); padding: 2.8rem 3rem; margin-bottom: 1.75rem; box-shadow: 0 2px 12px rgba(0,0,0,.05); transition: box-shadow .25s; }
+        .legal-card:hover { box-shadow: 0 6px 28px rgba(0,0,0,.09); }
+        .legal-card h2 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.25rem; color: var(--navy); margin-bottom: 1rem; display: flex; align-items: center; gap: .65rem; }
+        .legal-card h2 .num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: var(--white); border-radius: 8px; font-size: .8rem; font-weight: 700; flex-shrink: 0; }
+        .legal-card p { color: var(--muted); font-size: .95rem; margin-bottom: .85rem; }
+        .legal-card p:last-child { margin-bottom: 0; }
+        .legal-card ul { list-style: none; padding: 0; margin: .5rem 0 .85rem; }
+        .legal-card ul li { color: var(--muted); font-size: .95rem; padding: .3rem 0 .3rem 1.4rem; position: relative; }
+        .legal-card ul li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: .85rem; }
+
+        {# ── notice banner ── #}
+        .update-notice { background: linear-gradient(135deg, rgba(27,143,228,.08), rgba(93,184,255,.06)); border: 1px solid rgba(27,143,228,.2); border-radius: 10px; padding: 1rem 1.4rem; font-size: .88rem; color: var(--muted); text-align: center; margin-bottom: 2.5rem; }
+        .update-notice strong { color: var(--accent); }
+
+        {# ── highlight steps ── #}
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin: 1rem 0 .5rem; }
+        .step { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.3rem 1.5rem; display: flex; flex-direction: column; gap: .45rem; }
+        .step-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--accent); line-height: 1; }
+        .step-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .9rem; color: var(--navy); }
+        .step-desc { font-size: .85rem; color: var(--muted); }
+
+        {# ── guarantee badge ── #}
+        .guarantee-banner { background: var(--green-light); border: 1px solid rgba(34,197,94,.25); border-radius: 12px; padding: 1.3rem 1.8rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; }
+        .guarantee-banner svg { flex-shrink: 0; color: var(--green); }
+        .guarantee-banner p { color: var(--green); font-weight: 600; font-size: .95rem; margin: 0; }
+
+        {# ── CTA ── #}
+        .cta-card { background: linear-gradient(135deg, var(--navy), #163556); border-radius: 16px; padding: 2.5rem 3rem; text-align: center; }
+        .cta-card h2 { font-family: 'Syne', sans-serif; color: var(--white); font-size: 1.3rem; margin-bottom: .6rem; }
+        .cta-card p { color: rgba(255,255,255,.6); font-size: .92rem; margin-bottom: 1.4rem; }
+        .cta-btn { display: inline-block; background: var(--accent); color: var(--white); padding: .75rem 2rem; border-radius: 8px; font-weight: 600; font-size: .95rem; text-decoration: none; transition: background .2s, transform .15s; }
+        .cta-btn:hover { background: var(--accent-light); transform: translateY(-1px); }
+
+        @media (max-width: 600px) { .legal-card { padding: 1.75rem 1.4rem; } .cta-card { padding: 1.75rem 1.4rem; } }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+{# ── HERO ── #}
+<section class="page-hero mt-5">
+    <div class="tag">Service client</div>
+    <h1>Politique de retour</h1>
+    <p>Dernière mise à jour : {{ "now"|date("d F Y") }}</p>
+</section>
+
+{# ── CONTENT ── #}
+<main class="content-wrap">
+
+    {# Guarantee banner #}
+    <div class="guarantee-banner">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10h14V4H11.5zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"/>
+        </svg>
+        <p>Satisfait ou remboursé — 30 jours pour changer d'avis, sans conditions.</p>
+    </div>
+
+    <p class="update-notice">
+        Conformément à la législation française et européenne en vigueur, notamment la
+        <strong>loi Hamon</strong> et la <strong>directive 2011/83/UE</strong>, tout acheteur dispose
+        d'un droit de rétractation de 14 jours. Sports Bottles étend ce délai à <strong>30 jours</strong>.
+    </p>
+
+    {# Étapes #}
+    <div class="legal-card">
+        <h2><span class="num">1</span>Comment effectuer un retour ?</h2>
+        <p>La procédure de retour se déroule en 3 étapes simples :</p>
+        <div class="steps">
+            <div class="step">
+                <span class="step-num">01</span>
+                <span class="step-title">Contactez-nous</span>
+                <span class="step-desc">Envoyez un e-mail à retours@sportsbottles.fr avec votre numéro de commande.</span>
+            </div>
+            <div class="step">
+                <span class="step-num">02</span>
+                <span class="step-title">Renvoyez le colis</span>
+                <span class="step-desc">Emballez l'article soigneusement et déposez-le en point relais sous 7 jours.</span>
+            </div>
+            <div class="step">
+                <span class="step-num">03</span>
+                <span class="step-title">Remboursement</span>
+                <span class="step-desc">Votre remboursement est traité sous 5 à 10 jours ouvrés après réception.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">2</span>Délais de rétractation</h2>
+        <p>Vous disposez d'un délai de <strong>30 jours calendaires</strong> à compter de la réception de
+        votre commande pour exercer votre droit de rétractation, sans avoir à justifier votre décision
+        ni à payer de pénalités.</p>
+        <p>Au-delà de ce délai, aucun retour ne pourra être accepté sauf en cas de défaut de conformité
+        ou de vice caché.</p>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">3</span>Conditions de retour</h2>
+        <p>Pour être accepté, le produit retourné doit respecter les conditions suivantes :</p>
+        <ul>
+            <li>Article dans son état d'origine, non utilisé et non endommagé.</li>
+            <li>Emballage d'origine intact avec toutes les étiquettes.</li>
+            <li>Accessoires, notices et cadeaux inclus dans la commande présents.</li>
+            <li>Accompagné du bon de retour fourni par notre service client.</li>
+        </ul>
+        <p>Les articles manifestement utilisés, abîmés ou incomplets ne pourront pas faire l'objet d'un
+        remboursement intégral.</p>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">4</span>Articles non retournables</h2>
+        <p>Certains articles sont exclus du droit de retour conformément à l'article L221-28 du Code de la
+        consommation :</p>
+        <ul>
+            <li>Produits personnalisés ou fabriqués sur mesure.</li>
+            <li>Articles scellés descellés après livraison pour des raisons d'hygiène ou de protection de la santé.</li>
+            <li>Produits soldés ou en liquidation clairement indiqués comme non retournables.</li>
+        </ul>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">5</span>Frais de retour</h2>
+        <p>Les frais de retour sont à votre charge, sauf dans les cas suivants :</p>
+        <ul>
+            <li>Article défectueux ou non conforme à la description.</li>
+            <li>Erreur de notre part dans la préparation de la commande.</li>
+            <li>Article endommagé lors du transport.</li>
+        </ul>
+        <p>Dans ces cas, Sports Bottles prend en charge les frais de retour et vous envoie une étiquette
+        prépayée par e-mail.</p>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">6</span>Modalités de remboursement</h2>
+        <p>Le remboursement est effectué sur le même moyen de paiement que celui utilisé lors de l'achat,
+        dans un délai de <strong>5 à 10 jours ouvrés</strong> après réception et vérification du colis retourné.</p>
+        <ul>
+            <li>Carte bancaire : remboursement sous 5–10 jours ouvrés.</li>
+            <li>PayPal : remboursement sous 3–5 jours ouvrés.</li>
+            <li>Avoir boutique : disponible immédiatement après validation du retour.</li>
+        </ul>
+        <p>Les frais de livraison initiaux ne sont remboursés qu'en cas de rétractation totale de la
+        commande dans le délai légal de 14 jours.</p>
+    </div>
+
+    <div class="legal-card">
+        <h2><span class="num">7</span>Garantie légale de conformité</h2>
+        <p>Indépendamment du droit de retour, tous nos produits bénéficient de la garantie légale de
+        conformité (2 ans) et de la garantie contre les vices cachés prévues par le Code civil.</p>
+        <p>En cas de défaut constaté, contactez notre service client à <strong>garantie@sportsbottles.fr</strong>.
+        Nous vous proposerons un échange, une réparation ou un remboursement selon la nature du défaut.</p>
+    </div>
+
+    {# CTA #}
+    <div class="cta-card">
+        <h2>Une question sur votre retour ?</h2>
+        <p>Notre équipe est disponible du lundi au vendredi, de 9h à 18h.</p>
+        <a href="{{ path('app_contact') }}" class="cta-btn">Contacter le service client</a>
+    </div>
+
+</main>
+
+{% endblock %}
