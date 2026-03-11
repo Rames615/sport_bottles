@@ -47,6 +47,12 @@ final class PaymentController extends AbstractController
             try {
                 $stripeSession = Session::retrieve($sessionId);
                 if ($stripeSession->payment_status === 'paid' && $order->getStatus() !== 'paid') {
+                    // Deduct stock from products based on cart items
+                    $user = $this->getUser();
+                    if ($user instanceof User) {
+                        $this->cartService->deductStockForUser($user);
+                    }
+
                     $order->setStatus('paid');
                     $em->flush();
 

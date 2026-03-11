@@ -113,6 +113,12 @@ final class StripeController extends AbstractController
             try {
                 $stripeSession = Session::retrieve($sessionId);
                 if ($stripeSession->payment_status === 'paid' && $order->getStatus() !== 'paid') {
+                    // Deduct stock from products based on cart items
+                    $user = $this->getUser();
+                    if ($user instanceof User) {
+                        $this->cartService->deductStockForUser($user);
+                    }
+
                     $order->setStatus('paid');
                     $em->flush();
 
@@ -223,6 +229,12 @@ final class StripeController extends AbstractController
             $order   = $em->getRepository(Order::class)->findOneBy(['stripeSessionId' => $sessionId]);
 
             if ($order && $order->getStatus() !== 'paid') {
+                // Deduct stock from products based on cart items
+                $orderUser = $order->getUser();
+                if ($orderUser instanceof User) {
+                    $this->cartService->deductStockForUser($orderUser);
+                }
+
                 $order->setStatus('paid');
                 $em->flush();
                 $logger->info('Commande payée via webhook', ['order_id' => $order->getId()]);

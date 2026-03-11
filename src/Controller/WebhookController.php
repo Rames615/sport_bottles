@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\User;
+use App\Service\CartService;
 use App\Service\MailerService;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
@@ -19,6 +21,7 @@ final class WebhookController extends AbstractController
 {
     public function __construct(
         private readonly MailerService $mailerService,
+        private readonly CartService $cartService,
     ) {}
     /**
      * Health check (GET) + Stripe event handler (POST).
@@ -79,6 +82,12 @@ final class WebhookController extends AbstractController
         $order = $em->getRepository(Order::class)->findOneBy(['stripeSessionId' => $sessionId]);
 
         if ($order && $order->getStatus() !== 'paid') {
+            // Deduct stock from products based on cart items
+            $orderUser = $order->getUser();
+            if ($orderUser instanceof User) {
+                $this->cartService->deductStockForUser($orderUser);
+            }
+
             $order->setStatus('paid');
             $em->flush();
             $logger->info('Order marked as paid via webhook', ['order_id' => $order->getId()]);

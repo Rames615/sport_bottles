@@ -230,6 +230,30 @@ class CartService
     }
 
     /**
+     * Déduit le stock des produits en fonction des articles du panier de l'utilisateur.
+     * Si le panier est vide (déjà vidé), aucune déduction n'est effectuée.
+     */
+    public function deductStockForUser(User $user): void
+    {
+        $cart = $this->getCartWithItems($user);
+        $items = $cart->getItems();
+
+        if ($items->isEmpty()) {
+            return;
+        }
+
+        foreach ($items as $item) {
+            $product = $item->getProduct();
+            if ($product && $product->getStock() !== null) {
+                $newStock = max(0, $product->getStock() - ($item->getQuantity() ?? 0));
+                $product->setStock($newStock);
+            }
+        }
+
+        $this->em->flush();
+    }
+
+    /**
      * Calcule le montant total du panier.
      */
     public function getCartTotal(Cart $cart): float

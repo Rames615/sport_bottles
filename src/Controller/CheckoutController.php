@@ -148,6 +148,9 @@ final class CheckoutController extends AbstractController
         $em->persist($order);
         $em->flush();
 
+        // Deduct stock from products based on cart items
+        $this->cartService->deductStockForUser($user);
+
         $this->cartService->clear($user);
         $request->getSession()->remove('shipping_address_id');
 
