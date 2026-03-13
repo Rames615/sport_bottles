@@ -46,6 +46,7 @@ class Product
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $temperature = null;
 
+    /** @var Collection<int, Promotion> */
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Promotion::class, cascade: ['remove'])]
     private Collection $promotions;
 

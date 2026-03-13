@@ -115,7 +115,7 @@ final class CheckoutController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        if (!$this->isCsrfTokenValid('checkout_pay', $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('checkout_pay', (string) $request->request->get('_token'))) {
             $this->addFlash('error', 'Token de sécurité invalide.');
             return $this->redirectToRoute('checkout_confirm');
         }
@@ -219,7 +219,7 @@ final class CheckoutController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        if (!$this->isCsrfTokenValid('checkout_pay', $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('checkout_pay', (string) $request->request->get('_token'))) {
             $this->addFlash('error', 'Token de sécurité invalide.');
             return $this->redirectToRoute('app_cartindex');
         }
@@ -269,10 +269,10 @@ final class CheckoutController extends AbstractController
                 $lineItems[] = [
                     'price_data' => [
                         'currency'     => 'eur',
-                        'product_data' => ['name' => $product->getDesignation()],
+                        'product_data' => ['name' => $product->getDesignation() ?? ''],
                         'unit_amount'  => (int) round((float) $item->getUnitPrice() * 100),
                     ],
-                    'quantity' => $item->getQuantity(),
+                    'quantity' => $item->getQuantity() ?? 1,
                 ];
             }
         }
@@ -285,11 +285,17 @@ final class CheckoutController extends AbstractController
             'cancel_url'           => $this->generateUrl('payment_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
         ]);
 
+        $stripeUrl = $session->url;
+        if (!$stripeUrl) {
+            $this->addFlash('error', 'Impossible de créer la session de paiement Stripe.');
+            return $this->redirectToRoute('app_cartindex');
+        }
+
         $order->setStripeSessionId($session->id);
         $em->flush();
 
         $request->getSession()->remove('shipping_address_id');
 
-        return new RedirectResponse($session->url);
+        return new RedirectResponse($stripeUrl);
     }
 }

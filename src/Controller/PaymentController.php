@@ -62,10 +62,10 @@ final class PaymentController extends AbstractController
                         $lineItems = Session::allLineItems($sessionId, ['limit' => 100]);
                         foreach ($lineItems->data as $li) {
                             $items[] = [
-                                'name'      => $li->description,
-                                'quantity'  => $li->quantity,
-                                'unitPrice' => $li->price->unit_amount / 100,
-                                'subtotal'  => $li->amount_total / 100,
+                                'name'      => $li->description ?? '',
+                                'quantity'  => $li->quantity ?? 0,
+                                'unitPrice' => ($li->price?->unit_amount ?? 0) / 100,
+                                'subtotal'  => ($li->amount_total ?? 0) / 100,
                             ];
                         }
                         $this->mailerService->sendOrderConfirmation($order, $items);

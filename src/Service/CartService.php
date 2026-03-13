@@ -198,7 +198,7 @@ class CartService
      * Prépare le panier pour le passage en caisse :
      * vérifie que le panier n'est pas vide et recalcule les prix si nécessaire.
      *
-     * @return array{ok: bool, total?: float, cart?: Cart, message?: string}
+     * @return array{ok: true, total: float, cart: Cart}|array{ok: false, message: string}
      */
     public function prepareCheckout(User $user): array
     {

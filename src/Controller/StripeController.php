@@ -32,7 +32,7 @@ final class StripeController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        if (!$this->isCsrfTokenValid('stripe_checkout', $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('stripe_checkout', (string) $request->request->get('_token'))) {
             $this->addFlash('error', 'Token de sécurité invalide.');
             return $this->redirectToRoute('app_cartindex');
         }
@@ -51,6 +51,7 @@ final class StripeController extends AbstractController
         $order->setTotalAmount($total);
         $order->setStatus('pending');
         $order->setCreatedAt(new \DateTimeImmutable());
+        $order->setShippingAddress(''); // populated via checkout flow
 
         $em->persist($order);
         $em->flush();
@@ -69,10 +70,10 @@ final class StripeController extends AbstractController
                 $lineItems[] = [
                     'price_data' => [
                         'currency'     => 'eur',
-                        'product_data' => ['name' => $product->getDesignation()],
+                        'product_data' => ['name' => $product->getDesignation() ?? ''],
                         'unit_amount'  => (int) round((float) $item->getUnitPrice() * 100),
                     ],
-                    'quantity' => $item->getQuantity(),
+                    'quantity' => $item->getQuantity() ?? 1,
                 ];
             }
         }
@@ -85,10 +86,16 @@ final class StripeController extends AbstractController
             'cancel_url'           => $this->generateUrl('stripe_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
         ]);
 
+        $stripeUrl = $session->url;
+        if (!$stripeUrl) {
+            $this->addFlash('error', 'Impossible de créer la session de paiement Stripe.');
+            return $this->redirectToRoute('app_cartindex');
+        }
+
         $order->setStripeSessionId($session->id);
         $em->flush();
 
-        return new RedirectResponse($session->url);
+        return new RedirectResponse($stripeUrl);
     }
 
     #[Route('/stripe/success', name: 'stripe_success')]
@@ -204,7 +211,7 @@ final class StripeController extends AbstractController
 
         try {
             if ($endpointSecret) {
-                $event = Webhook::constructEvent($payload, $sigHeader, $endpointSecret);
+                $event = Webhook::constructEvent($payload, (string) $sigHeader, $endpointSecret);
             } else {
                 $logger->warning('STRIPE_WEBHOOK_SECRET absent — traitement sans vérification de signature');
                 $event = json_decode($payload, true);
@@ -220,7 +227,9 @@ final class StripeController extends AbstractController
             return new Response('Erreur serveur', 500);
         }
 
+        // @phpstan-ignore-next-line
         $type = is_object($event) && isset($event->type) ? $event->type : ($event['type'] ?? null);
+        // @phpstan-ignore-next-line
         $logger->info('Stripe event', ['type' => $type, 'id' => is_object($event) ? $event->id ?? null : ($event['id'] ?? null)]);
 
         if ($type === 'checkout.session.completed') {
@@ -267,6 +276,7 @@ final class StripeController extends AbstractController
             $logger->warning('Paiement échoué', ['payment_intent' => $pi->id ?? ($pi['id'] ?? null)]);
 
             if (isset($pi->metadata) || isset($pi['metadata'])) {
+                // @phpstan-ignore-next-line
                 $metadata = is_object($pi) ? $pi->metadata : $pi['metadata'];
                 if (!empty($metadata['order_id'])) {
                     $order = $em->getRepository(Order::class)->find($metadata['order_id']);

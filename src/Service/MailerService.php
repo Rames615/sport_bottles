@@ -87,9 +87,15 @@ class MailerService
             return;
         }
 
+        $userEmail = $user->getEmail();
+        if (!$userEmail) {
+            $this->logger->warning('Cannot send order confirmation: user has no email', ['order_id' => $order->getId()]);
+            return;
+        }
+
         $email = (new TemplatedEmail())
             ->from(new Address('no-reply@sportsbottles.fr', 'SportBottles'))
-            ->to(new Address($user->getEmail(), $user->getEmail()))
+            ->to(new Address($userEmail, $userEmail))
             ->subject('Confirmation de commande ' . $order->getReference() . ' — SportBottles')
             ->htmlTemplate('emails/order/confirmation.html.twig')
             ->textTemplate('emails/order/confirmation.txt.twig')

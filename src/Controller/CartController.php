@@ -47,7 +47,7 @@ class CartController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        if (!$this->isCsrfTokenValid('cart_add', $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('cart_add', (string) $request->request->get('_token'))) {
             return $this->redirectToRoute('app_product');
         }
 
@@ -58,7 +58,7 @@ class CartController extends AbstractController
         }
 
         // Get optional custom image path (e.g., promotion image)
-        $customImagePath = $request->request->get('custom_image_path');
+        $customImagePath = $request->request->getString('custom_image_path') ?: null;
 
         $added = $this->cartService->addProduct($user, $product, $customImagePath);
         
@@ -87,7 +87,7 @@ class CartController extends AbstractController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!$this->isCsrfTokenValid('cart_add', $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('cart_add', (string) $request->request->get('_token'))) {
             return $this->json([
                 'ok' => false,
                 'message' => 'Token CSRF invalide',
@@ -103,7 +103,7 @@ class CartController extends AbstractController
         }
 
         // Get optional custom image path (e.g., promotion image)
-        $customImagePath = $request->request->get('custom_image_path');
+        $customImagePath = $request->request->getString('custom_image_path') ?: null;
 
         $added = $this->cartService->addProduct($user, $product, $customImagePath);
         
@@ -122,9 +122,8 @@ class CartController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // Get the current cart item count
-        $cart = $this->cartService->getCartWithItems($user);
-        $itemCount = count($cart->getItems());
+        // Get the current cart item count (sum of all quantities, consistent with nav badge)
+        $itemCount = $this->cartService->getCartItemCount($user);
 
         return $this->json([
             'ok' => true,
@@ -141,7 +140,7 @@ class CartController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        if (!$this->isCsrfTokenValid('cart_update', $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('cart_update', (string) $request->request->get('_token'))) {
             return $this->redirectToRoute('app_cartindex');
         }
 
@@ -159,7 +158,7 @@ class CartController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        if (!$this->isCsrfTokenValid('cart_remove', $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('cart_remove', (string) $request->request->get('_token'))) {
             return $this->redirectToRoute('app_cartindex');
         }
 
@@ -182,7 +181,7 @@ class CartController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        if (!$this->isCsrfTokenValid('cart_clear', $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('cart_clear', (string) $request->request->get('_token'))) {
             return $this->redirectToRoute('app_cartindex');
         }
 

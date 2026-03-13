@@ -87,9 +87,15 @@ class PasswordService
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
+        $userEmail = $user->getEmail();
+        if (!$userEmail) {
+            $this->logger->warning('Cannot send password reset email: user has no email', ['user_id' => $user->getId()]);
+            return;
+        }
+
         $email = (new TemplatedEmail())
             ->from(new Address('no-reply@sportsbottles.fr', 'SportBottles'))
-            ->to(new Address($user->getEmail(), $user->getEmail()))
+            ->to(new Address($userEmail, $userEmail))
             ->subject('Réinitialisation de votre mot de passe — SportBottles')
             ->htmlTemplate('emails/reset_password/reset.html.twig')
             ->textTemplate('emails/reset_password/reset.txt.twig')

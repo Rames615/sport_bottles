@@ -19,6 +19,8 @@ class ShippingAddressRepository extends ServiceEntityRepository
 
     /**
      * Find all shipping addresses for a user
+     *
+     * @return array<int, ShippingAddress>
      */
     public function findByUser(User $user): array
     {

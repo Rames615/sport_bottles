@@ -42,7 +42,7 @@ class PromoteUserAdminCommand extends Command
 
         $roles = $user->getRoles();
         $roles[] = 'ROLE_ADMIN';
-        $user->setRoles(array_unique($roles));
+        $user->setRoles(array_values(array_unique($roles)));
 
         $this->em->flush();
 
