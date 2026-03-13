@@ -35,8 +35,13 @@ class CartService
     /**
      * Ajoute un produit au panier de l'utilisateur.
      * Retourne true en cas de succès, false si le stock est insuffisant.
+     * 
+     * @param User $user
+     * @param Product $product
+     * @param string|null $customImagePath Optional custom image path (e.g., promotion image)
+     * @return bool
      */
-    public function addProduct(User $user, Product $product): bool
+    public function addProduct(User $user, Product $product, ?string $customImagePath = null): bool
     {
         $cart = $this->getCart($user);
 
@@ -64,6 +69,10 @@ class CartService
                 }
 
                 $cartItem->setQuantity($quantiteActuelle + 1);
+                // Update custom image if provided (use the latest promotion image)
+                if ($customImagePath !== null) {
+                    $cartItem->setCustomImagePath($customImagePath);
+                }
                 $cart->setUpdatedAt(new \DateTimeImmutable());
                 $this->em->flush();
 
@@ -77,6 +86,10 @@ class CartService
         $cartItem->setQuantity(1);
         // Stocke le prix unitaire au moment de l'ajout
         $cartItem->setUnitPrice((string) $product->getPrice());
+        // Store custom image path if provided (e.g., promotion image)
+        if ($customImagePath !== null) {
+            $cartItem->setCustomImagePath($customImagePath);
+        }
 
         $cart->addItem($cartItem);
         $cart->setUpdatedAt(new \DateTimeImmutable());

@@ -37,6 +37,7 @@
 		<link rel="stylesheet" href="{{ asset('styles/hero-section.css') }}">
 		<link rel="stylesheet" href="{{ asset('styles/reassurance-section.css') }}">
 		<link rel="stylesheet" href="{{ asset('styles/product.css') }}">
+		<link rel="stylesheet" href="{{ asset('styles/modal.css') }}">
 		<link rel="stylesheet" href="{{ asset('styles/categories.css') }}">
 		<link rel="stylesheet" href="{{ asset('styles/promotion.css') }}">
 		<link rel="stylesheet" href="{{ asset('styles/footer.css') }}">
@@ -79,8 +80,14 @@
 		  </div>
 		</div>
 
-		<!-- Bootstrap JS Bundle with Popper - No defer: must be available before other scripts -->
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+		<!-- Bootstrap JS Bundle with Popper -->
+		<!-- data-turbo-eval="false" prevents Turbo from re-executing this on every
+		     navigation, which would reset Bootstrap's internal state and duplicate
+		     event listeners. Bootstrap needs to run exactly once per hard page load. -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" data-turbo-eval="false"></script>
+
+		<!-- Cart real-time badge update (promotion add-to-cart AJAX) -->
+		<script src="{{ asset('scripts/cart.js') }}" data-turbo-eval="false"></script>
 
 		<!-- Product Page Scripts -->
 		<script src="{{ asset('scripts/product-filters.js') }}"></script>
@@ -88,18 +95,21 @@
 
 		{% block javascripts %}{% endblock %}
 
-		<script>
-			// Re-initialize Bootstrap components after Turbo navigation
-			document.addEventListener('turbo:load', function() {
-				if (typeof bootstrap !== 'undefined') {
-					document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function(el) {
-						bootstrap.Dropdown.getOrCreateInstance(el);
-					});
-					document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(el) {
-						bootstrap.Collapse.getOrCreateInstance(el);
-					});
-				}
-			});
+		<script data-turbo-eval="false">
+			// Re-initialize Bootstrap components after Turbo navigation.
+			// Also runs on DOMContentLoaded for the initial hard page load.
+			// data-turbo-eval="false" ensures this listener is registered exactly once.
+			function reinitBootstrapComponents() {
+				if (typeof bootstrap === 'undefined') return;
+				document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function(el) {
+					bootstrap.Dropdown.getOrCreateInstance(el);
+				});
+				document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(el) {
+					bootstrap.Collapse.getOrCreateInstance(el);
+				});
+			}
+			document.addEventListener('DOMContentLoaded', reinitBootstrapComponents);
+			document.addEventListener('turbo:load', reinitBootstrapComponents);
 		</script>
 	</body>
 </html>

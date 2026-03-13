@@ -45,25 +45,28 @@
 
                 {# 3. Panier (logged-in only) #}
                 {% if app.user %}
+                {% set cartCount = cart_item_count is defined ? cart_item_count(app.user) : 0 %}
                 <li class="nav-item">
-                    <a class="nav-link position-relative" href="{{ path('app_cartindex') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="me-1 mb-1" viewBox="0 0 16 16">
-                            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                        </svg>
-                        <span class="d-none d-md-inline">Panier</span>
-                        {% if cart_item_count is defined %}
-                            {% set cartCount = cart_item_count(app.user) %}
-                            {% if cartCount > 0 %}
-                                <span id="cart-count-badge"
-                                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                      style="font-size: 0.65rem; min-width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; padding: 0 4px;">
-                                    {{ cartCount }}
-                                </span>
-                            {% else %}
-                                <span id="cart-count-badge" style="display:none"></span>
-                            {% endif %}
-                        {% endif %}
+                    <a class="nav-link nav-cart-link" href="{{ path('app_cartindex') }}"
+                       title="{{ cartCount > 0 ? cartCount ~ ' article' ~ (cartCount > 1 ? 's' : '') ~ ' dans le panier' : 'Mon panier' }}">
+
+                        {# Icon + live badge wrapper #}
+                        <span class="nav-cart-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                 viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                            </svg>
+
+                            {# Badge — always in DOM so JS can update it without page reload #}
+                            <span id="cart-count-badge"
+                                  class="cart-count-badge{{ cartCount > 0 ? ' cart-badge-visible' : '' }}"
+                                  aria-live="polite"
+                                  aria-label="{{ cartCount }} article{{ cartCount != 1 ? 's' : '' }} dans le panier">
+                                {{ cartCount > 0 ? cartCount : '' }}
+                            </span>
+                        </span>
+
+                        <span class="nav-cart-label d-none d-md-inline">Panier</span>
                     </a>
                 </li>
                 {% endif %}
@@ -164,4 +167,4 @@
     </div>
 </nav>
 
-<script src="{{ asset('scripts/nav.js') }}"></script>
+<script src="{{ asset('scripts/nav.js') }}" data-turbo-eval="false"></script>

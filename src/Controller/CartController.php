@@ -57,7 +57,10 @@ class CartController extends AbstractController
             return $this->redirectToRoute('app_product');
         }
 
-        $added = $this->cartService->addProduct($user, $product);
+        // Get optional custom image path (e.g., promotion image)
+        $customImagePath = $request->request->get('custom_image_path');
+
+        $added = $this->cartService->addProduct($user, $product, $customImagePath);
         
         if (!$added) {
             $stock = $product->getStock();
@@ -99,7 +102,10 @@ class CartController extends AbstractController
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $added = $this->cartService->addProduct($user, $product);
+        // Get optional custom image path (e.g., promotion image)
+        $customImagePath = $request->request->get('custom_image_path');
+
+        $added = $this->cartService->addProduct($user, $product, $customImagePath);
         
         if (!$added) {
             $stock = $product->getStock();

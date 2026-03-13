@@ -1,0 +1,138 @@
+/* ============================================
+   PRODUCT MODAL - Styles
+   ============================================ */
+
+/* Modal fade-in animation */
+.modal.fade {
+    transition: opacity 0.15s linear, visibility 0.15s linear;
+}
+
+.modal.show {
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Ensure backdrop is visible and clickable */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+}
+
+/* Modal content styling */
+.modal-content {
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Modal header */
+.modal-header {
+    background-color: #f8faf9;
+    border-bottom: 1px solid #e2ede9;
+    padding: 1rem 1.5rem;
+}
+
+.modal-header .btn-close {
+    transition: all 0.2s ease;
+}
+
+.modal-header .btn-close:hover {
+    background-color: rgba(31, 122, 99, 0.2) !important;
+    transform: rotate(90deg);
+}
+
+/* Modal body */
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: 60vh;
+}
+
+/* Modal footer */
+.modal-footer {
+    background-color: #f8faf9;
+    border-top: 1px solid #e2ede9;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+}
+
+/* Ensure buttons in footer are interactive */
+.modal-footer .btn {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+}
+
+.modal-footer .btn:hover {
+    transform: translateY(-2px);
+}
+
+.modal-footer .btn:active {
+    transform: translateY(0);
+}
+
+/* Button group in footer responsive */
+.modal-footer.flex-column-reverse {
+    flex-direction: column-reverse;
+}
+
+@media (min-width: 576px) {
+    .modal-footer.flex-sm-row {
+        flex-direction: row;
+    }
+}
+
+/* Form in modal footer */
+#modalAddToCartForm {
+    width: 100%;
+}
+
+@media (min-width: 576px) {
+    #modalAddToCartForm {
+        width: auto;
+        flex-grow: 1;
+    }
+}
+
+/* Product specs cards */
+.modal-spec-card {
+    transition: all 0.18s ease;
+    cursor: default;
+    user-select: none;
+    pointer-events: auto;
+}
+
+.modal-spec-card:hover {
+    border-color: #1F7A63 !important;
+    box-shadow: 0 0 0 3px rgba(31, 122, 99, 0.08) !important;
+}
+
+/* Image container */
+.modal-body img {
+    transition: transform 0.3s ease;
+}
+
+.modal-body img:hover {
+    transform: scale(1.02);
+}
+
+/* Ensure old price is hidden when no discount */
+#modalProductOldPrice:empty {
+    display: none !important;
+}
+
+/* Price styling */
+#modalProductPrice {
+    word-break: break-word;
+}

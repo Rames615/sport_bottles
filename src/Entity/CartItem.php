@@ -27,6 +27,9 @@ class CartItem
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $unitPrice = null;
 
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $customImagePath = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,5 +89,17 @@ class CartItem
         $qty = $this->quantity ?? 0;
 
         return $unit * $qty;
+    }
+
+    public function getCustomImagePath(): ?string
+    {
+        return $this->customImagePath;
+    }
+
+    public function setCustomImagePath(?string $customImagePath): static
+    {
+        $this->customImagePath = $customImagePath;
+
+        return $this;
     }
 }

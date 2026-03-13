@@ -67,15 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await resp.json();
 
                 if (resp.ok && data.ok) {
-                    // Update cart badge
-                    const badge = document.getElementById('cart-count-badge');
-                    if (badge) {
-                        if (data.count && parseInt(data.count) > 0) {
-                            badge.style.display = 'inline-flex';
-                            badge.textContent = data.count;
-                        } else {
-                            badge.style.display = 'none';
-                        }
+                    // Delegate badge update to the shared cart.js API
+                    if (window.updateCartBadge) {
+                        window.updateCartBadge(data.count);
                     }
                     showTemporaryMessage(data.message || 'Ajouté au panier', 'success');
                 } else {
