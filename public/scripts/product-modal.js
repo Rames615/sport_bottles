@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn-show-more');
+        const btn = e.target.closest('.btn-show-more, .btn-view-more');
         if (!btn) return;
 
         const productData = {
