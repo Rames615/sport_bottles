@@ -22,6 +22,13 @@
     {% endif %}
 {% endfor %}
 
+{# ── Choose display image: promotion image takes priority ─────── #}
+{% set displayImagePath = productImagePath %}
+{% if activePromotion and activePromotion.imgPath %}
+    {% set promoImageFile = activePromotion.imgPath|split('/')|last %}
+    {% set displayImagePath = asset('products_images/promotion/' ~ promoImageFile) %}
+{% endif %}
+
 {% set finalPrice = product.finalPrice %}
 {% set isDiscounted = (finalPrice != product.price) %}
 
@@ -42,7 +49,7 @@
         <div class="col-12 col-md-5">
             <div class="pd-image-wrapper rounded-4 overflow-hidden border"
                  style="background-color:#f8faf9; border-color:#e2ede9 !important;">
-                <img src="{{ productImagePath }}"
+                <img src="{{ displayImagePath }}"
                      alt="{{ product.designation }}"
                      class="d-block w-100 object-fit-contain p-4"
                      style="max-height:420px;"
