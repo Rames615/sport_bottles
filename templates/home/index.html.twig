@@ -148,22 +148,12 @@
 												Ajouter
 											</button>
 										</form>
-										<button type="button" class="btn-view-more modern-btn" 
-											data-product-name="{{ product.designation }}"
-											data-product-image="{% if product.imgPath %}{{ asset('products_images/' ~ (product.imgPath|split('/')|last)) }}{% else %}{{ asset('images/placeholder.png') }}{% endif %}"
-											data-product-price="{{ product.getFinalPrice() | number_format(2, ',', ' ') }}€"
-											data-product-old-price="{% if promotion %}{{ product.price }}€{% endif %}"
-											data-product-description="{% if promotion.getDescription() %}{{ promotion.getDescription() }}{% else %}{{ product.description }}{% endif %}"
-											data-product-capacity="{% if product.capacity %}{{ product.capacity }}{% endif %}"
-											data-product-temperature="{% if product.temperature %}{{ product.temperature }}{% endif %}"
-											data-product-category="{{ product.category.name }}"
-											data-product-id="{{ product.id }}"
-											data-csrf-token="{{ csrf_token('cart_add') }}"
-											data-cart-url="{{ path('app_cartadd', {id: product.id}) }}"
+										<a href="{{ path('app_product_show', {id: product.id}) }}"
+											class="btn-view-more modern-btn"
 											title="Voir la description complète">
 											<span class="btn-icon">👁️</span>
 											Voir plus
-										</button>
+										</a>
 									</div>
 								</div>
 							</div>
@@ -195,10 +185,6 @@
 			</div>
 		</div>
 	</section>
-
-	{# Ajouter lien JS depuis le hero.js pour fait ajouter le produits de la section promotion' #}
-	{# Product modal for promotions #}
-	{% include 'product/_modal.html.twig' %}
 
 	{% block javascripts %}
         <script src="{{ asset('scripts/hero.js') }}"></script>

@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Repository\ProductRepository;
-use App\Repository\Category;
 use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,6 +42,14 @@ final class ProductController extends AbstractController
             'categories' => $categories,
             'productsByCategory' => $productsByCategory,
             'allProducts' => $products,
+        ]);
+    }
+
+    #[Route('/product/{id}', name: 'app_product_show', requirements: ['id' => '\d+'])]
+    public function show(Product $product): Response
+    {
+        return $this->render('product/product_description.html.twig', [
+            'product' => $product,
         ]);
     }
 }

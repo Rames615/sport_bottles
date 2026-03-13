@@ -1,0 +1,175 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.designation }} – Sports Bottles{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/product-detail.css') }}">
+{% endblock %}
+
+{% block body %}
+
+{% set imageFileName = product.imgPath ? (product.imgPath|split('/')|last) : null %}
+{% set productImagePath = imageFileName
+    ? asset('products_images/' ~ imageFileName)
+    : asset('images/placeholder.png') %}
+
+{# ── Active promotion (if any) ──────────────────────────────── #}
+{% set activePromotion = null %}
+{% for promo in product.promotions %}
+    {% if promo.isActive is defined and promo.isActive %}
+        {% set activePromotion = promo %}
+    {% endif %}
+{% endfor %}
+
+{% set finalPrice = product.finalPrice %}
+{% set isDiscounted = (finalPrice != product.price) %}
+
+<div class="pd-page container py-5 mt-5">
+
+    {# ── Breadcrumb ───────────────────────────────────────────── #}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_product') }}">Produits</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.designation }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5 align-items-start">
+
+        {# ── Left – Image ─────────────────────────────────────── #}
+        <div class="col-12 col-md-5">
+            <div class="pd-image-wrapper rounded-4 overflow-hidden border"
+                 style="background-color:#f8faf9; border-color:#e2ede9 !important;">
+                <img src="{{ productImagePath }}"
+                     alt="{{ product.designation }}"
+                     class="d-block w-100 object-fit-contain p-4"
+                     style="max-height:420px;"
+                     onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}'">
+            </div>
+        </div>
+
+        {# ── Right – Info ─────────────────────────────────────── #}
+        <div class="col-12 col-md-7">
+
+            {# Name #}
+            <h1 class="pd-name fw-bold mb-3"
+                style="font-family:'Playfair Display',Georgia,serif;
+                       font-size:clamp(1.5rem,3vw,2.2rem);
+                       color:#0f1923; letter-spacing:-0.02em; line-height:1.2;">
+                {{ product.designation }}
+            </h1>
+
+            {# Category badge #}
+            {% if product.category %}
+            <span class="badge rounded-pill mb-4"
+                  style="background-color:#e8f5f1; color:#1F7A63;
+                         font-size:.75rem; font-weight:600; letter-spacing:.06em;">
+                {{ product.category.name }}
+            </span>
+            {% endif %}
+
+            {# Price block #}
+            <div class="d-flex align-items-baseline gap-3 mb-4 px-3 py-2 rounded-end-2"
+                 style="background-color:#e8f5f1; border-left:3px solid #1F7A63; display:inline-flex !important;">
+                <span class="fw-bold lh-1"
+                      style="font-family:'Playfair Display',Georgia,serif;
+                             font-size:2rem; color:#1F7A63;">
+                    {{ finalPrice|number_format(2, ',', ' ') }} €
+                </span>
+                {% if isDiscounted %}
+                <span class="text-muted text-decoration-line-through small">
+                    {{ product.price|number_format(2, ',', ' ') }} €
+                </span>
+                {% endif %}
+            </div>
+
+            {# Description #}
+            <div class="mb-4 pb-4" style="border-bottom:1px solid #e2ede9;">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <span class="d-flex align-items-center justify-content-center rounded-2"
+                          style="width:1.5rem;height:1.5rem;
+                                 background-color:#e8f5f1;color:#1F7A63;font-size:.6rem;">
+                        <i class="fas fa-info fa-xs"></i>
+                    </span>
+                    <span class="text-uppercase fw-semibold"
+                          style="font-size:.68rem;letter-spacing:.1em;color:#6b7f79;">
+                        Description
+                    </span>
+                </div>
+                <p class="mb-0"
+                   style="font-size:.9375rem;line-height:1.75;
+                          color:#3a4a45;text-align:justify;">
+                    {{ product.description }}
+                </p>
+            </div>
+
+            {# Caractéristiques #}
+            <div class="mb-4 pb-4" style="border-bottom:1px solid #e2ede9;">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <span class="d-flex align-items-center justify-content-center rounded-2"
+                          style="width:1.5rem;height:1.5rem;
+                                 background-color:#e8f5f1;color:#1F7A63;font-size:.6rem;">
+                        <i class="fas fa-cog fa-xs"></i>
+                    </span>
+                    <span class="text-uppercase fw-semibold"
+                          style="font-size:.68rem;letter-spacing:.1em;color:#6b7f79;">
+                        Caractéristiques
+                    </span>
+                </div>
+                <div class="row g-2">
+                    {% if product.capacity %}
+                    <div class="col-auto">
+                        <span class="badge rounded-pill px-3 py-2"
+                              style="background-color:#f0f4f3;color:#3a4a45;font-size:.8rem;">
+                            <i class="fas fa-fill-drip me-1" style="color:#1F7A63;"></i>
+                            {{ product.capacity }}
+                        </span>
+                    </div>
+                    {% endif %}
+                    {% if product.temperature %}
+                    <div class="col-auto">
+                        <span class="badge rounded-pill px-3 py-2"
+                              style="background-color:#f0f4f3;color:#3a4a45;font-size:.8rem;">
+                            <i class="fas fa-thermometer-half me-1" style="color:#1F7A63;"></i>
+                            {{ product.temperature }}
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Add-to-cart form #}
+            {% if product.stock > 0 %}
+            <form method="post" action="{{ path('app_cartadd', {id: product.id}) }}"
+                  class="add-to-cart-form-detail d-flex gap-2 flex-wrap">
+                <input type="hidden" name="_token" value="{{ csrf_token('cart_add') }}">
+                <button type="submit"
+                        class="btn btn-success fw-semibold d-inline-flex align-items-center gap-2 px-4"
+                        aria-label="Ajouter {{ product.designation }} au panier">
+                    <i class="fas fa-shopping-cart"></i>
+                    Ajouter au panier
+                </button>
+            </form>
+            {% else %}
+            <p class="text-danger fw-semibold mt-2">
+                <i class="fas fa-times-circle me-1"></i> Produit actuellement indisponible
+            </p>
+            {% endif %}
+
+            {# Back link #}
+            <div class="mt-4">
+                <a href="{{ path('app_product') }}"
+                   class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-2">
+                    <i class="fas fa-arrow-left fa-xs"></i>
+                    Retour aux produits
+                </a>
+            </div>
+
+        </div>{# /col right #}
+    </div>{# /row #}
+
+</div>{# /pd-page #}
+
+{% endblock %}

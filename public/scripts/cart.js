@@ -107,14 +107,14 @@ document.addEventListener('submit', async function (e) {
         }
     }
 
-    // ── 2. Product modal "Ajouter au panier" form ─────────────────
-    if (form.id === 'modalAddToCartForm') {
+    // ── 2. Product detail page "Ajouter au panier" form ──────────
+    if (form.classList.contains('add-to-cart-form-detail')) {
         e.preventDefault();
 
-        const productId = document.getElementById('modalProductId')?.value;
+        const productId = new URL(form.action).pathname.split('/').pop();
         if (!productId) return;
 
-        const csrf      = document.getElementById('modalCsrfToken')?.value || _getCartCsrf();
+        const csrf      = form.querySelector('[name="_token"]')?.value || _getCartCsrf();
         const submitBtn = form.querySelector('[type="submit"]');
         if (submitBtn) submitBtn.disabled = true;
 
@@ -123,11 +123,6 @@ document.addEventListener('submit', async function (e) {
             if (data.ok) {
                 window.updateCartBadge(data.count);
                 _showCartToast(data.message || 'Ajouté au panier !', 'success');
-                // Close modal after success
-                const modalEl = document.getElementById('productModal');
-                if (modalEl && typeof bootstrap !== 'undefined') {
-                    bootstrap.Modal.getInstance(modalEl)?.hide();
-                }
             } else {
                 _showCartToast(data.message || "Erreur lors de l'ajout.", 'danger');
             }

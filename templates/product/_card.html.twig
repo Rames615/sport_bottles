@@ -65,24 +65,12 @@
            ACTIONS BUTTONS
            ============================================ #}
         <div class="product-actions">
-            {# Show More Button - Opens Modal #}
-            <button type="button"
-                    class="btn btn-show-more btn-info w-100" 
-                    data-product-id="{{ product.id }}"
-                    data-product-name="{{ product.designation }}"
-                    data-product-price="{{ product.price }}"
-                    data-product-description="{{ product.description }}"
-                    data-product-capacity="{{ product.capacity }}"
-                    data-product-temperature="{{ product.temperature }}"
-                    data-product-category="{{ product.category ? product.category.name : '' }}"
-                    data-product-image="{{ productImagePath }}"
-                    data-csrf-token="{{ csrf_token('cart_add') }}"
-                    data-cart-url="{{ path('app_cartadd', { id: product.id }) }}"
-                    data-bs-toggle="modal" 
-                    data-bs-target="#productModal"
-                    title="Afficher plus de détails sur {{ product.designation }}">
-                <i class="fas fa-chevron-down"></i> Voir plus
-            </button>
+            {# Link to dedicated product detail page #}
+            <a href="{{ path('app_product_show', {id: product.id}) }}"
+               class="btn btn-show-more btn-info w-100"
+               title="Afficher plus de détails sur {{ product.designation }}">
+                <i class="fas fa-eye"></i> Voir plus
+            </a>
         </div>
     </div>
 </div>
