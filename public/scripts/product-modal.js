@@ -1,29 +1,36 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
+// Guard: only register the click listener once even if the script is somehow
+// evaluated more than once (Turbo + data-turbo-eval interactions).
+if (!window._productModalInitialised) {
+    window._productModalInitialised = true;
+
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('.btn-show-more, .btn-view-more');
         if (!btn) return;
 
-        const productData = {
-            name:        btn.dataset.productName        ?? '',
-            image:       btn.dataset.productImage       ?? '',
-            price:       btn.dataset.productPrice       ?? '',
-            oldPrice:    btn.dataset.productOldPrice    ?? '',
-            description: btn.dataset.productDescription ?? '',
-            capacity:    btn.dataset.productCapacity    ?? '',
-            temperature: btn.dataset.productTemperature ?? '',
-            category:    btn.dataset.productCategory    ?? '',
-            csrfToken:   btn.dataset.csrfToken          ?? '',
-            cartUrl:     btn.dataset.cartUrl            ?? '',
-            productId:   btn.dataset.productId          ?? '',
-            specs:       _parseSpecs(btn.dataset.productSpecs),
-        };
-        console.log('Product data from button:', productData);
-        openProductModal(productData);
+        try {
+            const productData = {
+                name:        btn.dataset.productName        ?? '',
+                image:       btn.dataset.productImage       ?? '',
+                price:       btn.dataset.productPrice       ?? '',
+                oldPrice:    btn.dataset.productOldPrice    ?? '',
+                description: btn.dataset.productDescription ?? '',
+                capacity:    btn.dataset.productCapacity    ?? '',
+                temperature: btn.dataset.productTemperature ?? '',
+                category:    btn.dataset.productCategory    ?? '',
+                csrfToken:   btn.dataset.csrfToken          ?? '',
+                cartUrl:     btn.dataset.cartUrl            ?? '',
+                productId:   btn.dataset.productId          ?? '',
+                specs:       _parseSpecs(btn.dataset.productSpecs),
+            };
+            openProductModal(productData);
+        } catch (error) {
+            console.error('Error opening product modal:', error);
+        }
     });
-});
+}
 
 // ── Public API ───────────────────────────────────────────────
 
@@ -42,16 +49,17 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {string}   [product.cartUrl]
  */
 function openProductModal(product) {
-    console.log('openProductModal called with:', product);
-    _setImage(product);
-    _setName(product.name);
-    _setPrice(product.price, product.oldPrice);
-    _setDescription(product.description);
-    const specs = _buildSpecs(product);
-    console.log('Built specs:', specs);
-    _setSpecs(specs);
-    _setCartForm(product.csrfToken, product.cartUrl, product.productId);
-    _show();
+    try {
+        _setImage(product);
+        _setName(product.name);
+        _setPrice(product.price, product.oldPrice);
+        _setDescription(product.description);
+        _setSpecs(_buildSpecs(product));
+        _setCartForm(product.csrfToken, product.cartUrl, product.productId);
+        _show();
+    } catch (error) {
+        console.error('Error in openProductModal:', error);
+    }
 }
 
 // ── Private helpers ──────────────────────────────────────────
@@ -124,12 +132,12 @@ function _setSpecs(specs) {
 }
 
 function _setCartForm(csrfToken, cartUrl, productId) {
-    const form       = document.getElementById('modalAddToCartForm');
-    const tokenInput = document.getElementById('modalCsrfToken');
+    const form           = document.getElementById('modalAddToCartForm');
+    const tokenInput     = document.getElementById('modalCsrfToken');
     const productIdInput = document.getElementById('modalProductId');
 
-    if (form && cartUrl)          form.action = cartUrl;
-    if (tokenInput && csrfToken)  tokenInput.value = csrfToken;
+    if (form && cartUrl)             form.action      = cartUrl;
+    if (tokenInput && csrfToken)     tokenInput.value = csrfToken;
     if (productIdInput && productId) productIdInput.value = productId;
 }
 
@@ -151,7 +159,10 @@ function _buildSpecs(product) {
 
 function _show() {
     const modalEl = document.getElementById('productModal');
-    if (!modalEl) return;
+    if (!modalEl) {
+        console.error('productModal element not found in DOM');
+        return;
+    }
     bootstrap.Modal.getOrCreateInstance(modalEl).show();
 }
 

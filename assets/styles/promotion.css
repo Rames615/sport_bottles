@@ -2,7 +2,7 @@
 .promotions-section {
   width: 100%;
   background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
-  padding: 80px 20px 60px;
+  padding: 40px 10px 30px;
   position: relative;
   overflow: hidden;
 }
@@ -33,7 +33,7 @@
 .promotions-section .section-title {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 25px;
   font-size: 2.2rem;
   font-weight: 700;
   color: var(--text-primary);
