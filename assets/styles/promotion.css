@@ -647,7 +647,7 @@
 
 /* "Voir plus" button - Purple/Secondary gradient */
 .btn-view-more {
-  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 50%, #5B21B6 100%);
+  background: linear-gradient(135deg, #3a7e31 0%, #306d14 50%, #3a5801 100%);
   color: white;
   position: relative;
   z-index: 1;
