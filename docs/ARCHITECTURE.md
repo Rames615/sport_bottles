@@ -1,392 +1,130 @@
-# Architecture Technique - Système Panier et Paiement
+# Architecture technique
 
-## Diagramme du Flux
+## Objectif
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                        UTILISATEUR AUTHENTIFIÉ                      │
-└─────────────────────────────────────────────────────────────────────┘
-                                  ↓
-                            ┌──────────────┐
-                            │   /panier    │
-                            │   (INDEX)    │
-                            └──────────────┘
-                                  ↓
-                    ┌─────────────────────────┐
-                    │ Options Panier :        │
-                    │ - Ajouter produit       │
-                    │ - Modifier quantité     │
-                    │ - Supprimer article     │
-                    │ - VIDER LE PANIER ✓     │
-                    │ - Procéder au paiement  │
-                    └─────────────────────────┘
-                                  ↓
-                      ┌───────────────────────────┐
-                      │ /checkout/shipping        │
-                      │ (Formulaire Adresse) ✓    │
-                      └───────────────────────────┘
-                                  ↓
-                    ┌───────────────────────────┐
-                    │ Validation Adresse        │
-                    │ - Client-side (HTML5)     │
-                    │ - Server-side (Symfony)   │
-                    │ - Regex (5 digits, etc)   │
-                    └───────────────────────────┘
-                                  ↓
-                          ┌─────────────────┐
-                          │ Sauvegarde DB   │
-                          │ shipping_addr.. │
-                          │ + Session ID    │
-                          └─────────────────┘
-                                  ↓
-                    ┌──────────────────────────┐
-                    │ /checkout/confirm        │
-                    │ (Résumé Commande)        │
-                    └──────────────────────────┘
-                                  ↓
-                    ┌──────────────────────────┐
-                    │ POST /checkout/pay       │
-                    │ - Créer Order (pending)  │
-                    │ - Créer Stripe Session   │
-                    │ - Rediriger vers Stripe  │
-                    └──────────────────────────┘
-                                  ↓
-                    ╔══════════════════════════╗
-                    ║   STRIPE CHECKOUT       ║
-                    ║   (Extérieur)           ║
-                    ║                          ║
-                    ║ Utilisateur paie         ║
-                    ╚══════════════════════════╝
-                                  ↓
-                    ┌──────────────────────────┐
-                    │ /payment/success         │
-                    │ (Page Attente Spinner)   │
-                    │ - Polling chaque 3s      │
-                    │ - Attendre webhook       │
-                    └──────────────────────────┘
-                                  ↓
-            ┌─────────────────────────────────────┐
-            │  WEBHOOK STRIPE REÇU                │
-            │  checkout.session.completed         │
-            │  ↓                                  │
-            │  Order.status = 'pending' → 'paid' │
-            │  ↓                                  │
-            │  JS détecte et redirige             │
-            └─────────────────────────────────────┘
-                                  ↓
-                    ┌──────────────────────────┐
-                    │ /payment/complete/{id}   │
-                    │ (Confirmation Finale)    │
-                    │ - Vider le panier        │
-                    │ - Afficher numéro        │
-                    │ - Lien vers accueil      │
-                    └──────────────────────────┘
-                                  ↓
-                           ┌──────────────┐
-                           │ App Accueil  │
-                           └──────────────┘
-```
+Ce document synthétise l'architecture réelle de Sports Bottles. Il complète la documentation générale sans répéter les éléments métier déjà couverts dans `docs/readme.md` et `docs/rapport_rncp_sports_bottles.md`.
 
-## Structure des Données
+## Vue d'ensemble
 
-### Table `shipping_address`
-```
-┌──────────────────────────────────────────────────────┐
-│ shipping_address                                     │
-├─────────────────────────────────────────────────────┤
-│ id (PK)        │ INT           │ AUTO INCREMENT      │
-│ user_id (FK)   │ INT           │ NOT NULL            │
-│ fullName       │ VARCHAR(255)  │ NOT NULL            │
-│ address        │ VARCHAR(255)  │ NOT NULL            │
-│ city           │ VARCHAR(100)  │ NOT NULL            │
-│ postalCode     │ VARCHAR(10)   │ NOT NULL (5 digits) │
-│ country        │ VARCHAR(100)  │ NOT NULL            │
-│ phone          │ VARCHAR(20)   │ NOT NULL            │
-│ createdAt      │ DATETIME      │ NOT NULL            │
-│ updatedAt      │ DATETIME      │ NULLABLE            │
-└──────────────────────────────────────────────────────┘
-```
+L'application repose sur Symfony 7.4, Doctrine ORM, Twig et EasyAdmin. L'architecture est structurée en couches lisibles : contrôleurs, services, entités, formulaires, repositories et templates.
 
-### Table `order` (enrichie)
-```
-Status Timeline:
-  'pending'  → Créée en POST /checkout/pay
-  'paid'     → Webhook checkout.session.completed
-  'failed'   → Webhook payment_intent.payment_failed
+## Couches applicatives
 
-shippingAddress contient la donnée texte formatée
-(ne pas utiliser pour les mises à jour futures)
-```
+### Présentation
 
-## Architecture Couches
+La couche présentation s'appuie sur Twig. Les vues sont regroupées par domaine :
 
-```
-┌──────────────────────────────────────────────────┐
-│           PRESENTATION (Templates)               │
-├──────────────────────────────────────────────────┤
-│ - cart/index.html.twig                           │
-│ - checkout/shipping.html.twig ✓ NOUVEAU         │
-│ - checkout/confirm.html.twig                     │
-│ - stripe/success.html.twig                       │
-│ - stripe/complete.html.twig                      │
-└──────────────────────────────────────────────────┘
-                        ↓
-┌──────────────────────────────────────────────────┐
-│        CONTROLLERS (Logique Métier)              │
-├──────────────────────────────────────────────────┤
-│ CartController                                   │
-│  - index()             → Affiche panier          │
-│  - add()              → Ajoute produit           │
-│  - update()           → Modifie quantité         │
-│  - remove()           → Supprime article         │
-│  - clear() ✓ NOUVEAU  → Vide panier              │
-├──────────────────────────────────────────────────┤
-│ CheckoutController ✓ REFONDU                     │
-│  - shipping() ✓       → Formulaire adresse       │
-│  - confirm()          → Confirmation             │
-│  - pay()              → Crée session Stripe      │
-├──────────────────────────────────────────────────┤
-│ PaymentController                                │
-│  - success()          → Page attente             │
-│  - orderStatus()      → API polling              │
-│  - complete()         → Confirmation finale      │
-│  - cancel()           → Annulation               │
-├──────────────────────────────────────────────────┤
-│ WebhookController                                │
-│  - stripe() POST      → Traite webhooks ✓       │
-│  - stripe() GET       → Health check ✓          │
-│  - handleSessionCompleted()  → Marque payée     │
-│  - handlePaymentFailed()     → Marque échouée   │
-└──────────────────────────────────────────────────┘
-                        ↓
-┌──────────────────────────────────────────────────┐
-│          FORMS (Validation)                      │
-├──────────────────────────────────────────────────┤
-│ ShippingAddressType ✓ NOUVEAU                    │
-│  - fullName (3-255 chars)                        │
-│  - address (5-255 chars)                          │
-│  - city (2-100 chars)                             │
-│  - postalCode (regex: ^\d{5}$)                    │
-│  - country (2-100 chars)                          │
-│  - phone (regex: telefone valide)              │
-└──────────────────────────────────────────────────┘
-                        ↓
-┌──────────────────────────────────────────────────┐
-│         SERVICES (Logique Métier)                │
-├──────────────────────────────────────────────────┤
-│ CartService                                      │
-│  - getCart()               → Ajoute ou crée      │
-│  - addProduct()            → Stock check         │
-│  - clear() ✓               → Vide articles       │
-│  - removeItemById()        → Supprime            │
-│  - updateItemQuantity()    → Modifie quantité    │
-│  - prepareCheckout()       → Récalc montant      │
-│  - getCartTotal()          → Total               │
-│  - getCartItemCount()      → Nombre articles     │
-└──────────────────────────────────────────────────┘
-                        ↓
-┌──────────────────────────────────────────────────┐
-│           ENTITIES (Modèle de Données)           │
-├──────────────────────────────────────────────────┤
-│ User                                             │
-│  - id, email, roles, password                    │
-│  - products (Many-to-Many)                       │
-│  - totalAmount (One-to-Many: Order)             │
-│  - shippingAddresses ✓ NOUVEAU                   │
-├──────────────────────────────────────────────────┤
-│ Cart                                             │
-│  - id, user, items, createdAt, updatedAt         │
-├──────────────────────────────────────────────────┤
-│ CartItem                                         │
-│  - id, cart, product, quantity, unitPrice        │
-├──────────────────────────────────────────────────┤
-│ Order                                            │
-│  - id, user, totalAmount, status, reference      │
-│  - stripeSessionId, shippingAddress              │
-│  - createdAt, updatedAt                          │
-├──────────────────────────────────────────────────┤
-│ ShippingAddress ✓ NOUVEAU                        │
-│  - id, user, fullName, address, city             │
-│  - postalCode, country, phone                    │
-│  - createdAt, updatedAt                          │
-├──────────────────────────────────────────────────┤
-│ Product, Category, Promotion                     │
-│  - (Inchangés)                                   │
-└──────────────────────────────────────────────────┘
-                        ↓
-┌──────────────────────────────────────────────────┐
-│        REPOSITORIES (Accès Données)              │
-├──────────────────────────────────────────────────┤
-│ CartRepository                                   │
-│  - findCartWithItems()                           │
-├──────────────────────────────────────────────────┤
-│ ShippingAddressRepository ✓ NOUVEAU              │
-│  - findByUser()                                  │
-├──────────────────────────────────────────────────┤
-│ OrderRepository, UserRepository, etc             │
-└──────────────────────────────────────────────────┘
-                        ↓
-┌──────────────────────────────────────────────────┐
-│      DATABASE (Doctrine/MySQL)                   │
-├──────────────────────────────────────────────────┤
-│ Tables : user, cart, cart_item, order            │
-│ Tables ✓ : shipping_address, product, category  │
-└──────────────────────────────────────────────────┘
-                        ↓
-┌──────────────────────────────────────────────────┐
-│          STRIPE API (Externe)                    │
-├──────────────────────────────────────────────────┤
-│ POST /v1/checkout/sessions         → Session    │
-│ GET  /v1/checkout/sessions/{id}    → Status     │
-│ POST webhooks (checkout.session..)  → Confirm   │
-└──────────────────────────────────────────────────┘
-```
+- `home` ;
+- `product` ;
+- `cart` ;
+- `checkout` ;
+- `payment` et `stripe` ;
+- `account` ;
+- `admin` ;
+- `legal` ;
+- `contact`.
 
-## Appels API Clés
+### Contrôleurs
 
-### 1. Créer Session Stripe
-```php
-// CheckoutController::pay()
-$session = Session::create([
-    'payment_method_types' => ['card'],
-    'line_items' => [
-        [
-            'price_data' => [
-                'currency' => 'eur',
-                'product_data' => ['name' => 'Produit'],
-                'unit_amount' => 9999, // Centimes
-            ],
-            'quantity' => 1,
-        ]
-    ],
-    'mode' => 'payment',
-    'success_url' => 'https://monsite.com/payment/success?session_id={CHECKOUT_SESSION_ID}',
-    'cancel_url' => 'https://monsite.com/payment/cancel',
-]);
-```
+Les principaux contrôleurs du projet sont :
 
-### 2. Récupérer Session Stripe
-```php
-// PaymentController::success()
-$stripeSession = Session::retrieve($sessionId);
-if ($stripeSession->payment_status === 'paid') {
-    $order->setStatus('paid');
-}
-```
+- `HomeController` pour l'accueil et la mise en avant des promotions ;
+- `ProductController` pour le catalogue et la page de détail produit ;
+- `CartController` pour les actions sur le panier ;
+- `CheckoutController` pour l'adresse de livraison, la confirmation et la préparation du paiement ;
+- `PaymentController` pour la page de succès, le polling d'état et la confirmation finale ;
+- `WebhookController` pour les événements Stripe ;
+- `AccountController` pour le profil et l'historique des commandes.
 
-### 3. Vérifier Webhook Signature
-```php
-// WebhookController::stripe()
-$event = Webhook::constructEvent(
-    $payload,
-    $sigHeader,
-    $endpointSecret  // STRIPE_WEBHOOK_SECRET
-);
-```
+### Services métier
 
-## Sécurité - Points Critiques
+Le coeur de la logique transactionnelle est regroupé dans `CartService`. Ce service gère :
 
-### 1. Validation Montant
-```
-CLIENT: Envoie /checkout/pay
-  └─> SERVEUR: Recalcule le montant total
-       └─> Compares avec la valeur reçue
-            └─> Si mismatch → Refuse
-             └─> Si match → Crée Stripe Session
-```
+- la récupération ou la création du panier ;
+- l'ajout de produits ;
+- la mise à jour des quantités ;
+- la suppression et le vidage du panier ;
+- la préparation du checkout ;
+- le calcul du total ;
+- la déduction du stock après paiement.
 
-### 2. Vérification Utilisateur
-```
-Chaque action doit vérifier:
-  ✓ $this->getUser() instanceof User
-  ✓ L'adresse appartient à cet utilisateur
-  ✓ La commande appartient à cet utilisateur
-```
+### Persistance
 
-### 3. Tokens CSRF
-```
-Tous les POST :
-  ✗ $_POST['_token'] sans vérification
-  ✓ $this->isCsrfTokenValid('checkout_pay', token)
-```
+Doctrine ORM assure la persistance des données. Les changements de schéma sont tracés par migrations et les données de démonstration sont fournies via les fixtures.
 
-### 4. Webhooks Signature
-```
-Stripe → Application :
-  ✓ Signature vérifiée avec STRIPE_WEBHOOK_SECRET
-  ✗ Sans secret → Warning, pas refusé (fallback JSON)
-```
+## Entités principales
 
-## Sessions et Cookies
+Le modèle métier s'appuie sur les entités suivantes :
 
-### Utilisation Session
+- `User` ;
+- `Category` ;
+- `Product` ;
+- `Promotion` ;
+- `Cart` ;
+- `CartItem` ;
+- `Order` ;
+- `ShippingAddress`.
 
-```php
-// Stocker ID adresse en session
-$request->getSession()->set('shipping_address_id', $id);
+Relations structurantes :
 
-// Récupérer depuis CheckoutController
-$id = $request->getSession()->get('shipping_address_id');
+- un utilisateur possède un panier actif ;
+- un panier contient plusieurs lignes ;
+- une ligne de panier pointe vers un produit ;
+- un produit appartient à une catégorie ;
+- un produit peut recevoir une promotion active ;
+- un utilisateur possède plusieurs commandes et plusieurs adresses de livraison.
 
-// Supprimer après utilisation
-$request->getSession()->remove('shipping_address_id');
-```
+## Flux principaux
 
-### Cookies Dépendances
+### Catalogue
 
-- PHPSESSID : Session utilisateur Symfony
-- Nécessaire pour :
-  - Authentification (`$this->getUser()`)
-  - Session data (`$request->getSession()`)
-  - Tokens CSRF
+`ProductController` charge les catégories et les produits puis transmet au template :
 
-## Performance
+- la liste complète des produits ;
+- l'organisation par catégorie ;
+- les données nécessaires à l'affichage des cartes et de la page détail.
 
-### Optimisations Implémentées
+### Panier et checkout
 
-```
-✓ CartRepository::findCartWithItems()
-  └─> Utilise LEFT JOIN pour charger articles
+Le flux standard est le suivant :
 
-✓ Polling limité à 20 tentatives
-  └─> Max 1 minute d'attente
+1. ajout d'un produit au panier ;
+2. contrôle du stock ;
+3. consultation du panier ;
+4. saisie d'une adresse de livraison ;
+5. récapitulatif ;
+6. création d'une commande `pending` ;
+7. redirection vers Stripe.
 
-✓ Webhooks non-bloquants
-  └─> Retour 200 immédiatement
+### Paiement
 
-✓ Index recommandé
-  └─> shipping_address.user_id
-  └─> order.stripeSessionId
-```
+Le retour de paiement s'appuie sur trois éléments complémentaires :
 
-## Améliorations Futures
+- la session Stripe liée à la commande ;
+- le webhook Stripe comme source de vérité ;
+- une page de succès capable de vérifier puis d'afficher l'état de la commande.
 
-### Court Terme
-- [ ] Email de confirmation
-- [ ] Factures PDF
-- [ ] Historique des commandes
+## Administration
 
-### Moyen Terme
-- [ ] Multiple adresses par utilisateur
-- [ ] Mise en cache des prix
-- [ ] Remises/codes promo avancés
+EasyAdmin gère le back-office sur les objets métier suivants :
 
-### Long Terme
-- [ ] Paiement par abonnement
-- [ ] Intégrations logistiques
-- [ ] Dashboard admin avancé
-- [ ] Analyse prédictive
+- utilisateurs ;
+- produits ;
+- catégories ;
+- promotions ;
+- paniers ;
+- commandes.
 
-## Documentation À Maintenir
+## Points de conception importants
 
-- [ ] Docs API interne
-- [ ] Database diagram (erdplus, etc)
-- [ ] Runbook dépannage
-- [ ] Guide déploiement
+- le panier est réservé à l'utilisateur authentifié ;
+- le prix est figé au niveau de `CartItem` ;
+- le montant de la commande est stocké en centimes ;
+- le stock n'est décrémenté qu'après paiement confirmé ;
+- les routes liées au paiement sont volontairement séparées entre préparation, confirmation utilisateur et confirmation serveur.
 
-## Contacts et Support
+## Références complémentaires
 
-- Stripe Documentation : https://stripe.com/docs
-- Stripe Dashboard : https://dashboard.stripe.com
-- Stripe Support : https://support.stripe.com
-- PHP Symfony : https://symfony.com/doc
+- `docs/STRIPE.md` pour le flux de paiement ;
+- `docs/PRODUCT_ARCHITECTURE.md` pour la partie catalogue ;
+- `docs/FILES_AUDIT.md` pour la cartographie du corpus documentaire.
