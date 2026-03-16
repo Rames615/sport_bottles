@@ -33,7 +33,6 @@
 .sb-footer__logo {
     display: inline-flex;
     align-items: center;
-    gap: .45rem;
     text-decoration: none;
     margin-bottom: .75rem;
 }
