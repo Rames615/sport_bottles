@@ -39,7 +39,7 @@ final class StripeController extends AbstractController
 
         $checkoutResult = $this->cartService->prepareCheckout($user);
         if (!$checkoutResult['ok']) {
-            $this->addFlash('error', $checkoutResult['message'] ?? 'Panier vide ou invalide');
+            $this->addFlash('error', $checkoutResult['message']);
             return $this->redirectToRoute('app_cartindex');
         }
 
@@ -61,7 +61,7 @@ final class StripeController extends AbstractController
             $this->addFlash('error', 'Configuration Stripe manquante. Contactez l\'administrateur.');
             return $this->redirectToRoute('app_cartindex');
         }
-        Stripe::setApiKey($stripeSecret);
+        Stripe::setApiKey((string) $stripeSecret);
 
         $lineItems = [];
         foreach ($cart->getItems() as $item) {
@@ -116,7 +116,7 @@ final class StripeController extends AbstractController
         // Sync status with Stripe right now (one-time, on page load)
         $stripeSecret = $_ENV['STRIPE_SECRET_KEY'] ?? null;
         if ($stripeSecret) {
-            Stripe::setApiKey($stripeSecret);
+            Stripe::setApiKey((string) $stripeSecret);
             try {
                 $stripeSession = Session::retrieve($sessionId);
                 if ($stripeSession->payment_status === 'paid' && $order->getStatus() !== 'paid') {
@@ -135,10 +135,10 @@ final class StripeController extends AbstractController
                         $lineItems = Session::allLineItems($sessionId, ['limit' => 100]);
                         foreach ($lineItems->data as $li) {
                             $items[] = [
-                                'name'      => $li->description,
-                                'quantity'  => $li->quantity,
-                                'unitPrice' => $li->price->unit_amount / 100,
-                                'subtotal'  => $li->amount_total / 100,
+                                'name'      => $li->description ?? '',
+                                'quantity'  => $li->quantity ?? 0,
+                                'unitPrice' => ($li->price->unit_amount ?? 0) / 100,
+                                'subtotal'  => ($li->amount_total ?? 0) / 100,
                             ];
                         }
                         $this->mailerService->sendOrderConfirmation($order, $items);
@@ -211,7 +211,7 @@ final class StripeController extends AbstractController
 
         try {
             if ($endpointSecret) {
-                $event = Webhook::constructEvent($payload, (string) $sigHeader, $endpointSecret);
+                $event = Webhook::constructEvent($payload, (string) $sigHeader, (string) $endpointSecret);
             } else {
                 $logger->warning('STRIPE_WEBHOOK_SECRET absent — traitement sans vérification de signature');
                 $event = json_decode($payload, true);
@@ -227,9 +227,7 @@ final class StripeController extends AbstractController
             return new Response('Erreur serveur', 500);
         }
 
-        // @phpstan-ignore-next-line
         $type = is_object($event) && isset($event->type) ? $event->type : ($event['type'] ?? null);
-        // @phpstan-ignore-next-line
         $logger->info('Stripe event', ['type' => $type, 'id' => is_object($event) ? $event->id ?? null : ($event['id'] ?? null)]);
 
         if ($type === 'checkout.session.completed') {
@@ -253,14 +251,14 @@ final class StripeController extends AbstractController
                     $items = [];
                     $stripeSecret = $_ENV['STRIPE_SECRET_KEY'] ?? null;
                     if ($stripeSecret) {
-                        Stripe::setApiKey($stripeSecret);
-                        $lineItems = Session::allLineItems($sessionId, ['limit' => 100]);
+                        Stripe::setApiKey((string) $stripeSecret);
+                        $lineItems = Session::allLineItems((string) $sessionId, ['limit' => 100]);
                         foreach ($lineItems->data as $li) {
                             $items[] = [
-                                'name'      => $li->description,
-                                'quantity'  => $li->quantity,
-                                'unitPrice' => $li->price->unit_amount / 100,
-                                'subtotal'  => $li->amount_total / 100,
+                                'name'      => $li->description ?? '',
+                                'quantity'  => $li->quantity ?? 0,
+                                'unitPrice' => ($li->price->unit_amount ?? 0) / 100,
+                                'subtotal'  => ($li->amount_total ?? 0) / 100,
                             ];
                         }
                     }
@@ -276,7 +274,6 @@ final class StripeController extends AbstractController
             $logger->warning('Paiement échoué', ['payment_intent' => $pi->id ?? ($pi['id'] ?? null)]);
 
             if (isset($pi->metadata) || isset($pi['metadata'])) {
-                // @phpstan-ignore-next-line
                 $metadata = is_object($pi) ? $pi->metadata : $pi['metadata'];
                 if (!empty($metadata['order_id'])) {
                     $order = $em->getRepository(Order::class)->find($metadata['order_id']);

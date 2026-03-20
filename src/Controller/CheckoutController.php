@@ -39,7 +39,7 @@ final class CheckoutController extends AbstractController
         $result = $this->cartService->prepareCheckout($user);
 
         if (!$result['ok']) {
-            $this->addFlash('error', $result['message'] ?? 'Votre panier est vide.');
+            $this->addFlash('error', $result['message']);
             return $this->redirectToRoute('app_cartindex');
         }
 
@@ -81,7 +81,7 @@ final class CheckoutController extends AbstractController
         $result = $this->cartService->prepareCheckout($user);
 
         if (!$result['ok']) {
-            $this->addFlash('error', $result['message'] ?? 'Votre panier est vide.');
+            $this->addFlash('error', $result['message']);
             return $this->redirectToRoute('app_cartindex');
         }
 
@@ -122,7 +122,7 @@ final class CheckoutController extends AbstractController
 
         $result = $this->cartService->prepareCheckout($user);
         if (!$result['ok']) {
-            $this->addFlash('error', $result['message'] ?? 'Panier vide ou invalide.');
+            $this->addFlash('error', $result['message']);
             return $this->redirectToRoute('app_cartindex');
         }
 
@@ -180,7 +180,7 @@ final class CheckoutController extends AbstractController
         $result = $this->cartService->prepareCheckout($user);
 
         if (!$result['ok']) {
-            $this->addFlash('error', $result['message'] ?? 'Votre panier est vide.');
+            $this->addFlash('error', $result['message']);
             return $this->redirectToRoute('app_cartindex');
         }
 
@@ -227,7 +227,7 @@ final class CheckoutController extends AbstractController
         $result = $this->cartService->prepareCheckout($user);
 
         if (!$result['ok']) {
-            $this->addFlash('error', $result['message'] ?? 'Panier vide ou invalide.');
+            $this->addFlash('error', $result['message']);
             return $this->redirectToRoute('app_cartindex');
         }
 
@@ -260,7 +260,7 @@ final class CheckoutController extends AbstractController
             return $this->redirectToRoute('app_cartindex');
         }
 
-        Stripe::setApiKey($stripeSecret);
+        Stripe::setApiKey((string) $stripeSecret);
 
         $lineItems = [];
         foreach ($cart->getItems() as $item) {

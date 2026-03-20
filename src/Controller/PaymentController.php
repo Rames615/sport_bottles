@@ -43,7 +43,7 @@ final class PaymentController extends AbstractController
         // One-time sync with Stripe on page load
         $stripeSecret = $_ENV['STRIPE_SECRET_KEY'] ?? null;
         if ($stripeSecret) {
-            Stripe::setApiKey($stripeSecret);
+            Stripe::setApiKey((string) $stripeSecret);
             try {
                 $stripeSession = Session::retrieve($sessionId);
                 if ($stripeSession->payment_status === 'paid' && $order->getStatus() !== 'paid') {
@@ -64,7 +64,7 @@ final class PaymentController extends AbstractController
                             $items[] = [
                                 'name'      => $li->description ?? '',
                                 'quantity'  => $li->quantity ?? 0,
-                                'unitPrice' => ($li->price?->unit_amount ?? 0) / 100,
+                                'unitPrice' => ($li->price->unit_amount ?? 0) / 100,
                                 'subtotal'  => ($li->amount_total ?? 0) / 100,
                             ];
                         }

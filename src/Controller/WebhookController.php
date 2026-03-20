@@ -43,7 +43,7 @@ final class WebhookController extends AbstractController
 
         try {
             if ($endpointSecret) {
-                $event = Webhook::constructEvent($payload, (string) $sigHeader, $endpointSecret);
+                $event = Webhook::constructEvent($payload, (string) $sigHeader, (string) $endpointSecret);
             } else {
                 $logger->warning('STRIPE_WEBHOOK_SECRET missing — processing without signature verification.');
                 $event = json_decode($payload, true);
@@ -59,18 +59,16 @@ final class WebhookController extends AbstractController
             return new Response('Server error', 500);
         }
 
-        // @phpstan-ignore-next-line
         $type = is_object($event) ? ($event->type ?? null) : ($event['type'] ?? null);
         $logger->info('Stripe event received', [
             'type' => $type,
-            // @phpstan-ignore-next-line
             'id'   => is_object($event) ? ($event->id ?? null) : ($event['id'] ?? null),
         ]);
 
         match ($type) {
             'checkout.session.completed'   => $this->handleSessionCompleted($event, $em, $logger),
             'payment_intent.payment_failed' => $this->handlePaymentFailed($event, $em, $logger),
-            default                        => $logger->info('Unhandled Stripe event type: ' . $type),
+            default                        => $logger->info('Unhandled Stripe event type: ' . (string) $type),
         };
 
         return new Response('Webhook processed', 200);
@@ -78,9 +76,7 @@ final class WebhookController extends AbstractController
 
     private function handleSessionCompleted(mixed $event, EntityManagerInterface $em, LoggerInterface $logger): void
     {
-        // @phpstan-ignore-next-line
         $session = is_object($event) ? $event->data->object : $event['data']['object'];
-        // @phpstan-ignore-next-line
         $sessionId = is_object($session) ? $session->id : $session['id'];
 
         $order = $em->getRepository(Order::class)->findOneBy(['stripeSessionId' => $sessionId]);
@@ -101,14 +97,14 @@ final class WebhookController extends AbstractController
                 $items = [];
                 $stripeSecret = $_ENV['STRIPE_SECRET_KEY'] ?? null;
                 if ($stripeSecret) {
-                    Stripe::setApiKey($stripeSecret);
-                    $lineItems = Session::allLineItems($sessionId, ['limit' => 100]);
+                    Stripe::setApiKey((string) $stripeSecret);
+                    $lineItems = Session::allLineItems((string) $sessionId, ['limit' => 100]);
                     foreach ($lineItems->data as $li) {
                         $items[] = [
-                            'name'      => $li->description,
-                            'quantity'  => $li->quantity,
-                            'unitPrice' => $li->price->unit_amount / 100,
-                            'subtotal'  => $li->amount_total / 100,
+                            'name'      => $li->description ?? '',
+                            'quantity'  => $li->quantity ?? 0,
+                            'unitPrice' => ($li->price->unit_amount ?? 0) / 100,
+                            'subtotal'  => ($li->amount_total ?? 0) / 100,
                         ];
                     }
                 }
@@ -121,11 +117,8 @@ final class WebhookController extends AbstractController
 
     private function handlePaymentFailed(mixed $event, EntityManagerInterface $em, LoggerInterface $logger): void
     {
-        // @phpstan-ignore-next-line
         $pi       = is_object($event) ? $event->data->object : $event['data']['object'];
-        // @phpstan-ignore-next-line
         $piId     = is_object($pi) ? ($pi->id ?? null) : ($pi['id'] ?? null);
-        // @phpstan-ignore-next-line
         $metadata = is_object($pi) ? ($pi->metadata ?? null) : ($pi['metadata'] ?? null);
 
         $logger->warning('Payment failed', ['payment_intent' => $piId]);
