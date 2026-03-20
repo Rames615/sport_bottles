@@ -1,63 +1,75 @@
-{# templates/partials/_navbar.html.twig  (or paste directly into base.html.twig) #}
+{# templates/nav.html.twig #}
 
-<!-- Bootstrap Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container-fluid ps-4 pe-4">
+<nav class="navbar fixed top-0 inset-x-0 z-[1030] bg-[#212529] shadow-[0_2px_6px_rgba(0,0,0,.1)]"
+     style="min-height:70px;">
+    <div class="w-full px-4 sm:px-6 flex flex-wrap items-center min-h-[70px]">
 
-        {# ── Brand / Logo attached together the image and text ─────────────────────────────────────────── #}
-        <a class="navbar-brand" href="{{ path('app_home') }}">
-            <img src="{{ asset('logo_gold.png') }}" alt="Sports Bottles Logo" style="height: 50px;">
-            <span>Sports<span/><span style="color: #5db8ff;"> Bottles</span>
+        {# ── Brand ───────────────────────────────────────────────── #}
+        <a href="{{ path('app_home') }}"
+           class="flex items-center gap-3 text-white no-underline font-bold text-[1.5rem] shrink-0"
+           style="font-family:'Poppins',sans-serif;">
+            <img src="{{ asset('logo_gold.png') }}" alt="Sports Bottles Logo"
+                 class="h-[50px] w-auto transition-transform duration-300 hover:scale-110">
+            <span>Sports</span><span style="color:#5db8ff;"> Bottles</span>
         </a>
 
-        {# ── Mobile toggler ───────────────────────────────────────── #}
-        <button class="navbar-toggler" type="button"
+        {# ── Mobile toggler ──────────────────────────────────────── #}
+        <button class="ml-auto lg:hidden flex items-center justify-center w-9 h-9 rounded-lg border border-white/20 text-white bg-transparent hover:bg-white/10 transition-colors"
+                type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false"
                 aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+        {# Collapsible nav — Bootstrap JS toggles .show; CSS collapse interop in app.css #}
+        <div class="collapse navbar-collapse w-full lg:flex-1" id="navbarNav">
+            <ul class="flex flex-col lg:flex-row lg:ml-auto lg:items-center lg:gap-1 list-none p-0 m-0
+                        border-t border-white/10 py-2 lg:border-t-0 lg:py-0">
 
                 {# 1. Produits #}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_product') }}">
+                <li>
+                    <a class="nav-link group flex items-center gap-2 px-[10px] py-2 text-white font-medium text-[.9rem] no-underline transition-colors duration-300 hover:text-primary relative"
+                       href="{{ path('app_product') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                             class="me-1 mb-1" viewBox="0 0 16 16">
+                             class="shrink-0" viewBox="0 0 16 16" aria-hidden="true">
                             <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
                         </svg>
                         Produits
+                        <span class="hidden lg:block absolute bottom-[-5px] left-0 h-[2px] w-0 bg-primary transition-all duration-300 group-hover:w-full"></span>
                     </a>
                 </li>
 
                 {# 2. Contactez-nous #}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_contact') }}">
+                <li>
+                    <a class="nav-link group flex items-center gap-2 px-[10px] py-2 text-white font-medium text-[.9rem] no-underline transition-colors duration-300 hover:text-primary relative"
+                       href="{{ path('app_contact') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                             class="me-1 mb-1" viewBox="0 0 16 16">
+                             class="shrink-0" viewBox="0 0 16 16" aria-hidden="true">
                             <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/>
                         </svg>
                         Contactez-nous
+                        <span class="hidden lg:block absolute bottom-[-5px] left-0 h-[2px] w-0 bg-primary transition-all duration-300 group-hover:w-full"></span>
                     </a>
                 </li>
 
                 {# 3. Panier (logged-in only) #}
                 {% if app.user %}
                 {% set cartCount = cart_item_count is defined ? cart_item_count(app.user) : 0 %}
-                <li class="nav-item">
-                    <a class="nav-link nav-cart-link" href="{{ path('app_cartindex') }}"
+                <li>
+                    <a class="nav-link nav-cart-link flex items-center gap-[7px] px-3 py-[6px] rounded-[10px] text-white no-underline transition-colors duration-200 hover:bg-primary/20 hover:text-white"
+                       href="{{ path('app_cartindex') }}"
                        title="{{ cartCount > 0 ? cartCount ~ ' article' ~ (cartCount > 1 ? 's' : '') ~ ' dans le panier' : 'Mon panier' }}">
-
-                        {# Icon + live badge wrapper #}
-                        <span class="nav-cart-icon-wrapper">
+                        <span class="nav-cart-icon-wrapper relative inline-flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                                  viewBox="0 0 16 16" aria-hidden="true">
                                 <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
                             </svg>
 
-                            {# Badge — always in DOM so JS can update it without page reload #}
+                            {# Badge — always in DOM; JS adds/removes cart-badge-visible #}
                             <span id="cart-count-badge"
                                   class="cart-count-badge{{ cartCount > 0 ? ' cart-badge-visible' : '' }}"
                                   aria-live="polite"
@@ -65,59 +77,63 @@
                                 {{ cartCount > 0 ? cartCount : '' }}
                             </span>
                         </span>
-
-                        <span class="nav-cart-label d-none d-md-inline">Panier</span>
+                        <span class="nav-cart-label hidden md:inline font-medium text-[.9rem] tracking-[.01em]">Panier</span>
                     </a>
                 </li>
                 {% endif %}
 
                 {# 4. Separator #}
-                <li class="nav-item d-none d-lg-block">
-                    <span class="nav-link px-0" style="opacity:.25; cursor:default;">|</span>
+                <li class="hidden lg:flex items-center">
+                    <span class="px-0 text-white/25 cursor-default select-none">|</span>
                 </li>
 
                 {# 5. User dropdown (logged-in) / Login dropdown (guest) #}
                 {% if app.user %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#"
+                <li class="relative dropdown">
+                    <a class="nav-link dropdown-toggle flex items-center gap-2 px-[10px] py-2 text-white font-medium text-[.9rem] no-underline"
+                       href="#"
                        id="userDropdown" role="button"
                        data-bs-toggle="dropdown" data-turbo="false" aria-expanded="false">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-secondary"
-                              style="width:28px; height:28px; font-size:13px; font-weight:600; flex-shrink:0;">
+                        <span class="inline-flex items-center justify-center rounded-full bg-[#6c757d] text-white text-[13px] font-semibold shrink-0"
+                              style="width:28px; height:28px;">
                             {{ app.user.userIdentifier|first|upper }}
                         </span>
-                        <span class="d-none d-md-inline">{{ app.user.userIdentifier }}</span>
+                        <span class="hidden md:inline truncate max-w-[120px]">{{ app.user.userIdentifier }}</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end bg-[#212529] border border-white/10 rounded-lg shadow-lg mt-1 py-1 min-w-[200px]"
+                        aria-labelledby="userDropdown">
                         <li>
-                            <h6 class="dropdown-header text-truncate" style="max-width:200px;">
+                            <span class="block px-4 py-2 text-white/50 text-xs font-semibold truncate max-w-[200px]">
                                 {{ app.user.userIdentifier }}
-                            </h6>
+                            </span>
                         </li>
-                        <li><hr class="dropdown-divider my-1"></li>
+                        <li><hr class="border-white/10 my-1"></li>
                         <li>
-                            <a class="dropdown-item" href="{{ path('app_profile') }}">
+                            <a class="dropdown-item flex items-center gap-2 px-4 py-2 text-white/80 text-sm no-underline transition-colors hover:bg-primary hover:text-white rounded-sm"
+                               href="{{ path('app_profile') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                     class="me-2 text-muted" viewBox="0 0 16 16">
+                                     class="opacity-60 shrink-0" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.029 10 8 10c-2.029 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
                                 </svg>
                                 Mon Profil
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ path('app_orders') }}">
+                            <a class="dropdown-item flex items-center gap-2 px-4 py-2 text-white/80 text-sm no-underline transition-colors hover:bg-primary hover:text-white rounded-sm"
+                               href="{{ path('app_orders') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                     class="me-2 text-muted" viewBox="0 0 16 16">
+                                     class="opacity-60 shrink-0" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
                                 </svg>
                                 Mes Commandes
                             </a>
                         </li>
-                        <li><hr class="dropdown-divider my-1"></li>
+                        <li><hr class="border-white/10 my-1"></li>
                         <li>
-                            <a class="dropdown-item text-danger" href="{{ logout_path() }}">
+                            <a class="dropdown-item flex items-center gap-2 px-4 py-2 text-red-400 text-sm no-underline transition-colors hover:bg-red-500 hover:text-white rounded-sm"
+                               href="{{ logout_path() }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                     class="me-2" viewBox="0 0 16 16">
+                                     class="shrink-0" viewBox="0 0 16 16" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
                                     <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
                                 </svg>
@@ -129,30 +145,34 @@
 
                 {% else %}
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#"
+                <li class="relative dropdown">
+                    <a class="nav-link dropdown-toggle flex items-center gap-2 px-[10px] py-2 text-white font-medium text-[.9rem] no-underline"
+                       href="#"
                        id="loginDropdown" role="button"
                        data-bs-toggle="dropdown" data-turbo="false" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                             class="me-1 mb-1" viewBox="0 0 16 16">
+                             class="shrink-0" viewBox="0 0 16 16" aria-hidden="true">
                             <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.029 10 8 10c-2.029 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
                         </svg>
                         Se connecter
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="loginDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end bg-[#212529] border border-white/10 rounded-lg shadow-lg mt-1 py-1 min-w-[180px]"
+                        aria-labelledby="loginDropdown">
                         <li>
-                            <a class="dropdown-item" href="{{ path('app_login') }}">
+                            <a class="dropdown-item flex items-center gap-2 px-4 py-2 text-white/80 text-sm no-underline transition-colors hover:bg-primary hover:text-white rounded-sm"
+                               href="{{ path('app_login') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                     class="me-2 text-muted" viewBox="0 0 16 16">
+                                     class="opacity-60 shrink-0" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4z"/>
                                 </svg>
                                 Connexion
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ path('admin') }}">
+                            <a class="dropdown-item flex items-center gap-2 px-4 py-2 text-white/80 text-sm no-underline transition-colors hover:bg-primary hover:text-white rounded-sm"
+                               href="{{ path('admin') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                     class="me-2 text-muted" viewBox="0 0 16 16">
+                                     class="opacity-60 shrink-0" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
                                 </svg>
                                 Espace Admin

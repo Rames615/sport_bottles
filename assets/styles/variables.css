@@ -1,23 +1,12 @@
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600&display=swap');
-
-/* Global Color Variables */
-:root {
-  --primary-color: #1F7A63;
-  --secondary-color: #0F172A;
-  --accent-color: #22C55E;
-  --background-color: #FFFFFF;
-  --text-secondary: #64748B;
-  --text-primary: #0F172A;
-}
-
-/* Typography */
-body {
-  margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: var(--text-primary);
-  background-color: #f0f9f5;
-}
+/*
+ * ============================================================
+ *  variables.css — Decorative Background & Global Typography
+ *
+ *  All color variables, body resets, and utility classes have
+ *  been removed (now handled by Tailwind config / utilities).
+ *  Only the decorative bottle background and heading fonts remain.
+ * ============================================================
+ */
 
 /* ── Decorative product-image background layer ── */
 .site-bg-deco {
@@ -67,47 +56,5 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', 'Inter', sans-serif;
   font-weight: 600;
-}
-
-/* Main element — ensure transparent to show body background */
-main {
-  background: transparent;
-  position: relative;
-  z-index: 1;
-}
-
-/* Global Container */
-.container-main {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Section Title */
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  color: var(--text-primary);
-  text-align: center;
-  margin: 0 0 50px 0;
-}
-
-/* Accessibility */
-a:focus {
-  outline: 3px solid #28a745;
-  outline-offset: 2px;
-}
-
-/* Screen reader only text */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
 }
 

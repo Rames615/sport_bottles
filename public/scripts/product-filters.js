@@ -130,7 +130,7 @@
         if (count === 0) {
             if (!noProductsDiv) {
                 noProductsDiv = document.createElement('div');
-                noProductsDiv.className = 'no-products-message alert alert-info';
+                noProductsDiv.className = 'no-products-message';
                 noProductsDiv.innerHTML = '<p class="mb-0">Aucun produit ne correspond à vos critères de recherche.</p>';
                 productsGrid.appendChild(noProductsDiv);
             }
@@ -156,8 +156,12 @@
     filterAndSort();
     }
 
-    // Turbo-compatible: fires on both initial load and Turbo navigations
-    document.addEventListener('turbo:load', initFilters);
-    // Fallback for non-Turbo page loads
-    document.addEventListener('DOMContentLoaded', initFilters);
+    // Turbo re-evaluates this script on each navigation (no data-turbo-eval="false").
+    // Call initFilters directly — DOM is always ready at evaluation time.
+    // For the initial hard load where the DOM may still be loading, use DOMContentLoaded.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFilters, { once: true });
+    } else {
+        initFilters();
+    }
 })();

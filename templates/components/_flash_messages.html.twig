@@ -1,8 +1,17 @@
+{% set colorMap = {
+    'success': 'bg-green-50 border-green-200 text-green-700',
+    'error':   'bg-red-50 border-red-200 text-red-700',
+    'danger':  'bg-red-50 border-red-200 text-red-700',
+    'warning': 'bg-yellow-50 border-yellow-200 text-yellow-800',
+    'info':    'bg-blue-50 border-blue-200 text-blue-700'
+} %}
 {% for label, messages in app.flashes %}
     {% for message in messages %}
-        <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {% set cls = colorMap[label] ?? colorMap['info'] %}
+        <div class="flex items-start gap-3 p-4 mb-3 border rounded-lg {{ cls }}" role="alert">
+            <span class="flex-1 text-sm">{{ message }}</span>
+            {# TODO: data-bs-dismiss="alert" requires Bootstrap JS — replace with a Stimulus controller when Bootstrap is removed #}
+            <button type="button" class="ml-auto opacity-60 hover:opacity-100 text-current leading-none" data-bs-dismiss="alert" aria-label="Close">✕</button>
         </div>
     {% endfor %}
 {% endfor %}

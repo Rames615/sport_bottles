@@ -5,97 +5,29 @@
 {% block stylesheets %}
     {{ parent() }}
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy: #0d1b2a;
-            --accent: #1b8fe4;
-            --accent-light: #5db8ff;
-            --surface: #f4f7fb;
-            --text: #1a2535;
-            --muted: #5a6a7e;
-            --white: #ffffff;
-            --border: #dde4ed;
-            --green: #16a34a;
-            --green-bg: rgba(34,197,94,.08);
-        }
-        body { background: var(--surface); color: var(--text); line-height: 1.7; font-size: 1rem; }
-
-        {# ── HERO ── #}
-        .page-hero { background: linear-gradient(135deg, var(--navy) 0%, #163556 100%); padding: 5rem 2rem 4rem; text-align: center; position: relative; overflow: hidden; }
-        .page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(27,143,228,.35) 0%, transparent 70%); }
-        .page-hero .tag { display: inline-block; background: rgba(27,143,228,.18); border: 1px solid rgba(93,184,255,.35); color: var(--accent-light); font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: .35rem .9rem; border-radius: 2rem; margin-bottom: 1.2rem; position: relative; }
-        .page-hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.2rem); color: var(--white); position: relative; line-height: 1.12; }
-        .page-hero .hero-sub { color: rgba(255,255,255,.65); margin-top: 1rem; font-size: 1.05rem; max-width: 640px; margin-left: auto; margin-right: auto; position: relative; }
-
-        {# ── LAYOUT ── #}
-        .content-wrap { max-width: 860px; margin: 0 auto; padding: 3.5rem 2rem 5rem; }
-
-        {# ── CARDS ── #}
-        .section-card { background: var(--white); border-radius: 16px; border: 1px solid var(--border); padding: 2.8rem 3rem; margin-bottom: 1.75rem; box-shadow: 0 2px 12px rgba(0,0,0,.05); transition: box-shadow .25s; }
-        .section-card:hover { box-shadow: 0 6px 28px rgba(0,0,0,.09); }
-        .section-card h2 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--navy); margin-bottom: 1rem; display: flex; align-items: center; gap: .75rem; }
-        .section-card h2 .icon { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: var(--white); border-radius: 10px; flex-shrink: 0; }
-        .section-card p { color: var(--muted); font-size: .96rem; margin-bottom: .85rem; }
-        .section-card p:last-child { margin-bottom: 0; }
-
-        {# ── PRODUCT CATEGORIES ── #}
-        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 1rem; margin: 1.2rem 0 .5rem; }
-        .cat-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.4rem; display: flex; flex-direction: column; gap: .4rem; transition: border-color .2s, box-shadow .2s; }
-        .cat-item:hover { border-color: var(--accent-light); box-shadow: 0 4px 16px rgba(27,143,228,.1); }
-        .cat-icon { font-size: 1.6rem; line-height: 1; }
-        .cat-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .9rem; color: var(--navy); }
-        .cat-desc { font-size: .82rem; color: var(--muted); }
-
-        {# ── UX FEATURES ── #}
-        .features-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .85rem; margin: 1rem 0 .5rem; }
-        .feature-item { display: flex; align-items: flex-start; gap: .75rem; padding: .9rem 1rem; background: var(--surface); border-radius: 10px; border: 1px solid var(--border); }
-        .feature-item .check { width: 22px; height: 22px; background: linear-gradient(135deg, var(--accent), var(--accent-light)); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: .1rem; }
-        .feature-item .check svg { width: 13px; height: 13px; color: white; }
-        .feature-item span { font-size: .9rem; color: var(--muted); font-weight: 500; }
-
-        {# ── TECH PILLARS ── #}
-        .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin: 1rem 0; }
-        .pillar { text-align: center; padding: 1.4rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; transition: border-color .2s; }
-        .pillar:hover { border-color: var(--accent-light); }
-        .pillar-icon { font-size: 1.8rem; margin-bottom: .5rem; }
-        .pillar-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .88rem; color: var(--navy); }
-
-        {# ── VISION BANNER ── #}
-        .vision-banner { background: linear-gradient(135deg, var(--navy), #163556); border-radius: 16px; padding: 2.8rem 3rem; text-align: center; margin-bottom: 1.75rem; position: relative; overflow: hidden; }
-        .vision-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(27,143,228,.3) 0%, transparent 70%); }
-        .vision-banner h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--white); margin-bottom: .9rem; position: relative; }
-        .vision-banner p { color: rgba(255,255,255,.65); font-size: .97rem; max-width: 580px; margin: 0 auto 1.5rem; position: relative; }
-        .vision-btn { display: inline-block; background: var(--accent); color: var(--white); padding: .75rem 2rem; border-radius: 8px; font-weight: 600; font-size: .95rem; text-decoration: none; transition: background .2s, transform .15s; position: relative; }
-        .vision-btn:hover { background: var(--accent-light); transform: translateY(-1px); }
-
-        {# ── ECO BADGE ── #}
-        .eco-badge { display: inline-flex; align-items: center; gap: .5rem; background: var(--green-bg); border: 1px solid rgba(34,197,94,.22); color: var(--green); border-radius: 8px; padding: .45rem .9rem; font-size: .85rem; font-weight: 600; margin-bottom: 1rem; }
-
-        @media (max-width: 600px) {
-            .section-card { padding: 1.75rem 1.4rem; }
-            .vision-banner { padding: 2rem 1.4rem; }
-        }
-    </style>
 {% endblock %}
 
 {% block body %}
 
 {# ── HERO ── #}
-<section class="page-hero">
-    <div class="tag">À propos</div>
-    <h1>Qui sommes-nous ?</h1>
-    <p class="hero-sub">
-        Accompagner un mode de vie actif, sain et responsable — une bouteille à la fois.
-    </p>
+<section class="relative overflow-hidden text-center py-20 sm:py-24 px-8 mt-20" style="background: linear-gradient(135deg, #0d1b2a 0%, #163556 100%);">
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(27,143,228,.35) 0%, transparent 70%);"></div>
+    <div class="relative">
+        <span class="inline-block text-xs font-semibold tracking-widest uppercase border mb-5 px-3 py-1 rounded-full" style="background: rgba(27,143,228,.18); border-color: rgba(93,184,255,.35); color: #5db8ff;">À propos</span>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-white leading-tight" style="font-family: 'Syne', sans-serif;">Qui sommes-nous ?</h1>
+        <p class="mt-4 text-[1.05rem] max-w-xl mx-auto relative" style="color: rgba(255,255,255,.65);">
+            Accompagner un mode de vie actif, sain et responsable — une bouteille à la fois.
+        </p>
+    </div>
 </section>
 
 {# ── CONTENT ── #}
-<main class="content-wrap">
+<main class="max-w-[860px] mx-auto px-6 sm:px-8 py-14 pb-20">
 
     {# 1. Mission #}
-    <div class="section-card">
-        <h2>
-            <span class="icon">
+    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+            <span class="inline-flex items-center justify-center w-9 h-9 text-white rounded-xl shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                     <path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10zm0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/>
@@ -105,11 +37,11 @@
             </span>
             Notre mission
         </h2>
-        <p>
+        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">
             Notre mission est simple : accompagner un mode de vie actif, sain et responsable en proposant
             des bouteilles de sport <strong>fiables, durables et adaptées aux usages du quotidien</strong>.
         </p>
-        <p>
+        <p class="text-[#5a6a7e] text-[0.95rem]">
             Nous croyons que l'hydratation est un élément essentiel du bien-être et de la performance,
             que ce soit dans le sport, au travail ou dans la vie de tous les jours. C'est pourquoi nous
             concevons une plateforme spécialisée, claire et accessible, dédiée exclusivement aux bouteilles
@@ -118,61 +50,61 @@
     </div>
 
     {# 2. Catalogue #}
-    <div class="section-card">
-        <h2>
-            <span class="icon">
+    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+            <span class="inline-flex items-center justify-center w-9 h-9 text-white rounded-xl shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13z"/>
                 </svg>
             </span>
             Une sélection pensée pour tous les usages
         </h2>
-        <p>
+        <p class="text-[#5a6a7e] text-[0.95rem] mb-4">
             Notre catalogue est structuré autour de quatre grandes catégories, afin de répondre à des
             besoins précis. Chaque produit est sélectionné selon des critères stricts : qualité des
             matériaux, durabilité, sécurité alimentaire et confort d'utilisation.
         </p>
-        <div class="categories">
-            <div class="cat-item">
-                <span class="cat-icon">🧴</span>
-                <span class="cat-name">Plastique sans BPA</span>
-                <span class="cat-desc">Légères et pratiques pour le quotidien</span>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5">
+            <div class="bg-[#f4f7fb] border border-[#dde4ed] rounded-xl p-5 flex flex-col gap-1.5 hover:border-[#5db8ff] hover:shadow-md transition-all">
+                <span class="text-2xl leading-none">🧴</span>
+                <span class="font-bold text-sm text-[#0d1b2a]">Plastique sans BPA</span>
+                <span class="text-xs text-[#5a6a7e]">Légères et pratiques pour le quotidien</span>
             </div>
-            <div class="cat-item">
-                <span class="cat-icon">⚙️</span>
-                <span class="cat-name">Acier inoxydable</span>
-                <span class="cat-desc">Robustes et durables pour le sport intensif</span>
+            <div class="bg-[#f4f7fb] border border-[#dde4ed] rounded-xl p-5 flex flex-col gap-1.5 hover:border-[#5db8ff] hover:shadow-md transition-all">
+                <span class="text-2xl leading-none">⚙️</span>
+                <span class="font-bold text-sm text-[#0d1b2a]">Acier inoxydable</span>
+                <span class="text-xs text-[#5a6a7e]">Robustes et durables pour le sport intensif</span>
             </div>
-            <div class="cat-item">
-                <span class="cat-icon">🌿</span>
-                <span class="cat-name">Verre</span>
-                <span class="cat-desc">Saines et respectueuses de l'environnement</span>
+            <div class="bg-[#f4f7fb] border border-[#dde4ed] rounded-xl p-5 flex flex-col gap-1.5 hover:border-[#5db8ff] hover:shadow-md transition-all">
+                <span class="text-2xl leading-none">🌿</span>
+                <span class="font-bold text-sm text-[#0d1b2a]">Verre</span>
+                <span class="text-xs text-[#5a6a7e]">Saines et respectueuses de l'environnement</span>
             </div>
-            <div class="cat-item">
-                <span class="cat-icon">🌡️</span>
-                <span class="cat-name">Thermos</span>
-                <span class="cat-desc">Conservation optimale de la température</span>
+            <div class="bg-[#f4f7fb] border border-[#dde4ed] rounded-xl p-5 flex flex-col gap-1.5 hover:border-[#5db8ff] hover:shadow-md transition-all">
+                <span class="text-2xl leading-none">🌡️</span>
+                <span class="font-bold text-sm text-[#0d1b2a]">Thermos</span>
+                <span class="text-xs text-[#5a6a7e]">Conservation optimale de la température</span>
             </div>
         </div>
     </div>
 
     {# 3. Approche durable #}
-    <div class="section-card">
-        <h2>
-            <span class="icon">
+    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+            <span class="inline-flex items-center justify-center w-9 h-9 text-white rounded-xl shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16zm0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15z"/>
                 </svg>
             </span>
             Une approche responsable et durable
         </h2>
-        <div class="eco-badge">
+        <div class="inline-flex items-center gap-2 text-green-700 border border-green-200 rounded-lg px-3 py-2 text-sm font-semibold mb-4 bg-green-50">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
             </svg>
             Engagement éco-responsable
         </div>
-        <p>
+        <p class="text-[#5a6a7e] text-[0.95rem]">
             Nous nous engageons à promouvoir des <strong>alternatives réutilisables</strong> afin de réduire
             l'utilisation du plastique à usage unique. Notre démarche s'inscrit dans une vision à long terme,
             où la performance sportive et le respect de l'environnement vont de pair.
@@ -180,87 +112,90 @@
     </div>
 
     {# 4. Expérience utilisateur #}
-    <div class="section-card">
-        <h2>
-            <span class="icon">
+    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+            <span class="inline-flex items-center justify-center w-9 h-9 text-white rounded-xl shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                 </svg>
             </span>
             Une expérience utilisateur fiable et transparente
         </h2>
-        <p>Notre plateforme e-commerce est conçue pour offrir :</p>
-        <div class="features-list">
-            <div class="feature-item">
-                <span class="check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
-                <span>Navigation claire et intuitive</span>
+        <p class="text-[#5a6a7e] text-[0.95rem] mb-4">Notre plateforme e-commerce est conçue pour offrir :</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 mb-4">
+            <div class="flex items-start gap-3 p-3 bg-[#f4f7fb] rounded-xl border border-[#dde4ed]">
+                <span class="w-6 h-6 bg-gradient-to-br from-[#1b8fe4] to-[#5db8ff] rounded-md flex items-center justify-center shrink-0 mt-0.5"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" class="w-3 h-3 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
+                <span class="text-sm text-[#5a6a7e] font-medium">Navigation claire et intuitive</span>
             </div>
-            <div class="feature-item">
-                <span class="check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
-                <span>Panier simple et sécurisé</span>
+            <div class="flex items-start gap-3 p-3 bg-[#f4f7fb] rounded-xl border border-[#dde4ed]">
+                <span class="w-6 h-6 bg-gradient-to-br from-[#1b8fe4] to-[#5db8ff] rounded-md flex items-center justify-center shrink-0 mt-0.5"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" class="w-3 h-3 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
+                <span class="text-sm text-[#5a6a7e] font-medium">Panier simple et sécurisé</span>
             </div>
-            <div class="feature-item">
-                <span class="check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
-                <span>Processus de commande fluide</span>
+            <div class="flex items-start gap-3 p-3 bg-[#f4f7fb] rounded-xl border border-[#dde4ed]">
+                <span class="w-6 h-6 bg-gradient-to-br from-[#1b8fe4] to-[#5db8ff] rounded-md flex items-center justify-center shrink-0 mt-0.5"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" class="w-3 h-3 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
+                <span class="text-sm text-[#5a6a7e] font-medium">Processus de commande fluide</span>
             </div>
-            <div class="feature-item">
-                <span class="check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
-                <span>Livraison rapide</span>
+            <div class="flex items-start gap-3 p-3 bg-[#f4f7fb] rounded-xl border border-[#dde4ed]">
+                <span class="w-6 h-6 bg-gradient-to-br from-[#1b8fe4] to-[#5db8ff] rounded-md flex items-center justify-center shrink-0 mt-0.5"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" class="w-3 h-3 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
+                <span class="text-sm text-[#5a6a7e] font-medium">Livraison rapide</span>
             </div>
-            <div class="feature-item">
-                <span class="check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
-                <span>Politique de retour facile</span>
+            <div class="flex items-start gap-3 p-3 bg-[#f4f7fb] rounded-xl border border-[#dde4ed]">
+                <span class="w-6 h-6 bg-gradient-to-br from-[#1b8fe4] to-[#5db8ff] rounded-md flex items-center justify-center shrink-0 mt-0.5"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" class="w-3 h-3 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
+                <span class="text-sm text-[#5a6a7e] font-medium">Politique de retour facile</span>
             </div>
         </div>
-        <p>Chaque fonctionnalité est pensée pour garantir <strong>confiance, simplicité et transparence</strong>.</p>
+        <p class="text-[#5a6a7e] text-[0.95rem]">Chaque fonctionnalité est pensée pour garantir <strong>confiance, simplicité et transparence</strong>.</p>
     </div>
 
     {# 5. Architecture technique #}
-    <div class="section-card">
-        <h2>
-            <span class="icon">
+    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+            <span class="inline-flex items-center justify-center w-9 h-9 text-white rounded-xl shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14A2.5 2.5 0 0 1 11.5 14v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0z"/>
                 </svg>
             </span>
             Un projet construit sur des bases solides
         </h2>
-        <p>
+        <p class="text-[#5a6a7e] text-[0.95rem] mb-4">
             Ce site repose sur une architecture technique robuste, basée sur <strong>Symfony</strong> et
             <strong>Doctrine</strong>, avec une attention particulière portée aux piliers suivants :
         </p>
-        <div class="pillars">
-            <div class="pillar">
-                <div class="pillar-icon">🔒</div>
-                <div class="pillar-label">Sécurité des données</div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 my-4">
+            <div class="text-center p-5 bg-[#f4f7fb] border border-[#dde4ed] rounded-xl hover:border-[#5db8ff] transition-colors">
+                <div class="text-3xl mb-2">🔒</div>
+                <div class="font-bold text-sm text-[#0d1b2a]">Sécurité des données</div>
             </div>
-            <div class="pillar">
-                <div class="pillar-icon">♿</div>
-                <div class="pillar-label">Accessibilité</div>
+            <div class="text-center p-5 bg-[#f4f7fb] border border-[#dde4ed] rounded-xl hover:border-[#5db8ff] transition-colors">
+                <div class="text-3xl mb-2">♿</div>
+                <div class="font-bold text-sm text-[#0d1b2a]">Accessibilité</div>
             </div>
-            <div class="pillar">
-                <div class="pillar-icon">⚡</div>
-                <div class="pillar-label">Performance</div>
+            <div class="text-center p-5 bg-[#f4f7fb] border border-[#dde4ed] rounded-xl hover:border-[#5db8ff] transition-colors">
+                <div class="text-3xl mb-2">⚡</div>
+                <div class="font-bold text-sm text-[#0d1b2a]">Performance</div>
             </div>
-            <div class="pillar">
-                <div class="pillar-icon">🛠️</div>
-                <div class="pillar-label">Maintenabilité</div>
+            <div class="text-center p-5 bg-[#f4f7fb] border border-[#dde4ed] rounded-xl hover:border-[#5db8ff] transition-colors">
+                <div class="text-3xl mb-2">🛠️</div>
+                <div class="font-bold text-sm text-[#0d1b2a]">Maintenabilité</div>
             </div>
         </div>
-        <p>
+        <p class="text-[#5a6a7e] text-[0.95rem]">
             Notre objectif est de proposer une plateforme évolutive, capable d'intégrer de nouvelles
             fonctionnalités tout en conservant une expérience fiable.
         </p>
     </div>
 
     {# 6. Vision — CTA banner #}
-    <div class="vision-banner">
-        <h2>Notre vision</h2>
-        <p>
-            À travers ce projet, nous souhaitons bâtir bien plus qu'une boutique en ligne : un espace
-            de confiance dédié à l'hydratation, au sport et à un mode de vie responsable.
-        </p>
-        <a href="{{ path('app_contact') }}" class="vision-btn">Nous contacter</a>
+    <div class="relative overflow-hidden rounded-2xl px-10 py-10 text-center mb-7" style="background: linear-gradient(135deg, #0d1b2a, #163556);">
+        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(27,143,228,.3) 0%, transparent 70%);"></div>
+        <div class="relative">
+            <h2 class="text-2xl font-extrabold text-white mb-4" style="font-family: 'Syne', sans-serif;">Notre vision</h2>
+            <p class="text-[0.97rem] max-w-lg mx-auto mb-6" style="color: rgba(255,255,255,.65);">
+                À travers ce projet, nous souhaitons bâtir bien plus qu'une boutique en ligne : un espace
+                de confiance dédié à l'hydratation, au sport et à un mode de vie responsable.
+            </p>
+            <a href="{{ path('app_contact') }}" class="inline-block bg-[#1b8fe4] text-white px-8 py-3 rounded-lg font-semibold text-[0.95rem] no-underline hover:bg-[#5db8ff] hover:-translate-y-0.5 transition-all">Nous contacter</a>
+        </div>
     </div>
 
 </main>

@@ -3,71 +3,74 @@
 {% block title %}Validation de la commande - Sports Bottles{% endblock %}
 
 {% block body %}
-<div class="cart-container container-fluid container-lg" style="margin-top: 100px; margin-bottom: 50px;">
-    <div class="cart-header">
-        <h1><i class="bi bi-check-circle"></i> Validation de la commande</h1>
-    </div>
+<div class="w-full max-w-5xl mx-auto px-4 sm:px-6 mt-24 mb-12">
 
-    <div class="row g-3 g-lg-4">
+    <h1 class="text-2xl font-semibold font-display text-gray-900 mb-6 flex items-center gap-2">
+        <i class="bi bi-check-circle"></i> Validation de la commande
+    </h1>
+
+    <div class="flex flex-col lg:flex-row gap-4 lg:gap-6">
         <!-- Order Summary -->
-        <div class="col-12 col-lg-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-list-check"></i> Récapitulatif de votre commande</h5>
+        <div class="w-full lg:w-2/3">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm">
+                <div class="bg-primary text-white px-5 py-4 rounded-t-xl">
+                    <h5 class="text-base font-semibold m-0"><i class="bi bi-list-check"></i> Récapitulatif de votre commande</h5>
                 </div>
-                <div class="card-body p-2 p-sm-3 p-md-4">
+                <div class="p-2 sm:p-4 md:p-6">
                     <!-- Mobile View: Card Layout -->
-                    <div class="d-lg-none">
+                    <div class="block lg:hidden">
                         {% for item in cart.items %}
-                            <div class="card mb-3 p-3 border">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="bg-white rounded-lg border border-gray-200 mb-3 p-3">
+                                <div class="flex justify-between items-start mb-2">
                                     <div>
-                                        <h6 class="mb-1">{{ item.product.designation }}</h6>
+                                        <h6 class="text-sm font-semibold text-gray-900 mb-1">{{ item.product.designation }}</h6>
                                         {% if item.product.capacity %}
-                                            <small class="text-muted d-block mb-2">{{ item.product.capacity }}</small>
+                                            <small class="text-xs text-gray-500 block mb-2">{{ item.product.capacity }}</small>
                                         {% endif %}
                                     </div>
-                                    <span class="badge bg-secondary">{{ item.quantity }}x</span>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">{{ item.quantity }}x</span>
                                 </div>
-                                <hr class="my-2">
-                                <div class="row g-2 text-sm">
-                                    <div class="col-6">
-                                        <small class="text-muted">Prix unitaire:</small>
-                                        <p class="mb-0 fw-bold">{{ item.unitPrice|number_format(2, ',', ' ') }} €</p>
+                                <hr class="border-t border-gray-100 my-2">
+                                <div class="grid grid-cols-2 gap-2 text-sm">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Prix unitaire:</p>
+                                        <p class="mb-0 font-semibold">{{ item.unitPrice|number_format(2, ',', ' ') }} €</p>
                                     </div>
-                                    <div class="col-6 text-end">
-                                        <small class="text-muted">Sous-total:</small>
-                                        <p class="mb-0 fw-bold text-primary">{{ item.subtotal|number_format(2, ',', ' ') }} €</p>
+                                    <div class="text-right">
+                                        <p class="text-xs text-gray-500">Sous-total:</p>
+                                        <p class="mb-0 font-semibold text-primary">{{ item.subtotal|number_format(2, ',', ' ') }} €</p>
                                     </div>
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
-                    
+
                     <!-- Desktop View: Table Layout -->
-                    <div class="d-none d-lg-block">
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
+                    <div class="hidden lg:block">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-50 border-b border-gray-200">
                                     <tr>
-                                        <th>Produit</th>
-                                        <th class="text-center">Quantité</th>
-                                        <th class="text-end">Prix unitaire</th>
-                                        <th class="text-end">Total</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produit</th>
+                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Quantité</th>
+                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Prix unitaire</th>
+                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for item in cart.items %}
                                         <tr>
-                                            <td>
+                                            <td class="px-4 py-3 border-b border-gray-100">
                                                 <strong>{{ item.product.designation }}</strong>
                                                 {% if item.product.capacity %}
-                                                    <br><small class="text-muted">{{ item.product.capacity }}</small>
+                                                    <br><small class="text-xs text-gray-500">{{ item.product.capacity }}</small>
                                                 {% endif %}
                                             </td>
-                                            <td class="text-center"><span class="badge bg-secondary">{{ item.quantity }}</span></td>
-                                            <td class="text-end">{{ item.unitPrice|number_format(2, ',', ' ') }} €</td>
-                                            <td class="text-end fw-bold">{{ item.subtotal|number_format(2, ',', ' ') }} €</td>
+                                            <td class="px-4 py-3 border-b border-gray-100 text-center">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">{{ item.quantity }}</span>
+                                            </td>
+                                            <td class="px-4 py-3 border-b border-gray-100 text-right">{{ item.unitPrice|number_format(2, ',', ' ') }} €</td>
+                                            <td class="px-4 py-3 border-b border-gray-100 text-right font-semibold">{{ item.subtotal|number_format(2, ',', ' ') }} €</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -79,46 +82,44 @@
         </div>
 
         <!-- Order Total & Actions -->
-        <div class="col-12 col-lg-4">
-            <div class="cart-summary">
-                <div class="summary-card">
-                    <h4 class="mb-3"><i class="bi bi-calculator"></i> Résumé</h4>
-                    <hr>
-                    
-                    <div class="summary-row">
-                        <span>Sous-total</span>
-                        <span class="fw-bold">{{ total|number_format(2, ',', ' ') }} €</span>
-                    </div>
-                    
-                    <div class="summary-row">
-                        <span>Livraison</span>
-                        <span class="text-success fw-bold">Gratuite</span>
-                    </div>
-                    
-                    <hr>
-                    
-                    <div class="summary-total">
-                        <span>Total à payer</span>
-                        <span class="d-block" style="font-size: 1.8rem;">{{ total|number_format(2, ',', ' ') }} €</span>
-                    </div>
-                    
-                    <form action="{{ path('stripe_checkout') }}" method="post" class="mb-2">
-                        <input type="hidden" name="_token" value="{{ csrf_token('stripe_checkout') }}">
-                        <button type="submit" class="btn btn-success w-100">
-                            <i class="bi bi-credit-card"></i>
-                            Payer {{ total|number_format(2, ',', ' ') }} €
-                        </button>
-                    </form>
+        <div class="w-full lg:w-1/3">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                <h4 class="text-lg font-semibold font-display text-gray-900 mb-3 flex items-center gap-2">
+                    <i class="bi bi-calculator"></i> Résumé
+                </h4>
+                <hr class="border-t border-gray-100 my-4">
 
-                    <a href="{{ path('app_cartindex') }}" class="btn btn-outline-primary w-100">
-                        <i class="bi bi-arrow-left"></i> <span class="d-none d-sm-inline">Retour au panier</span><span class="d-sm-none">Retour</span>
-                    </a>
+                <div class="flex justify-between items-center mb-2">
+                    <span>Sous-total</span>
+                    <span class="font-semibold">{{ total|number_format(2, ',', ' ') }} €</span>
                 </div>
+
+                <div class="flex justify-between items-center mb-2">
+                    <span>Livraison</span>
+                    <span class="text-green-600 font-semibold">Gratuite</span>
+                </div>
+
+                <hr class="border-t border-gray-100 my-4">
+
+                <div class="flex justify-between items-center mt-1 mb-5">
+                    <span class="font-semibold">Total à payer</span>
+                    <span class="block text-3xl font-bold text-gray-900">{{ total|number_format(2, ',', ' ') }} €</span>
+                </div>
+
+                <form action="{{ path('stripe_checkout') }}" method="post" class="mb-2">
+                    <input type="hidden" name="_token" value="{{ csrf_token('stripe_checkout') }}">
+                    <button type="submit" class="flex w-full justify-center items-center gap-2 py-2.5 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors">
+                        <i class="bi bi-credit-card"></i>
+                        Payer {{ total|number_format(2, ',', ' ') }} €
+                    </button>
+                </form>
+
+                <a href="{{ path('app_cartindex') }}" class="flex w-full justify-center items-center gap-2 py-2.5 border border-primary text-primary text-sm font-medium rounded-md hover:bg-primary/5 transition-colors">
+                    <i class="bi bi-arrow-left"></i>
+                    <span class="hidden sm:inline">Retour au panier</span><span class="sm:hidden">Retour</span>
+                </a>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Bootstrap Icons CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 {% endblock %}

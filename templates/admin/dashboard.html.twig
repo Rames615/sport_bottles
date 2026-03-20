@@ -2,233 +2,131 @@
 
 {% block title %}Tableau de bord admin - Sports Bottles{% endblock %}
 
-{% block stylesheets %}
-{{ parent() }}
-<style>
-.admin-dashboard {
-    margin-top: 70px;
-    padding: 2rem 1rem;
-}
-
-.admin-cards .card {
-    border: 0;
-    border-radius: .75rem;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    height: 100%;
-    transition: transform .15s ease, box-shadow .15s ease;
-}
-
-.admin-cards .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-}
-
-.admin-cards .icon {
-    font-size: 1.8rem;
-    line-height: 1;
-}
-
-.admin-section-card {
-    border: 0;
-    border-radius: .9rem;
-    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
-}
-
-.section-title {
-    font-weight: 700;
-    margin-bottom: .25rem;
-}
-
-.section-subtitle {
-    color: #6c757d;
-    margin-bottom: 1rem;
-    font-size: .95rem;
-}
-
-.stats-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .75rem;
-}
-
-.stat-item {
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: .7rem;
-    padding: .75rem .9rem;
-    background: #fff;
-}
-
-.stat-label {
-    display: block;
-    color: #6c757d;
-    font-size: .85rem;
-}
-
-.stat-value {
-    display: block;
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
-.chart-wrapper {
-    position: relative;
-    min-height: 280px;
-}
-
-@media (max-width: 768px) {
-    .admin-dashboard {
-        margin-top: 60px;
-    }
-
-    .stats-list {
-        grid-template-columns: 1fr;
-    }
-
-    .chart-wrapper {
-        min-height: 240px;
-    }
-}
-</style>
-
-{% endblock %}
-
 {% block body %}
-<div class="container admin-dashboard" id="adminDashboardData"
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[70px] md:mt-[60px] py-8" id="adminDashboardData"
     data-user-count="{{ userCount }}"
     data-product-count="{{ productCount }}"
     data-category-count="{{ categoryCount }}"
     data-cart-count="{{ cartCount }}"
     data-order-count="{{ orderCount }}"
     data-promotion-count="{{ promotionCount }}">
-    <h1 class="mb-4">Tableau de bord</h1>
+    <h1 class="text-2xl font-bold font-display text-gray-900 mb-6">Tableau de bord</h1>
 
-     {# Composant réutilisable #}
-     {% include 'components/_flash_messages.html.twig' %}
+    {# Composant réutilisable #}
+    {% include 'components/_flash_messages.html.twig' %}
 
-    <div class="row admin-cards g-3 mb-4">
-        <div class="col-12 col-sm-6 col-lg-4">
-            <div class="card p-3 position-relative">
-                <div class="d-flex align-items-center">
-                    <div class="me-3 icon text-primary"><i class="bi bi-people-fill" aria-hidden="true"></i></div>
-                    <div>
-                        <div class="text-muted">Utilisateurs</div>
-                        <div class="h4 mb-0">{{ userCount }}</div>
-                    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+
+        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+            <div class="flex items-center">
+                <div class="mr-3 text-3xl leading-none text-blue-600"><i class="bi bi-people-fill" aria-hidden="true"></i></div>
+                <div>
+                    <div class="text-sm text-gray-500">Utilisateurs</div>
+                    <div class="text-2xl font-bold">{{ userCount }}</div>
                 </div>
-                <a href="/admin/user" class="stretched-link"></a>
             </div>
+            <a href="/admin/user" class="absolute inset-0" aria-label="Gérer les utilisateurs"></a>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-4">
-            <div class="card p-3 position-relative">
-                <div class="d-flex align-items-center">
-                    <div class="me-3 icon text-success"><i class="bi bi-box-seam-fill" aria-hidden="true"></i></div>
-                    <div>
-                        <div class="text-muted">Produits</div>
-                        <div class="h4 mb-0">{{ productCount }}</div>
-                    </div>
+        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+            <div class="flex items-center">
+                <div class="mr-3 text-3xl leading-none text-green-600"><i class="bi bi-box-seam-fill" aria-hidden="true"></i></div>
+                <div>
+                    <div class="text-sm text-gray-500">Produits</div>
+                    <div class="text-2xl font-bold">{{ productCount }}</div>
                 </div>
-                <a href="/admin/product" class="stretched-link"></a>
             </div>
+            <a href="/admin/product" class="absolute inset-0" aria-label="Gérer les produits"></a>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-4">
-            <div class="card p-3 position-relative">
-                <div class="d-flex align-items-center">
-                    <div class="me-3 icon text-warning"><i class="bi bi-tags-fill" aria-hidden="true"></i></div>
-                    <div>
-                        <div class="text-muted">Categories</div>
-                        <div class="h4 mb-0">{{ categoryCount }}</div>
-                    </div>
+        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+            <div class="flex items-center">
+                <div class="mr-3 text-3xl leading-none text-yellow-500"><i class="bi bi-tags-fill" aria-hidden="true"></i></div>
+                <div>
+                    <div class="text-sm text-gray-500">Categories</div>
+                    <div class="text-2xl font-bold">{{ categoryCount }}</div>
                 </div>
-                <a href="/admin/category" class="stretched-link"></a>
             </div>
+            <a href="/admin/category" class="absolute inset-0" aria-label="Gérer les categories"></a>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-4">
-            <div class="card p-3 position-relative">
-                <div class="d-flex align-items-center">
-                    <div class="me-3 icon text-danger"><i class="bi bi-cart-fill" aria-hidden="true"></i></div>
-                    <div>
-                        <div class="text-muted">Paniers</div>
-                        <div class="h4 mb-0">{{ cartCount }}</div>
-                    </div>
+        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+            <div class="flex items-center">
+                <div class="mr-3 text-3xl leading-none text-red-500"><i class="bi bi-cart-fill" aria-hidden="true"></i></div>
+                <div>
+                    <div class="text-sm text-gray-500">Paniers</div>
+                    <div class="text-2xl font-bold">{{ cartCount }}</div>
                 </div>
-                <a href="/admin/cart" class="stretched-link"></a>
             </div>
+            <a href="/admin/cart" class="absolute inset-0" aria-label="Gérer les paniers"></a>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-4">
-            <div class="card p-3 position-relative">
-                <div class="d-flex align-items-center">
-                    <div class="me-3 icon text-secondary"><i class="bi bi-receipt-cutoff" aria-hidden="true"></i></div>
-                    <div>
-                        <div class="text-muted">Commandes</div>
-                        <div class="h4 mb-0">{{ orderCount }}</div>
-                    </div>
+        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+            <div class="flex items-center">
+                <div class="mr-3 text-3xl leading-none text-gray-500"><i class="bi bi-receipt-cutoff" aria-hidden="true"></i></div>
+                <div>
+                    <div class="text-sm text-gray-500">Commandes</div>
+                    <div class="text-2xl font-bold">{{ orderCount }}</div>
                 </div>
-                <a href="/admin/order" class="stretched-link"></a>
             </div>
+            <a href="/admin/order" class="absolute inset-0" aria-label="Gérer les commandes"></a>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-4">
-            <div class="card p-3 position-relative">
-                <div class="d-flex align-items-center">
-                    <div class="me-3 icon text-info"><i class="bi bi-percent" aria-hidden="true"></i></div>
-                    <div>
-                        <div class="text-muted">Promotions</div>
-                        <div class="h4 mb-0">{{ promotionCount }}</div>
-                    </div>
+        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+            <div class="flex items-center">
+                <div class="mr-3 text-3xl leading-none text-cyan-500"><i class="bi bi-percent" aria-hidden="true"></i></div>
+                <div>
+                    <div class="text-sm text-gray-500">Promotions</div>
+                    <div class="text-2xl font-bold">{{ promotionCount }}</div>
                 </div>
-                <a href="/admin/promotion" class="stretched-link"></a>
             </div>
+            <a href="/admin/promotion" class="absolute inset-0" aria-label="Gérer les promotions"></a>
         </div>
+
     </div>
 
     {% set totalEntities = userCount + productCount + categoryCount + cartCount + orderCount + promotionCount %}
     {% set conversionRate = cartCount > 0 ? ((orderCount / cartCount) * 100) : 0 %}
     {% set productPerCategory = categoryCount > 0 ? (productCount / categoryCount) : 0 %}
 
-    <div class="row g-4">
-        <div class="col-12 col-xl-7">
-            <div class="card admin-section-card p-3 p-md-4 h-100">
-                <h5 class="section-title">Repartition generale</h5>
-                <p class="section-subtitle">Vue d'ensemble des entites de la plateforme.</p>
-                <div class="chart-wrapper">
-                    <canvas id="overviewChart"></canvas>
-                </div>
+    <div class="grid grid-cols-1 xl:grid-cols-[7fr_5fr] gap-6 mt-2">
+
+        <div class="bg-white rounded-[0.9rem] shadow-[0_6px_20px_rgba(15,23,42,0.08)] p-4 md:p-5 h-full">
+            <h5 class="text-base font-bold mb-1 text-gray-900">Repartition generale</h5>
+            <p class="text-sm text-gray-500 mb-4">Vue d'ensemble des entites de la plateforme.</p>
+            <div class="relative min-h-[280px] md:min-h-[240px]">
+                <canvas id="overviewChart"></canvas>
             </div>
         </div>
 
-        <div class="col-12 col-xl-5">
-            <div class="card admin-section-card p-3 p-md-4 h-100">
-                <h5 class="section-title">Statistiques detaillees</h5>
-                <p class="section-subtitle">Indicateurs operationnels rapides.</p>
+        <div class="bg-white rounded-[0.9rem] shadow-[0_6px_20px_rgba(15,23,42,0.08)] p-4 md:p-5 h-full">
+            <h5 class="text-base font-bold mb-1 text-gray-900">Statistiques detaillees</h5>
+            <p class="text-sm text-gray-500 mb-4">Indicateurs operationnels rapides.</p>
 
-                <div class="stats-list mb-4">
-                    <div class="stat-item">
-                        <span class="stat-label">Total entites</span>
-                        <span class="stat-value">{{ totalEntities }}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Ratio commandes/paniers</span>
-                        <span class="stat-value">{{ conversionRate|number_format(1, ',', ' ') }} %</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Produits par categorie</span>
-                        <span class="stat-value">{{ productPerCategory|number_format(1, ',', ' ') }}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Promotions actives (total)</span>
-                        <span class="stat-value">{{ promotionCount }}</span>
-                    </div>
+            <div class="grid grid-cols-2 md:grid-cols-1 gap-3 mb-6">
+                <div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
+                    <span class="block text-xs text-gray-500">Total entites</span>
+                    <span class="block text-xl font-bold text-gray-900">{{ totalEntities }}</span>
                 </div>
-
-                <div class="chart-wrapper">
-                    <canvas id="funnelChart"></canvas>
+                <div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
+                    <span class="block text-xs text-gray-500">Ratio commandes/paniers</span>
+                    <span class="block text-xl font-bold text-gray-900">{{ conversionRate|number_format(1, ',', ' ') }} %</span>
+                </div>
+                <div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
+                    <span class="block text-xs text-gray-500">Produits par categorie</span>
+                    <span class="block text-xl font-bold text-gray-900">{{ productPerCategory|number_format(1, ',', ' ') }}</span>
+                </div>
+                <div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
+                    <span class="block text-xs text-gray-500">Promotions actives (total)</span>
+                    <span class="block text-xl font-bold text-gray-900">{{ promotionCount }}</span>
                 </div>
             </div>
+
+            <div class="relative min-h-[280px] md:min-h-[240px]">
+                <canvas id="funnelChart"></canvas>
+            </div>
         </div>
+
     </div>
 {% endblock %}
 

@@ -1,126 +1,86 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="csrf-token" content="{{ csrf_token('') }}">
-		<meta name="csrf-cart-token" content="{{ csrf_token('cart_add') }}">
-		<title>
-			{% block title %}Sports Bottles - Bouteilles Durables
-			{% endblock %}
-		</title>
-		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-		
-		<!-- Bootstrap CSS -->
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-		
-		<!-- Font Awesome Icons -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEZSMUkrQ6usKGgiToZdeNQvQBKALuBuxmuP3w1b0xhopsWIcGMaYNFtatX3v4vpJtqiiZYg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-		 
-        {# Google Fonts #}
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-		
-		<!-- Global Variables and Typography -->
-		<link rel="stylesheet" href="{{ asset('styles/variables.css') }}">
-		
-		<!-- Global UI Components -->
-		<link rel="stylesheet" href="{{ asset('styles/ui-components.css') }}">
-		
-		
-		
-		{% block stylesheets %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token('') }}">
+    <meta name="csrf-cart-token" content="{{ csrf_token('cart_add') }}">
+    <title>{% block title %}Sports Bottles - Bouteilles Durables{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
-		<!-- Section Specific Styles -->
-		<link rel="stylesheet" href="{{ asset('styles/nav.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/hero-section.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/reassurance-section.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/product.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/modal.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/categories.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/promotion.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/footer.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/login.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/registration.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/contact.css') }}">
-		<link rel="stylesheet" href="{{ asset('styles/payment.css') }}">
-		
-		{% endblock %}
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEZSMUkrQ6usKGgiToZdeNQvQBKALuBuxmuP3w1b0xhopsWIcGMaYNFtatX3v4vpJtqiiZYg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-		{% block importmap %}
-			{{ importmap('app') }}
-		{% endblock %}
-	</head>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-	<body>
-		{# Decorative background: real product images, fixed, blurred, semi-transparent #}
-		<div class="site-bg-deco" aria-hidden="true">
-			<img src="{{ asset('products_images/isothermique_blue.png') }}"    class="bg-bottle b1" alt="">
-			<img src="{{ asset('products_images/glass_green.png') }}"           class="bg-bottle b2" alt="">
-			<img src="{{ asset('products_images/bpa-free-rose.png') }}"         class="bg-bottle b3" alt="">
-			<img src="{{ asset('products_images/acier_inoxydable_vert.png') }}" class="bg-bottle b4" alt="">
-			<img src="{{ asset('products_images/verre_blue.png') }}"            class="bg-bottle b5" alt="">
-			<img src="{{ asset('products_images/isothermique_red.png') }}"      class="bg-bottle b6" alt="">
-			<img src="{{ asset('products_images/glass_degrade_blue.png') }}"   class="bg-bottle b7" alt="">
-			<img src="{{ asset('products_images/transparent_sans_bpa.png') }}" class="bg-bottle b8" alt="">
-			<img src="{{ asset('products_images/acier_inoxydable.png') }}"     class="bg-bottle b9" alt="">
-		</div>
-		{% include 'nav.html.twig' %}
+    <!-- Tailwind compiled CSS -->
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
 
-		<main>
-			{% block body %}{% endblock %}
-		</main>
+    {% block stylesheets %}{% endblock %}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+</head>
 
-		{% include 'footer.html.twig' %}
-		
-		{# Cookie consent modal container - shown/hidden by JS #}
-		<div class="modal fade" id="cookieConsentModal" tabindex="-1" aria-labelledby="cookieConsentLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-dialog-centered">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="cookieConsentLabel">Cookies et confidentialité</h5>
-		      </div>
-		      <div class="modal-body">
-		        <p>Nous utilisons des cookies pour améliorer votre expérience. En continuant, vous acceptez l'utilisation des cookies.</p>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" id="cookie-decline">Refuser</button>
-		        <button type="button" class="btn btn-primary" id="cookie-accept">Accepter</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
+<body>
+    <!-- Decorative bottle background -->
+    <div class="site-bg-deco" aria-hidden="true">
+        <img src="{{ asset('products_images/isothermique_blue.png') }}"    class="bg-bottle b1" alt="">
+        <img src="{{ asset('products_images/glass_green.png') }}"           class="bg-bottle b2" alt="">
+        <img src="{{ asset('products_images/bpa-free-rose.png') }}"         class="bg-bottle b3" alt="">
+        <img src="{{ asset('products_images/acier_inoxydable_vert.png') }}" class="bg-bottle b4" alt="">
+        <img src="{{ asset('products_images/verre_blue.png') }}"            class="bg-bottle b5" alt="">
+        <img src="{{ asset('products_images/isothermique_red.png') }}"      class="bg-bottle b6" alt="">
+        <img src="{{ asset('products_images/glass_degrade_blue.png') }}"    class="bg-bottle b7" alt="">
+        <img src="{{ asset('products_images/transparent_sans_bpa.png') }}"  class="bg-bottle b8" alt="">
+        <img src="{{ asset('products_images/acier_inoxydable.png') }}"      class="bg-bottle b9" alt="">
+    </div>
 
-		<!-- Bootstrap JS Bundle with Popper -->
-		<!-- data-turbo-eval="false" prevents Turbo from re-executing this on every
-		     navigation, which would reset Bootstrap's internal state and duplicate
-		     event listeners. Bootstrap needs to run exactly once per hard page load. -->
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" data-turbo-eval="false"></script>
+    {% include 'nav.html.twig' %}
 
-		<!-- Cart real-time badge update (promotion add-to-cart AJAX) -->
-		<script src="{{ asset('scripts/cart.js') }}" data-turbo-eval="false"></script>
+    <main>
+        {% block body %}{% endblock %}
+    </main>
 
-		<!-- Product Page Scripts -->
-		<script src="{{ asset('scripts/product-filters.js') }}" data-turbo-eval="false"></script>
+    {% include 'footer.html.twig' %}
 
-		{% block javascripts %}{% endblock %}
+    <!-- Cookie consent modal (Bootstrap JS required) -->
+    <div class="modal fade" id="cookieConsentModal" tabindex="-1" aria-labelledby="cookieConsentLabel" aria-hidden="true">
+        <div class="modal-dialog flex items-center min-h-[calc(100%-1rem)] my-2 mx-auto max-w-lg px-4">
+            <div class="modal-content w-full rounded-xl bg-white shadow-green-lg border border-gray-100 overflow-hidden">
+                <div class="flex items-center px-6 pt-5 pb-4 border-b border-gray-100">
+                    <h5 class="text-base font-semibold text-gray-900 m-0" id="cookieConsentLabel">Cookies et confidentialité</h5>
+                </div>
+                <div class="px-6 py-5">
+                    <p class="text-sm text-gray-600 m-0">Nous utilisons des cookies pour améliorer votre expérience. En continuant, vous acceptez l'utilisation des cookies.</p>
+                </div>
+                <div class="flex justify-end gap-3 px-6 pt-4 pb-5 border-t border-gray-100">
+                    <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors" id="cookie-decline">Refuser</button>
+                    <button type="button" class="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-green-dark transition-colors" id="cookie-accept">Accepter</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-		<script data-turbo-eval="false">
-			// Re-initialize Bootstrap components after Turbo navigation.
-			// Also runs on DOMContentLoaded for the initial hard page load.
-			// data-turbo-eval="false" ensures this listener is registered exactly once.
-			function reinitBootstrapComponents() {
-				if (typeof bootstrap === 'undefined') return;
-				document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function(el) {
-					bootstrap.Dropdown.getOrCreateInstance(el);
-				});
-				document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(el) {
-					bootstrap.Collapse.getOrCreateInstance(el);
-				});
-			}
-			document.addEventListener('DOMContentLoaded', reinitBootstrapComponents);
-			document.addEventListener('turbo:load', reinitBootstrapComponents);
-		</script>
-	</body>
+    <!-- Bootstrap JS (dropdowns, collapse, modals) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" data-turbo-eval="false"></script>
+
+    <script src="{{ asset('scripts/cart.js') }}" data-turbo-eval="false"></script>
+    <script src="{{ asset('scripts/product-filters.js') }}"></script>
+
+    {% block javascripts %}{% endblock %}
+
+    <!-- Re-initialize Bootstrap components after Turbo navigation -->
+    <script data-turbo-eval="false">
+        function reinitBootstrap() {
+            if (typeof bootstrap === 'undefined') return;
+            document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(el => bootstrap.Dropdown.getOrCreateInstance(el));
+            document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(el => bootstrap.Collapse.getOrCreateInstance(el));
+        }
+        document.addEventListener('DOMContentLoaded', reinitBootstrap);
+        document.addEventListener('turbo:load', reinitBootstrap);
+    </script>
+</body>
 </html>

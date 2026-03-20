@@ -3,62 +3,59 @@
 {% block title %}Nos Produits{% endblock %}
 
 {% block body %}
-{# ajouter le margin top plus que le hauter de bar nav #}
-    <div class="container-fluid mt-5 p-5">
+    <div class="w-full mt-[70px] px-6 sm:px-8 py-8">
+
         {# Products Header #}
-        <div class="products-header mb-4">
+        <div class="flex justify-between items-center mb-8 flex-wrap gap-6">
             <div>
-                <h1 class="products-title">Nos Produits</h1>
-                <p class="text-muted">{{ allProducts|length }} produit(s) disponible(s)</p>
+                <h1 class="text-[1.75rem] font-bold text-[#212529] m-0">Nos Produits</h1>
+                <p class="text-muted mt-1 mb-0">{{ allProducts|length }} produit(s) disponible(s)</p>
             </div>
-            
-            {# Filters & Sort Controls - Using Bootstrap form-select #}
-            <div class="products-controls">
-                {# Category Filter #}
-                <div>
-                    <select id="categoryFilter" class="form-select form-select-sm" aria-label="Filtrer par catégorie">
-                        <option value="">Toutes les catégories</option>
-                        {% for category in categories %}
-                            <option value="{{ category.name }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
 
-                {# Price Range Filter #}
-                <div>
-                    <select id="priceFilter" class="form-select form-select-sm" aria-label="Filtrer par prix">
-                        <option value="">Tous les prix</option>
-                        <option value="0-50">0 - 50 €</option>
-                        <option value="50-100">50 - 100 €</option>
-                        <option value="100-500">100 - 500 €</option>
-                        <option value="500+">500 € +</option>
-                    </select>
-                </div>
+            {# Filters & Sort Controls #}
+            <div class="flex gap-3 flex-wrap items-center">
+                <select id="categoryFilter"
+                        class="text-sm border border-[#dee2e6] rounded-md py-2 pl-3 pr-2 bg-white text-[#212529] focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary min-w-[140px] cursor-pointer"
+                        aria-label="Filtrer par catégorie">
+                    <option value="">Toutes les catégories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.name }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
 
-                {# Sort #}
-                <div>
-                    <select id="sortFilter" class="form-select form-select-sm" aria-label="Trier les produits">
-                        <option value="">Trier par</option>
-                        <option value="name-asc">Nom (A-Z)</option>
-                        <option value="name-desc">Nom (Z-A)</option>
-                        <option value="price-asc">Prix (croissant)</option>
-                        <option value="price-desc">Prix (décroissant)</option>
-                    </select>
-                </div>
+                <select id="priceFilter"
+                        class="text-sm border border-[#dee2e6] rounded-md py-2 pl-3 pr-2 bg-white text-[#212529] focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary min-w-[140px] cursor-pointer"
+                        aria-label="Filtrer par prix">
+                    <option value="">Tous les prix</option>
+                    <option value="0-50">0 - 50 €</option>
+                    <option value="50-100">50 - 100 €</option>
+                    <option value="100-500">100 - 500 €</option>
+                    <option value="500+">500 € +</option>
+                </select>
+
+                <select id="sortFilter"
+                        class="text-sm border border-[#dee2e6] rounded-md py-2 pl-3 pr-2 bg-white text-[#212529] focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary min-w-[140px] cursor-pointer"
+                        aria-label="Trier les produits">
+                    <option value="">Trier par</option>
+                    <option value="name-asc">Nom (A-Z)</option>
+                    <option value="name-desc">Nom (Z-A)</option>
+                    <option value="price-asc">Prix (croissant)</option>
+                    <option value="price-desc">Prix (décroissant)</option>
+                </select>
             </div>
         </div>
 
         {# Products Grid #}
         {% if allProducts is not empty %}
-            <div class="products-grid">
+            <div class="products-grid grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {% for product in allProducts %}
                     {% include 'product/_card.html.twig' with {'product': product} only %}
                 {% endfor %}
             </div>
         {% else %}
-            <div class="alert alert-info" role="alert">
-                <h4 class="alert-heading">Aucun produit trouvé</h4>
-                <p>Veuillez vérifier les filtres appliqués et réessayer.</p>
+            <div class="no-products-message text-center py-16 px-6 bg-[#f8f9fa] border border-dashed border-[#dee2e6] rounded-md" role="alert">
+                <h4 class="font-semibold text-lg mb-2 text-[#212529]">Aucun produit trouvé</h4>
+                <p class="mb-0 text-muted">Veuillez vérifier les filtres appliqués et réessayer.</p>
             </div>
         {% endif %}
     </div>

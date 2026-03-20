@@ -4,28 +4,31 @@
 
 {% block body %}
 
-<div class="pm-page">
+<div class="min-h-screen pt-[110px] pb-[60px] px-4 flex items-start justify-center gap-8 bg-[#f4faf7] text-[#1a2e23] max-[900px]:flex-col max-[900px]:items-center">
 
     <!-- ═══ LEFT COLUMN ═══ -->
-    <div class="pm-left">
+    <div class="w-full max-w-[460px]" style="animation: slideIn .4s ease both;">
 
-        <h1 class="pm-section-title">
+        <h1 class="font-extrabold text-[1.6rem] text-[#1a2e23] tracking-[-0.5px] mb-6 max-[480px]:text-[1.35rem]">
             Paiement sécurisé
-            <small>Choisissez votre méthode de paiement</small>
+            <small class="block mt-1 text-[.85rem] font-normal text-[#4a7060] tracking-normal">Choisissez votre méthode de paiement</small>
         </h1>
 
         <!-- Method tabs -->
-        <div class="method-tabs">
-            <button class="method-tab active" data-method="card" onclick="switchMethod('card', this)">
-                <span class="tab-icon"><i class="bi bi-credit-card-2-front-fill"></i></span>
+        <div class="grid grid-cols-3 gap-[10px] mb-7">
+            <button class="method-tab active bg-white border-[1.5px] border-[rgba(34,139,87,0.18)] rounded-[14px] px-[10px] py-[14px] flex flex-col items-center gap-[6px] cursor-pointer transition-all duration-200 select-none text-[#4a7060] text-[.8rem] font-semibold shadow-[0_1px_4px_rgba(34,139,87,0.08)] hover:border-[#176e3b] hover:bg-[#edfaf3] hover:text-[#176e3b] hover:-translate-y-[2px] hover:shadow-[0_4px_16px_rgba(34,139,87,0.12)] [&.active]:border-[#176e3b] [&.active]:bg-[#c8ecd8] [&.active]:text-[#176e3b] [&.active]:shadow-[0_4px_16px_rgba(34,139,87,0.12)]"
+                    data-method="card" onclick="switchMethod('card', this)">
+                <span class="text-[1.5rem] leading-none"><i class="bi bi-credit-card-2-front-fill"></i></span>
                 Carte bancaire
             </button>
-            <button class="method-tab" data-method="wallet" onclick="switchMethod('wallet', this)">
-                <span class="tab-icon"><i class="bi bi-phone-fill"></i></span>
+            <button class="method-tab bg-white border-[1.5px] border-[rgba(34,139,87,0.18)] rounded-[14px] px-[10px] py-[14px] flex flex-col items-center gap-[6px] cursor-pointer transition-all duration-200 select-none text-[#4a7060] text-[.8rem] font-semibold shadow-[0_1px_4px_rgba(34,139,87,0.08)] hover:border-[#176e3b] hover:bg-[#edfaf3] hover:text-[#176e3b] hover:-translate-y-[2px] hover:shadow-[0_4px_16px_rgba(34,139,87,0.12)] [&.active]:border-[#176e3b] [&.active]:bg-[#c8ecd8] [&.active]:text-[#176e3b] [&.active]:shadow-[0_4px_16px_rgba(34,139,87,0.12)]"
+                    data-method="wallet" onclick="switchMethod('wallet', this)">
+                <span class="text-[1.5rem] leading-none"><i class="bi bi-phone-fill"></i></span>
                 Wallet
             </button>
-            <button class="method-tab" data-method="transfer" onclick="switchMethod('transfer', this)">
-                <span class="tab-icon"><i class="bi bi-bank2"></i></span>
+            <button class="method-tab bg-white border-[1.5px] border-[rgba(34,139,87,0.18)] rounded-[14px] px-[10px] py-[14px] flex flex-col items-center gap-[6px] cursor-pointer transition-all duration-200 select-none text-[#4a7060] text-[.8rem] font-semibold shadow-[0_1px_4px_rgba(34,139,87,0.08)] hover:border-[#176e3b] hover:bg-[#edfaf3] hover:text-[#176e3b] hover:-translate-y-[2px] hover:shadow-[0_4px_16px_rgba(34,139,87,0.12)] [&.active]:border-[#176e3b] [&.active]:bg-[#c8ecd8] [&.active]:text-[#176e3b] [&.active]:shadow-[0_4px_16px_rgba(34,139,87,0.12)]"
+                    data-method="transfer" onclick="switchMethod('transfer', this)">
+                <span class="text-[1.5rem] leading-none"><i class="bi bi-bank2"></i></span>
                 Virement
             </button>
         </div>
@@ -35,52 +38,54 @@
             No local card form here — Stripe Checkout handles all card collection securely.
             This panel simply redirects the user to Stripe via a single POST to /checkout/pay.
         #}
-        <div id="method-card" class="alt-panel active">
+        <div id="method-card" class="alt-panel">
 
             <!-- Accepted cards -->
-            <div class="accepted-cards">
-                <span class="card-logo visa">VISA</span>
-                <span class="card-logo mc">MASTERCARD</span>
-                <span class="card-logo amex">AMEX</span>
-                <span class="card-logo cb">CB</span>
+            <div class="flex gap-2 flex-wrap mb-4">
+                <span class="bg-[#f0f6ff] border border-[rgba(21,88,168,0.25)] rounded-md px-[11px] py-[5px] text-[.7rem] font-extrabold text-[#1558a8] tracking-[.5px]">VISA</span>
+                <span class="bg-[#fff5f5] border border-[rgba(168,33,21,0.25)] rounded-md px-[11px] py-[5px] text-[.7rem] font-extrabold text-[#a82115] tracking-[.5px]">MASTERCARD</span>
+                <span class="bg-[#f0f8ff] border border-[rgba(0,99,154,0.25)] rounded-md px-[11px] py-[5px] text-[.7rem] font-extrabold text-[#00639a] tracking-[.5px]">AMEX</span>
+                <span class="bg-[#edfaf3] border border-[rgba(23,110,59,0.25)] rounded-md px-[11px] py-[5px] text-[.7rem] font-extrabold text-[#176e3b] tracking-[.5px]">CB</span>
             </div>
 
             <!-- Stripe badge -->
-            <div class="stripe-badge">
+            <div class="inline-flex items-center gap-[6px] bg-[#eeecff] border border-[rgba(87,83,224,0.2)] rounded-lg px-[14px] py-2 text-[.76rem] text-[#5753e0] font-semibold mb-5">
                 <i class="bi bi-shield-lock-fill"></i>
                 Paiement traité par Stripe — certifié PCI DSS niveau 1
             </div>
 
-            <div class="pm-panel">
+            <div class="bg-white border border-[rgba(34,139,87,0.18)] rounded-[14px] p-7 shadow-[0_1px_4px_rgba(34,139,87,0.08)] max-[480px]:p-5">
 
                 <!-- Info: redirect to Stripe -->
-                <div class="stripe-info-box">
-                    <i class="bi bi-box-arrow-up-right"></i>
-                    <p>
-                        Vous serez redirigé vers la <strong>page de paiement sécurisée Stripe</strong>
+                <div class="flex items-start gap-[14px] bg-[#edfaf3] border border-[rgba(23,110,59,0.2)] rounded-[10px] px-[18px] py-4 mb-[22px]">
+                    <i class="bi bi-box-arrow-up-right text-[#176e3b] text-[1.2rem] shrink-0 mt-[2px]"></i>
+                    <p class="text-[.83rem] text-[#2d4a38] m-0 leading-[1.65]">
+                        Vous serez redirigé vers la <strong class="text-[#1a2e23]">page de paiement sécurisée Stripe</strong>
                         pour saisir vos informations bancaires. Nous ne stockons aucune donnée de carte.
                     </p>
                 </div>
 
                 <!-- What to expect -->
-                <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px;">
-                    <div style="display:flex;align-items:center;gap:10px;font-size:.83rem;color:var(--muted);">
-                        <i class="bi bi-1-circle-fill" style="color:var(--green);flex-shrink:0;"></i>
+                <div class="flex flex-col gap-[10px] mb-2">
+                    <div class="flex items-center gap-[10px] text-[.83rem] text-[#2d4a38]">
+                        <i class="bi bi-1-circle-fill text-[#176e3b] shrink-0"></i>
                         Cliquez sur le bouton ci-dessous
                     </div>
-                    <div style="display:flex;align-items:center;gap:10px;font-size:.83rem;color:var(--muted);">
-                        <i class="bi bi-2-circle-fill" style="color:var(--green);flex-shrink:0;"></i>
+                    <div class="flex items-center gap-[10px] text-[.83rem] text-[#2d4a38]">
+                        <i class="bi bi-2-circle-fill text-[#176e3b] shrink-0"></i>
                         Saisissez vos informations de carte sur la page Stripe
                     </div>
-                    <div style="display:flex;align-items:center;gap:10px;font-size:.83rem;color:var(--muted);">
-                        <i class="bi bi-3-circle-fill" style="color:var(--green);flex-shrink:0;"></i>
+                    <div class="flex items-center gap-[10px] text-[.83rem] text-[#2d4a38]">
+                        <i class="bi bi-3-circle-fill text-[#176e3b] shrink-0"></i>
                         Vous êtes redirigé vers la confirmation de commande
                     </div>
                 </div>
 
                 <form action="{{ path('checkout_pay') }}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token('checkout_pay') }}">
-                    <button type="submit" class="btn-pay" id="btn-stripe-pay"
+                    <button type="submit"
+                            class="w-full py-4 px-4 mt-6 flex items-center justify-center gap-[10px] bg-gradient-to-br from-[#176e3b] to-[#198443] border-0 rounded-[14px] text-white font-bold text-[1.05rem] tracking-[.3px] cursor-pointer transition-all duration-200 shadow-[0_6px_20px_rgba(23,110,59,0.3)] hover:opacity-[.93] hover:-translate-y-[2px] hover:shadow-[0_10px_28px_rgba(23,110,59,0.35)] active:scale-[.98] disabled:opacity-55 disabled:cursor-not-allowed disabled:translate-y-0"
+                            id="btn-stripe-pay"
                             onclick="this.disabled=true; this.innerHTML='<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> Redirection…'; this.form.submit();">
                         <i class="bi bi-lock-fill"></i>
                         Payer par carte
@@ -91,20 +96,22 @@
         </div>
 
         <!-- ══ WALLET METHOD ══ -->
-        <div id="method-wallet" class="alt-panel">
-            <div class="pm-panel">
-                <p style="font-size:.85rem;color:var(--muted);margin-bottom:20px;line-height:1.6;">
+        <div id="method-wallet" class="alt-panel hidden">
+            <div class="bg-white border border-[rgba(34,139,87,0.18)] rounded-[14px] p-7 shadow-[0_1px_4px_rgba(34,139,87,0.08)] max-[480px]:p-5">
+                <p class="text-[.85rem] text-[#4a7060] mb-5 leading-[1.6]">
                     Payez en un clic avec votre portefeuille numérique. Aucune saisie de carte requise.
                 </p>
 
-                <button class="wallet-btn apple" onclick="handleWalletPay('Apple Pay')">
+                <button class="w-full py-[15px] px-4 mb-3 rounded-[14px] border-[1.5px] border-[rgba(0,0,0,0.15)] bg-white text-[#1a2e23] text-[.92rem] font-semibold cursor-pointer flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_1px_4px_rgba(34,139,87,0.08)] hover:border-[#176e3b] hover:bg-[#edfaf3] hover:text-[#176e3b] hover:-translate-y-[1px] hover:shadow-[0_4px_16px_rgba(34,139,87,0.12)]"
+                        onclick="handleWalletPay('Apple Pay')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                     </svg>
                     Payer avec Apple Pay
                 </button>
 
-                <button class="wallet-btn google" onclick="handleWalletPay('Google Pay')">
+                <button class="w-full py-[15px] px-4 mb-3 rounded-[14px] border-[1.5px] border-[rgba(0,0,0,0.15)] bg-white text-[#1a2e23] text-[.92rem] font-semibold cursor-pointer flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_1px_4px_rgba(34,139,87,0.08)] hover:border-[#176e3b] hover:bg-[#edfaf3] hover:text-[#176e3b] hover:-translate-y-[1px] hover:shadow-[0_4px_16px_rgba(34,139,87,0.12)]"
+                        onclick="handleWalletPay('Google Pay')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -114,15 +121,21 @@
                     Payer avec Google Pay
                 </button>
 
-                <button class="wallet-btn paypal" onclick="handleWalletPay('PayPal')">
+                <button class="w-full py-[15px] px-4 mb-3 rounded-[14px] border-[1.5px] border-[rgba(0,90,200,0.25)] bg-white text-[#1a2e23] text-[.92rem] font-semibold cursor-pointer flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_1px_4px_rgba(34,139,87,0.08)] hover:border-[#176e3b] hover:bg-[#edfaf3] hover:text-[#176e3b] hover:-translate-y-[1px] hover:shadow-[0_4px_16px_rgba(34,139,87,0.12)]"
+                        onclick="handleWalletPay('PayPal')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="#009cde">
                         <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
                     </svg>
                     Payer avec PayPal
                 </button>
 
-                <div class="divider-or">ou utiliser une carte</div>
-                <button class="wallet-btn" onclick="switchMethod('card', document.querySelector('[data-method=card]'))">
+                <div class="flex items-center gap-3 text-[#4a7060] text-[.78rem] my-5
+                            before:content-[''] before:flex-1 before:h-px before:bg-[rgba(34,139,87,0.18)]
+                            after:content-['']  after:flex-1  after:h-px  after:bg-[rgba(34,139,87,0.18)]">
+                    ou utiliser une carte
+                </div>
+                <button class="w-full py-[15px] px-4 rounded-[14px] border-[1.5px] border-[rgba(34,139,87,0.18)] bg-white text-[#1a2e23] text-[.92rem] font-semibold cursor-pointer flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_1px_4px_rgba(34,139,87,0.08)] hover:border-[#176e3b] hover:bg-[#edfaf3] hover:text-[#176e3b] hover:-translate-y-[1px] hover:shadow-[0_4px_16px_rgba(34,139,87,0.12)]"
+                        onclick="switchMethod('card', document.querySelector('[data-method=card]'))">
                     <i class="bi bi-credit-card-fill"></i>
                     Payer par carte bancaire
                 </button>
@@ -130,39 +143,39 @@
         </div>
 
         <!-- ══ TRANSFER METHOD ══ -->
-        <div id="method-transfer" class="alt-panel">
-            <div class="pm-panel">
-                <p style="font-size:.85rem;color:var(--muted);margin-bottom:22px;line-height:1.6;">
+        <div id="method-transfer" class="alt-panel hidden">
+            <div class="bg-white border border-[rgba(34,139,87,0.18)] rounded-[14px] p-7 shadow-[0_1px_4px_rgba(34,139,87,0.08)] max-[480px]:p-5">
+                <p class="text-[.85rem] text-[#4a7060] mb-[22px] leading-[1.6]">
                     Effectuez un virement bancaire. Votre commande sera validée dès réception du paiement (1–2 jours ouvrés).
                 </p>
 
-                <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:20px;">
-                    <div style="margin-bottom:14px;">
-                        <div class="form-label" style="margin-bottom:4px;">IBAN</div>
-                        <div style="font-family:var(--mono);font-size:.9rem;color:var(--text);letter-spacing:1px;">
+                <div class="bg-[#eaf5ef] border border-[rgba(34,139,87,0.18)] rounded-[10px] p-5">
+                    <div class="mb-[14px]">
+                        <div class="block text-[.75rem] font-bold text-[#4a7060] uppercase tracking-[1.2px] mb-1">IBAN</div>
+                        <div class="font-mono text-[.9rem] text-[#1a2e23] tracking-[1px]">
                             FR76 3000 6000 0112 3456 7890 189
-                            <button onclick="copyIBAN()" style="background:none;border:none;color:var(--green);cursor:pointer;margin-left:8px;font-size:.8rem;">
+                            <button onclick="copyIBAN()"
+                                    class="bg-transparent border-0 text-[#176e3b] cursor-pointer ml-2 text-[.8rem] px-1 py-[2px] rounded transition-colors duration-200 hover:text-[#1a2e23] hover:bg-[#c8ecd8]">
                                 <i class="bi bi-clipboard" id="copy-icon"></i>
                             </button>
                         </div>
                     </div>
-                    <div style="margin-bottom:14px;">
-                        <div class="form-label" style="margin-bottom:4px;">BIC / SWIFT</div>
-                        <div style="font-family:var(--mono);font-size:.9rem;color:var(--text);">AGRIFRPP</div>
+                    <div class="mb-[14px]">
+                        <div class="block text-[.75rem] font-bold text-[#4a7060] uppercase tracking-[1.2px] mb-1">BIC / SWIFT</div>
+                        <div class="font-mono text-[.9rem] text-[#1a2e23]">AGRIFRPP</div>
                     </div>
                     <div>
-                        <div class="form-label" style="margin-bottom:4px;">Référence à indiquer</div>
-                        <div style="font-family:var(--mono);font-size:.9rem;color:var(--green);">
+                        <div class="block text-[.75rem] font-bold text-[#4a7060] uppercase tracking-[1.2px] mb-1">Référence à indiquer</div>
+                        <div class="font-mono text-[.9rem] text-[#176e3b] font-semibold">
                             SB-{{ 'now'|date('YmdHis') }}
                         </div>
                     </div>
                 </div>
 
-                <div class="d-flex align-items-start gap-3 mt-3"
-                     style="background:rgba(52,209,138,.05);border:1px solid rgba(52,209,138,.15);border-radius:10px;padding:14px 16px;">
-                    <i class="bi bi-info-circle-fill" style="color:var(--green);margin-top:2px;flex-shrink:0;"></i>
-                    <p style="font-size:.8rem;color:var(--muted);margin:0;line-height:1.5;">
-                        Votre commande sera réservée pendant <strong style="color:var(--text);">72 heures</strong>.
+                <div class="flex items-start gap-3 mt-3 bg-[#edfaf3] border border-[rgba(23,110,59,0.2)] rounded-[10px] px-4 py-[14px]">
+                    <i class="bi bi-info-circle-fill text-[#176e3b] mt-[2px] shrink-0"></i>
+                    <p class="text-[.8rem] text-[#4a7060] m-0 leading-[1.5]">
+                        Votre commande sera réservée pendant <strong class="text-[#1a2e23]">72 heures</strong>.
                         Passé ce délai, elle sera automatiquement annulée si le paiement n'est pas reçu.
                     </p>
                 </div>
@@ -171,9 +184,10 @@
                     Bank transfer posts to checkout_confirm_post (non-Stripe route)
                     which sets order status to "paid" immediately for manual processing.
                 #}
-                <form action="{{ path('checkout_confirm_post') }}" method="post" style="margin-top:20px;">
+                <form action="{{ path('checkout_confirm_post') }}" method="post" class="mt-5">
                     <input type="hidden" name="_token" value="{{ csrf_token('checkout_pay') }}">
-                    <button type="submit" class="btn-pay">
+                    <button type="submit"
+                            class="w-full py-4 px-4 flex items-center justify-center gap-[10px] bg-gradient-to-br from-[#176e3b] to-[#198443] border-0 rounded-[14px] text-white font-bold text-[1.05rem] tracking-[.3px] cursor-pointer transition-all duration-200 shadow-[0_6px_20px_rgba(23,110,59,0.3)] hover:opacity-[.93] hover:-translate-y-[2px] hover:shadow-[0_10px_28px_rgba(23,110,59,0.35)] active:scale-[.98]">
                         <i class="bi bi-bank2"></i>
                         Confirmer la commande par virement
                     </button>
@@ -182,53 +196,53 @@
         </div>
 
         <!-- Security strip -->
-        <div class="security-strip mt-3">
-            <div class="security-item"><i class="bi bi-shield-check-fill"></i> SSL 256-bit</div>
-            <div class="security-item"><i class="bi bi-patch-check-fill"></i> 3D Secure</div>
-            <div class="security-item"><i class="bi bi-lock-fill"></i> PCI DSS</div>
-            <div class="security-item"><i class="bi bi-stripe" style="color:#635bff;"></i> Powered by Stripe</div>
+        <div class="flex items-center justify-center gap-[18px] mt-3 flex-wrap">
+            <div class="flex items-center gap-[5px] text-[.72rem] text-[#4a7060] font-medium"><i class="bi bi-shield-check-fill text-[#176e3b]"></i> SSL 256-bit</div>
+            <div class="flex items-center gap-[5px] text-[.72rem] text-[#4a7060] font-medium"><i class="bi bi-patch-check-fill text-[#176e3b]"></i> 3D Secure</div>
+            <div class="flex items-center gap-[5px] text-[.72rem] text-[#4a7060] font-medium"><i class="bi bi-lock-fill text-[#176e3b]"></i> PCI DSS</div>
+            <div class="flex items-center gap-[5px] text-[.72rem] text-[#4a7060] font-medium"><i class="bi bi-stripe" style="color:#635bff;"></i> Powered by Stripe</div>
         </div>
     </div>
 
     <!-- ═══ RIGHT COLUMN — Order summary ═══ -->
-    <div class="pm-right">
-        <div class="summary-box">
-            <div class="summary-header">
-                <i class="bi bi-bag-check-fill" style="color:var(--green);"></i>
+    <div class="w-full max-w-[320px] sticky top-[110px] max-[900px]:static max-[900px]:max-w-[460px]" style="animation: slideIn .4s ease .1s both;">
+        <div class="bg-white border border-[rgba(34,139,87,0.18)] rounded-[14px] overflow-hidden shadow-[0_4px_16px_rgba(34,139,87,0.12)]">
+            <div class="px-[22px] py-[18px] border-b border-[rgba(34,139,87,0.18)] bg-[#edfaf3] font-bold text-[.95rem] text-[#1a2e23] flex items-center gap-2">
+                <i class="bi bi-bag-check-fill text-[#176e3b]"></i>
                 Votre commande
             </div>
-            <div class="summary-body">
+            <div class="px-[22px] py-[18px]">
                 {% for item in cart.items %}
-                <div class="summary-item">
+                <div class="flex justify-between items-start gap-2 mb-[14px]">
                     <div>
-                        <div class="summary-item-name">{{ item.product.designation }}</div>
-                        <div class="summary-item-qty">Qté : {{ item.quantity }}</div>
+                        <div class="text-[.88rem] text-[#1a2e23] font-medium">{{ item.product.designation }}</div>
+                        <div class="text-[.75rem] text-[#4a7060] mt-[2px]">Qté : {{ item.quantity }}</div>
                     </div>
-                    <div class="summary-item-price">{{ item.subtotal|number_format(2, ',', ' ') }} €</div>
+                    <div class="text-[.88rem] font-bold text-[#1a2e23] whitespace-nowrap">{{ item.subtotal|number_format(2, ',', ' ') }} €</div>
                 </div>
                 {% endfor %}
 
-                <hr class="summary-divider">
+                <hr class="border-0 border-t border-[rgba(34,139,87,0.18)] my-[14px]">
 
-                <div class="summary-row">
+                <div class="flex justify-between text-[.86rem] text-[#4a7060] mb-[7px]">
                     <span>Sous-total</span>
                     <span>{{ total|number_format(2, ',', ' ') }} €</span>
                 </div>
-                <div class="summary-row">
+                <div class="flex justify-between text-[.86rem] text-[#4a7060] mb-[7px]">
                     <span>Livraison</span>
-                    <span style="color:var(--green);">Gratuite</span>
+                    <span class="text-[#176e3b] font-semibold">Gratuite</span>
                 </div>
-                <div class="summary-row">
+                <div class="flex justify-between text-[.86rem] text-[#4a7060] mb-[7px]">
                     <span>TVA (20%)</span>
                     <span>incluse</span>
                 </div>
 
-                <div class="summary-total">
-                    <span class="summary-total-label">Total</span>
-                    <span class="summary-total-amount">{{ total|number_format(2, ',', ' ') }} €</span>
+                <div class="flex justify-between items-center mt-[14px] pt-[14px] border-t-2 border-[#c8ecd8]">
+                    <span class="font-bold text-[1rem] text-[#1a2e23]">Total</span>
+                    <span class="font-extrabold text-[1.4rem] text-[#176e3b]">{{ total|number_format(2, ',', ' ') }} €</span>
                 </div>
 
-                <div class="badge-secure">
+                <div class="flex items-center justify-center gap-[6px] bg-[#c8ecd8] border border-[rgba(23,110,59,0.2)] rounded-[20px] px-[14px] py-[7px] text-[.73rem] text-[#176e3b] font-semibold mt-4">
                     <i class="bi bi-shield-lock-fill"></i>
                     Paiement 100% sécurisé
                 </div>
@@ -238,7 +252,7 @@
         <!-- Back link -->
         <div class="text-center mt-3">
             <a href="{{ path('checkout_confirm') }}"
-               style="font-size:.8rem;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:5px;">
+               class="inline-flex items-center gap-[5px] text-[.8rem] text-[#4a7060] no-underline underline underline-offset-[3px] transition-colors duration-200 hover:text-[#176e3b]">
                 <i class="bi bi-arrow-left"></i> Modifier ma commande
             </a>
         </div>
@@ -250,10 +264,10 @@
 // ── Method switcher ──
 function switchMethod(method, btn) {
     document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.alt-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.alt-panel').forEach(p => p.classList.add('hidden'));
 
     document.querySelector('[data-method=' + method + ']').classList.add('active');
-    document.getElementById('method-' + method).classList.add('active');
+    document.getElementById('method-' + method).classList.remove('hidden');
 }
 
 // ── Wallet pay placeholder ──
@@ -266,7 +280,7 @@ function copyIBAN() {
     navigator.clipboard.writeText('FR7630006000011234567890189').then(() => {
         const icon = document.getElementById('copy-icon');
         icon.className = 'bi bi-clipboard-check';
-        icon.style.color = 'var(--green)';
+        icon.style.color = '#176e3b';
         setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 2000);
     });
 }

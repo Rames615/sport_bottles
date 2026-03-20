@@ -14,7 +14,7 @@ function showTemporaryMessage(message, type = 'success') {
     // Falls back to alert() if UI toast cannot be created
     try {
         const el = document.createElement('div');
-        el.className = `hero-toast alert alert-${type}`;
+        el.className = `hero-toast ${type === 'success' ? 'bg-green-50 border border-green-200 text-green-700' : type === 'danger' ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-blue-50 border border-blue-200 text-blue-700'} rounded-xl px-4 py-3 text-sm font-medium shadow-lg`;
         el.style.position = 'fixed';
         el.style.right = '1rem';
         el.style.top = '6rem';

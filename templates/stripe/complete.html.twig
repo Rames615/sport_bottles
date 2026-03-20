@@ -24,18 +24,6 @@
     .delay-2 { animation-delay: .25s; }
     .delay-3 { animation-delay: .35s; }
     .delay-4 { animation-delay: .45s; }
-
-    .btn-primary-green {
-        background: linear-gradient(135deg,#1a8a5a,#34d18a);
-        border: none;
-        color: #fff;
-        transition: opacity .2s, transform .2s;
-    }
-    .btn-primary-green:hover {
-        opacity: .92;
-        transform: translateY(-2px);
-        color: #fff;
-    }
     .dot {
         position: absolute;
         border-radius: 50%;
@@ -44,23 +32,21 @@
     }
 </style>
 
-<div class="container d-flex justify-content-center align-items-center"
-     style="min-height:100vh;padding-top:80px;padding-bottom:60px;">
-    <div class="col-12 col-md-8 col-lg-5">
+<div class="min-h-screen flex justify-center items-center pt-20 pb-[60px] px-4">
+    <div class="w-full max-w-md">
 
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden position-relative">
+        <div class="bg-white shadow-sm rounded-2xl overflow-hidden relative">
 
             <!-- Accent bar -->
-            <div style="height:5px;background:linear-gradient(90deg,#1a8a5a,#34d18a);"></div>
+            <div class="h-[5px] bg-gradient-to-r from-[#1a8a5a] to-[#34d18a]"></div>
 
             <!-- Confetti container -->
-            <div id="confetti" class="position-absolute top-0 start-0 w-100 h-100"
-                 style="pointer-events:none;overflow:hidden;"></div>
+            <div id="confetti" class="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden"></div>
 
-            <div class="card-body p-4 p-md-5 text-center">
+            <div class="p-6 md:p-10 text-center">
 
                 <!-- Animated check -->
-                <div class="pop-in rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow-sm"
+                <div class="pop-in rounded-full inline-flex items-center justify-center mb-3 shadow-sm"
                      style="width:88px;height:88px;background:linear-gradient(135deg,#1a8a5a,#34d18a);">
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
                         <path d="M10 20L17 27L30 13" stroke="white" stroke-width="3.5"
@@ -68,31 +54,30 @@
                     </svg>
                 </div>
 
-                <h1 class="fw-bold h3 mb-1 fade-up delay-1" style="color:#0f1923;">Commande confirmée !</h1>
-                <p class="text-muted mb-4 fade-up delay-2">
+                <h1 class="font-bold text-2xl mb-1 fade-up delay-1 text-[#0f1923]">Commande confirmée !</h1>
+                <p class="text-gray-500 mb-4 fade-up delay-2">
                     Votre paiement a été accepté. Vous recevrez<br>une confirmation par e-mail.
                 </p>
 
                 <!-- Order summary box -->
-                <div class="rounded-3 text-start mb-4 fade-up delay-3"
-                     style="background:#f7f9fb;border:1px solid #e8edf2;padding:20px 24px;">
-                    <div class="d-flex justify-content-between py-2 border-bottom">
-                        <span class="text-muted small">Référence</span>
-                        <span class="fw-semibold small">Commande #{{ order.id }}</span>
+                <div class="rounded-xl text-left mb-4 fade-up delay-3 bg-[#f7f9fb] border border-[#e8edf2] px-6 py-5">
+                    <div class="flex justify-between py-2 border-b border-[#e8edf2]">
+                        <span class="text-gray-500 text-sm">Référence</span>
+                        <span class="font-semibold text-sm">Commande #{{ order.id }}</span>
                     </div>
-                    <div class="d-flex justify-content-between py-2 border-bottom">
-                        <span class="text-muted small">Date</span>
-                        <span class="fw-semibold small">{{ order.createdAt|date('d/m/Y à H:i') }}</span>
+                    <div class="flex justify-between py-2 border-b border-[#e8edf2]">
+                        <span class="text-gray-500 text-sm">Date</span>
+                        <span class="font-semibold text-sm">{{ order.createdAt|date('d/m/Y à H:i') }}</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                        <span class="text-muted small">Statut</span>
-                        <span class="badge rounded-pill bg-success" style="font-size:.8rem;">
-                            <i class="bi bi-check-circle-fill me-1"></i>Payé
+                    <div class="flex justify-between items-center py-2 border-b border-[#e8edf2]">
+                        <span class="text-gray-500 text-sm">Statut</span>
+                        <span class="inline-flex items-center gap-1 bg-green-100 text-green-700 rounded-full px-3 py-0.5 text-[.8rem] font-semibold">
+                            <i class="bi bi-check-circle-fill"></i>Payé
                         </span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center pt-3 mt-1">
-                        <span class="fw-bold" style="color:#0f1923;">Total payé</span>
-                        <span class="fw-bold fs-5" style="color:#1a8a5a;">
+                    <div class="flex justify-between items-center pt-3 mt-1">
+                        <span class="font-bold text-[#0f1923]">Total payé</span>
+                        <span class="font-bold text-lg text-[#1a8a5a]">
                             {{ (order.totalAmount / 100)|number_format(2, ',', ' ') }} €
                         </span>
                     </div>
@@ -101,13 +86,14 @@
                 <!-- Actions -->
                 <div class="fade-up delay-4">
                     <a href="{{ path('app_home') }}"
-                       class="btn btn-primary-green w-100 rounded-3 py-3 fw-semibold mb-2">
-                        <i class="bi bi-house-fill me-2"></i>Retour à l'accueil
+                       class="flex items-center justify-center gap-2 w-full rounded-xl py-3 font-semibold mb-2 text-white no-underline transition-all duration-200 hover:opacity-[.92] hover:-translate-y-0.5"
+                       style="background:linear-gradient(135deg,#1a8a5a,#34d18a);">
+                        <i class="bi bi-house-fill"></i>Retour à l'accueil
                     </a>
                     {#
                     <a href="{{ path('app_orders') }}"
-                       class="btn btn-outline-success w-100 rounded-3 py-2 fw-semibold">
-                        <i class="bi bi-bag-check me-2"></i>Voir mes commandes
+                       class="flex items-center justify-center gap-2 w-full rounded-xl py-2 font-semibold border-2 border-green-600 text-green-600 no-underline transition-colors hover:bg-green-600 hover:text-white">
+                        <i class="bi bi-bag-check"></i>Voir mes commandes
                     </a>
                     #}
                 </div>
@@ -115,8 +101,8 @@
             </div>
         </div>
 
-        <div class="text-center mt-3 text-muted small">
-            <i class="bi bi-shield-lock-fill text-success me-1"></i>
+        <div class="text-center mt-3 text-gray-500 text-sm">
+            <i class="bi bi-shield-lock-fill text-green-600 mr-1"></i>
             Paiement sécurisé par <strong>Stripe</strong>
         </div>
     </div>

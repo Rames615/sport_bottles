@@ -22,6 +22,9 @@ Ce document propose un parcours de lecture clair pour un jury, un formateur ou u
 - `docs/ARCHITECTURE.md`
   Synthèse de l'architecture applicative, des couches techniques et des principaux flux.
 
+- `docs/conception_bdd.md`
+  Description détaillée de la base de données, des relations Doctrine et des emplacements conseillés pour les captures du diagramme.
+
 ### 3. Comprendre les fonctionnalités e-commerce
 
 - `docs/PRODUCT_ARCHITECTURE.md`
@@ -68,6 +71,7 @@ Ce document propose un parcours de lecture clair pour un jury, un formateur ou u
 - `docs/rapport_rncp_sports_bottles.md`
 - `docs/GETTING_STARTED.md`
 - `docs/ARCHITECTURE.md`
+- `docs/conception_bdd.md`
 
 ### Paiement et checkout
 

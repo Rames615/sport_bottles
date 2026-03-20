@@ -46,7 +46,7 @@ function _getCartCsrf() {
 function _showCartToast(message, type) {
     try {
         const el = document.createElement('div');
-        el.className = `alert alert-${type} cart-toast`;
+        el.className = `cart-toast ${type === 'success' ? 'bg-green-50 border border-green-200 text-green-700' : type === 'danger' ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-blue-50 border border-blue-200 text-blue-700'} rounded-xl px-4 py-3 text-sm font-medium shadow-lg`;
         el.setAttribute('role', 'alert');
         Object.assign(el.style, {
             position:  'fixed',

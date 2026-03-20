@@ -10,6 +10,7 @@ Ce document sert d'index documentaire. Il permet d'éviter les doublons en ident
 - `docs/rapport_rncp_sports_bottles.md` : version académique et structurée du projet ;
 - `docs/SOMMAIRE_JURY.md` : parcours de lecture orienté jury et présentation ;
 - `docs/ARCHITECTURE.md` : synthèse de l'architecture technique ;
+- `docs/conception_bdd.md` : conception détaillée de la base de données relationnelle ;
 - `docs/GETTING_STARTED.md` : installation et démarrage local.
 
 ## Bloc paiement et Stripe
