@@ -13,8 +13,8 @@
             <span>Sports</span><span style="color:#5db8ff;"> Bottles</span>
         </a>
 
-        {# ── Mobile toggler ──────────────────────────────────────── #}
-        <button class="ml-auto lg:hidden flex items-center justify-center w-9 h-9 rounded-lg border border-white/20 text-white bg-transparent hover:bg-white/10 transition-colors"
+        {# ── Mobile toggler (visible sm+md only, hidden on lg+) ── #}
+        <button class="ml-auto flex items-center justify-center w-9 h-9 rounded-lg border border-white/20 text-white bg-transparent hover:bg-white/10 transition-colors lg:!hidden"
                 type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false"
@@ -81,11 +81,6 @@
                     </a>
                 </li>
                 {% endif %}
-
-                {# 4. Separator #}
-                <li class="hidden lg:flex items-center">
-                    <span class="px-0 text-white/25 cursor-default select-none">|</span>
-                </li>
 
                 {# 5. User dropdown (logged-in) / Login dropdown (guest) #}
                 {% if app.user %}

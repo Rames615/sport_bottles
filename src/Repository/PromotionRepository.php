@@ -22,13 +22,16 @@ class PromotionRepository extends ServiceEntityRepository
 
     public function findActivePromotions(): array
     {
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
 
         return $this->createQueryBuilder('p')
+            ->addSelect('product')
+            ->leftJoin('p.product', 'product')
             ->where('p.isActive = true')
             ->andWhere('p.startAt <= :now')
             ->andWhere('p.endAt >= :now')
             ->setParameter('now', $now)
+            ->orderBy('p.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
