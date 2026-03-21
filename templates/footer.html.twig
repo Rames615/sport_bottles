@@ -61,28 +61,10 @@
                             Politique de retour
                         </a>
                     </li>
-                    <li>
-                        <a href="mailto:contact@sportsbottles.com"
-                           class="inline-flex items-center gap-[.35rem] text-white/65 text-[.85rem] no-underline transition-colors duration-200 hover:text-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
-                                 class="opacity-60 shrink-0" viewBox="0 0 16 16" aria-hidden="true">
-                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/>
-                            </svg>
-                            contact@sportsbottles.com
-                        </a>
-                    </li>
+                    <li><a href="{{ path('app_conditions_utilisation') }}" class="text-[.75rem] text-white/65 no-underline transition-colors duration-200 hover:text-primary">CGU</a></li>
+        
                 </ul>
             </div>
-
-            {# Légal — commented out in original #}
-            {# <div>
-                <h4 class="text-[.7rem] font-bold tracking-[.1em] uppercase text-white/35 m-0 mb-[.85rem]">Légal</h4>
-                <ul class="list-none p-0 m-0 flex flex-col gap-2">
-                    <li><a href="{{ path('app_politique_confidentialite') }}" class="inline-flex items-center gap-[.35rem] text-white/65 text-[.85rem] no-underline transition-colors duration-200 hover:text-primary">Confidentialité</a></li>
-                    <li><a href="{{ path('app_conditions_utilisation') }}" class="inline-flex items-center gap-[.35rem] text-white/65 text-[.85rem] no-underline transition-colors duration-200 hover:text-primary">CGU</a></li>
-                    <li><a href="{{ path('app_mentions_legales') }}" class="inline-flex items-center gap-[.35rem] text-white/65 text-[.85rem] no-underline transition-colors duration-200 hover:text-primary">Mentions légales</a></li>
-                </ul>
-            </div> #}
 
             {# Aide #}
             <div>
@@ -99,15 +81,19 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#"
+                        <a href="tel:+33123456789"
                            class="inline-flex items-center gap-[.35rem] text-white/65 text-[.85rem] no-underline transition-colors duration-200 hover:text-primary">
-                            FAQ
+                            Tel: +33 1 23 45 67 89
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('app_politique_cookies') }}"
+                        <a href="mailto:contact@sportsbottles.com"
                            class="inline-flex items-center gap-[.35rem] text-white/65 text-[.85rem] no-underline transition-colors duration-200 hover:text-primary">
-                            Cookies
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                                 class="opacity-60 shrink-0" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/>
+                            </svg>
+                            contact@sportsbottles.com
                         </a>
                     </li>
                 </ul>
@@ -122,7 +108,6 @@
             </p>
             <ul class="flex flex-wrap gap-5 list-none p-0 m-0">
                 <li><a href="{{ path('app_politique_confidentialite') }}" class="text-[.75rem] text-white/30 no-underline transition-colors duration-200 hover:text-white/65">Confidentialité</a></li>
-                <li><a href="{{ path('app_conditions_utilisation') }}" class="text-[.75rem] text-white/30 no-underline transition-colors duration-200 hover:text-white/65">CGU</a></li>
                 <li><a href="{{ path('app_mentions_legales') }}" class="text-[.75rem] text-white/30 no-underline transition-colors duration-200 hover:text-white/65">Mentions légales</a></li>
                 <li><a href="{{ path('app_politique_cookies') }}" class="text-[.75rem] text-white/30 no-underline transition-colors duration-200 hover:text-white/65">Cookies</a></li>
             </ul>

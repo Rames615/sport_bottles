@@ -139,12 +139,12 @@
 									<div class="flex gap-2.5 mt-auto items-stretch">
 										<form method="post" action="{{ path('app_cartadd', {id: product.id}) }}" class="flex-none add-to-cart-form-promo">
 											<input type="hidden" name="_token" value="{{ csrf_token('cart_add') }}">
-											<button type="submit" class="flex items-center justify-center gap-1.5 px-3.5 py-2 border-0 rounded-[10px] font-semibold text-[.75rem] uppercase tracking-[.4px] cursor-pointer transition-all duration-300 text-white shadow-green-sm hover:-translate-y-0.5 hover:shadow-green-md whitespace-nowrap font-display" style="background: linear-gradient(135deg, #1F7A63, #1a5c4a);" data-product-id="{{ product.id }}" title="Ajouter {{ product.designation }} au panier">
+											<button type="submit" class="flex items-center justify-center gap-1.5 px-3.5 py-2 border-0 rounded-[10px] font-semibold text-[.75rem] uppercase tracking-[.4px] cursor-pointer transition-all duration-300 text-white shadow-green-sm hover:-translate-y-0.5 hover:shadow-green-md hover:brightness-110 whitespace-nowrap font-display" style="background: linear-gradient(135deg, #1F7A63, #1a5c4a);" data-product-id="{{ product.id }}" title="Ajouter {{ product.designation }} au panier">
 												<span>🛒</span>
 												Ajouter
 											</button>
 										</form>
-										<a href="{{ path('app_product_show', {id: product.id}) }}" class="flex flex-1 items-center justify-center gap-1.5 px-3.5 py-2 rounded-[10px] font-semibold text-[.75rem] uppercase tracking-[.4px] transition-all duration-300 text-white shadow-green-sm no-underline hover:-translate-y-0.5 hover:shadow-green-md whitespace-nowrap font-display" style="background: linear-gradient(135deg, #1F7A63, #1a5c4a);" title="Voir la description complète">
+										<a href="{{ path('app_product_show', {id: product.id}) }}" class="flex flex-1 items-center justify-center gap-1.5 px-3.5 py-2 rounded-[10px] font-semibold text-[.75rem] uppercase tracking-[.4px] transition-all duration-300 text-white shadow-green-sm no-underline hover:-translate-y-0.5 hover:shadow-green-md hover:brightness-110 whitespace-nowrap font-display" style="background: linear-gradient(135deg, #1F7A63, #1a5c4a);" title="Voir la description complète">
 											<span>👁️</span>
 										Voir le produit
 										</a>
