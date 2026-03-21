@@ -68,6 +68,8 @@ module.exports = {
 
     // product-card.js: classList.add/remove('hidden') on .product-desc-short
     'hidden',
+    // nav.html.twig: hamburger toggler must be hidden on lg+ screens
+    'lg:hidden',
     // product-card.js: max-h-0 / overflow-hidden / transition-all on .product-desc-full
     'max-h-0',
 

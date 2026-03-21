@@ -77,7 +77,7 @@
         function reinitBootstrap() {
             if (typeof bootstrap === 'undefined') return;
             document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(el => bootstrap.Dropdown.getOrCreateInstance(el));
-            document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(el => bootstrap.Collapse.getOrCreateInstance(el));
+            document.querySelectorAll('.collapse').forEach(el => bootstrap.Collapse.getOrCreateInstance(el, { toggle: false }));
         }
         document.addEventListener('DOMContentLoaded', reinitBootstrap);
         document.addEventListener('turbo:load', reinitBootstrap);

@@ -12,6 +12,7 @@
 .navbar .collapse.show { display: block; }
 @media (min-width: 1024px) {
   .navbar .collapse { display: flex !important; align-items: center; }
+  .navbar button[data-bs-toggle="collapse"] { display: none !important; }
 }
 .navbar .collapsing {
   display: block;
