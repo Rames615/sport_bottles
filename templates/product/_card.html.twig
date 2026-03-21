@@ -1,9 +1,11 @@
-<div class="product-card group flex flex-col h-full bg-white border border-[#dee2e6] rounded-md shadow-[0_2px_4px_rgba(0,0,0,.075)] transition-all duration-300 overflow-hidden hover:shadow-[0_8px_16px_rgba(0,0,0,.15)] hover:-translate-y-1"
+{% set activePromo = product.activePromotion %}
+<div class="product-card group flex flex-col h-full bg-white border {{ activePromo ? 'border-primary/30' : 'border-[#dee2e6]' }} rounded-md shadow-[0_2px_4px_rgba(0,0,0,.075)] transition-all duration-300 overflow-hidden hover:shadow-[0_8px_16px_rgba(0,0,0,.15)] hover:-translate-y-1"
      data-product-id="{{ product.id }}"
      data-category="{{ product.category ? product.category.name : 'Uncategorized' }}"
      data-price="{{ product.price }}"
      data-capacity="{{ product.capacity }}"
-     data-temperature="{{ product.temperature }}">
+     data-temperature="{{ product.temperature }}"
+     data-promotion="{{ activePromo ? '1' : '0' }}">
 
     {% set imageFileName = product.imgPath ? (product.imgPath|split('/')|last) : null %}
     {% set productImagePath = imageFileName ? asset('products_images/' ~ imageFileName) : asset('images/placeholder.png') %}
@@ -12,6 +14,15 @@
        IMAGE SECTION
        ============================================ #}
     <div class="relative w-full h-[200px] overflow-hidden bg-[#f8f9fa] shrink-0">
+        {% if activePromo %}
+            <div class="absolute top-2 left-2 z-10 flex items-center gap-1">
+                {% if activePromo.discountType == 'percentage' %}
+                    <span class="px-2 py-1 rounded-md font-bold text-[.7rem] uppercase tracking-[.5px] text-white shadow-sm" style="background: linear-gradient(135deg, #dc2626, #bb1c27);">-{{ activePromo.discountValue }}%</span>
+                {% else %}
+                    <span class="px-2 py-1 rounded-md font-bold text-[.7rem] uppercase tracking-[.5px] text-white shadow-sm" style="background: linear-gradient(135deg, #f59e0b, #d97706);">-{{ activePromo.discountValue }}€</span>
+                {% endif %}
+            </div>
+        {% endif %}
         {% if product.imgPath %}
             <img src="{{ productImagePath }}"
                  alt="{{ product.designation }}"
@@ -31,6 +42,9 @@
 
         {# Product Name #}
         <h3 class="product-name text-[1.1rem] font-semibold text-[#212529] mb-3 leading-[1.3] line-clamp-2">{{ product.designation }}</h3>
+
+        {# Product Description (shared component) #}
+        {% include 'components/_product_description.html.twig' with { product: product, descClass: 'text-[.8rem] text-[#555]' } only %}
 
         {# Product Specs Summary #}
         <div class="flex flex-col gap-2 mb-4 py-3 border-t border-b border-[#dee2e6] text-sm">
@@ -55,16 +69,23 @@
         </div>
 
         {# Product Price #}
-        <p class="text-2xl font-bold text-[#28a745] mt-3 mb-3">
-            {{ product.price|number_format(2, ',', ' ') }} €
-        </p>
+        <div class="mt-3 mb-3">
+            {% if activePromo %}
+                <div class="flex items-baseline gap-2">
+                    <span class="text-2xl font-bold text-[#28a745]">{{ product.finalPrice|number_format(2, ',', ' ') }} €</span>
+                    <span class="text-sm text-muted line-through">{{ product.price|number_format(2, ',', ' ') }} €</span>
+                </div>
+            {% else %}
+                <p class="text-2xl font-bold text-[#28a745] m-0">{{ product.price|number_format(2, ',', ' ') }} €</p>
+            {% endif %}
+        </div>
 
         {# Actions #}
         <div class="flex gap-3 mt-auto">
             <a href="{{ path('app_product_show', {id: product.id}) }}"
                class="flex flex-1 items-center justify-center gap-2 px-4 py-2 bg-[#17a2b8] text-white text-sm font-semibold rounded no-underline transition-colors duration-200 hover:bg-[#138496]"
                title="Afficher plus de détails sur {{ product.designation }}">
-                <i class="fas fa-eye"></i> Voir plus
+                <i class="fas fa-eye"></i> Voir le produit
             </a>
         </div>
     </div>

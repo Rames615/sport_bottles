@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\PromotionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,10 +15,12 @@ final class ProductController extends AbstractController
     #[Route('/product', name: 'app_product')]
     public function index(
         ProductRepository $productRepository,
-        CategoryRepository $categoryRepository
+        CategoryRepository $categoryRepository,
+        PromotionRepository $promotionRepository,
     ): Response {
         $categories = $categoryRepository->findAll();
         $products = $productRepository->findAll();
+        $activePromotions = $promotionRepository->findActivePromotions();
 
         // Initialize all categories as empty
         $productsByCategory = [];
@@ -42,6 +45,7 @@ final class ProductController extends AbstractController
             'categories' => $categories,
             'productsByCategory' => $productsByCategory,
             'allProducts' => $products,
+            'activePromotions' => $activePromotions,
         ]);
     }
 

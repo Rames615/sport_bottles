@@ -22,6 +22,9 @@ class Product
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 160, nullable: true)]
+    private ?string $shortDescription = null;
+
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
@@ -83,6 +86,30 @@ class Product
         $this->description = $description;
 
         return $this;
+    }
+
+    public function getShortDescription(): ?string
+    {
+        return $this->shortDescription;
+    }
+
+    public function setShortDescription(?string $shortDescription): static
+    {
+        $this->shortDescription = $shortDescription;
+
+        return $this;
+    }
+
+    /**
+     * Returns the short description if set, otherwise truncates the full description.
+     */
+    public function getCardDescription(): string
+    {
+        if ($this->shortDescription) {
+            return $this->shortDescription;
+        }
+
+        return $this->description ?? '';
     }
 
     public function getPrice(): ?string

@@ -65,6 +65,17 @@ module.exports = {
     // Mobile filter sidebar state class. Defined in @layer components (app.css).
     // Must remain on #filtersSidebar in product templates after Phase 3.
     'open',
+
+    // product-card.js: classList.add/remove('hidden') on .product-desc-short
+    'hidden',
+    // product-card.js: max-h-0 / overflow-hidden / transition-all on .product-desc-full
+    'max-h-0',
+
+    // product-filters.js: promo toggle button active state classes
+    'border-primary',
+    'bg-primary/10',
+    'text-primary',
+    'border-[#dee2e6]',
   ],
 
   theme: {

@@ -34,16 +34,17 @@ class ProductCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->setLabel('ID')->onlyOnIndex(),
-            TextField::new('designation')->setLabel('Designation'),
-            TextareaField::new('description')->setLabel('Description')->hideOnIndex(),
+            TextField::new('designation')->setLabel('Désignation'),
+            TextField::new('shortDescription')->setLabel('Description courte')->setHelp('Résumé affiché sur les cartes produit (max 160 car.). Si vide, la description longue sera tronquée.')->setRequired(false),
+            TextareaField::new('description')->setLabel('Description complète')->hideOnIndex(),
             MoneyField::new('price')
                 ->setLabel('Prix')
                 ->setCurrency('EUR')
                 ->setStoredAsCents(false),
             NumberField::new('stock')->setLabel('Stock'),
-            AssociationField::new('category')->setLabel('Categorie'),
-            TextField::new('capacity')->setLabel('Capacite'),
-            TextField::new('temperature')->setLabel('Temperature'),
+            AssociationField::new('category')->setLabel('Catégorie'),
+            TextField::new('capacity')->setLabel('Capacité'),
+            TextField::new('temperature')->setLabel('Température'),
             ImageField::new('imgPath')
                 ->setLabel('Image')
                 ->setBasePath('products_images')

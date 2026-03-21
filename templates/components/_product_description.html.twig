@@ -1,0 +1,21 @@
+{# ─────────────────────────────────────────────────────────
+   Shared product description block — truncated with animated
+   "Voir plus / Voir moins" expand toggle.
+
+   Required variable:
+     product  — App\Entity\Product
+
+   Optional variable:
+     descClass — extra Tailwind text classes (default: text-[.8rem] text-[#555])
+   ───────────────────────────────────────────────────────── #}
+{% set descClass = descClass|default('text-[.8rem] text-[#555]') %}
+{% set cardDesc = product.cardDescription %}
+
+{% if cardDesc %}
+    <div class="product-desc-wrapper mb-3">
+        {# Short description (always visible) #}
+        <p class="product-desc-short {{ descClass }} leading-relaxed m-0">
+            {{ product.shortDescription ?? (cardDesc|length > 100 ? cardDesc|slice(0, 100) ~ '…' : cardDesc) }}
+        </p>
+    </div>
+{% endif %}

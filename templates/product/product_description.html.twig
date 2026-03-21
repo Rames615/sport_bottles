@@ -13,20 +13,8 @@
     ? asset('products_images/' ~ imageFileName)
     : asset('images/placeholder.png') %}
 
-{# ── Active promotion (if any) ──────────────────────────────── #}
-{% set activePromotion = null %}
-{% for promo in product.promotions %}
-    {% if promo.isActive is defined and promo.isActive %}
-        {% set activePromotion = promo %}
-    {% endif %}
-{% endfor %}
-
-{# ── Choose display image: promotion image takes priority ─────── #}
+{# ── Always display the product's own image on its detail page ── #}
 {% set displayImagePath = productImagePath %}
-{% if activePromotion and activePromotion.imgPath %}
-    {% set promoImageFile = activePromotion.imgPath|split('/')|last %}
-    {% set displayImagePath = asset('products_images/promotion/' ~ promoImageFile) %}
-{% endif %}
 
 {% set finalPrice = product.finalPrice %}
 {% set isDiscounted = (finalPrice != product.price) %}
