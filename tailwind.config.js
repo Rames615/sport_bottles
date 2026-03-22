@@ -203,6 +203,11 @@ module.exports = {
           '0%, 100%': { transform: 'scale(1)' },
           '50%':       { transform: 'scale(1.1)' },
         },
+        // Hero feature badges — staggered fade + slide up
+        fadeSlideUp: {
+          from: { opacity: '0', transform: 'translateY(20px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
+        },
       },
 
       animation: {
