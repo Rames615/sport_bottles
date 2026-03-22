@@ -10,7 +10,7 @@
            style="font-family:'Poppins',sans-serif;">
             <img src="{{ asset('logo_gold.png') }}" alt="Sports Bottles Logo"
                  class="h-[50px] w-auto transition-transform duration-300 hover:scale-110">
-            <span>Sports</span><span style="color:#5db8ff;"> Bottles</span>
+                <span>Sports<span class="text-amber-500">Bottles</span></span>
         </a>
 
         {# ── Mobile toggler (visible sm+md only, hidden on lg+) ── #}
@@ -71,7 +71,7 @@
 
                             {# Badge — always in DOM; JS adds/removes cart-badge-visible #}
                             <span id="cart-count-badge"
-                                  class="cart-count-badge{{ cartCount > 0 ? ' cart-badge-visible' : '' }}"
+                                  class="cart-count-badge text-amber-500{{ cartCount > 0 ? ' cart-badge-visible' : '' }}"
                                   aria-live="polite"
                                   aria-label="{{ cartCount }} article{{ cartCount != 1 ? 's' : '' }} dans le panier">
                                 {{ cartCount > 0 ? cartCount : '' }}
