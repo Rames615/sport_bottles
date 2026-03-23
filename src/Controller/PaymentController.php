@@ -4,10 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Entity\User;
-use App\Service\MailerService;
-use Stripe\Stripe;
-use Stripe\Checkout\Session;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CartService;
+use App\Service\OrderService;
+use App\Service\StripeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,8 +16,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class PaymentController extends AbstractController
 {
     public function __construct(
-        private \App\Service\CartService $cartService,
-        private MailerService $mailerService,
+        private CartService $cartService,
+        private StripeService $stripeService,
+        private OrderService $orderService,
     ) {}
 
     /**
@@ -26,7 +26,7 @@ final class PaymentController extends AbstractController
      * Syncs order status once, then lets JS polling take over.
      */
     #[Route('/success', name: 'success', methods: ['GET'])]
-    public function success(Request $request, EntityManagerInterface $em): Response
+    public function success(Request $request): Response
     {
         $sessionId = $request->query->get('session_id');
 
@@ -34,48 +34,27 @@ final class PaymentController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $order = $em->getRepository(Order::class)->findOneBy(['stripeSessionId' => $sessionId]);
+        $order = $this->orderService->findByStripeSessionId($sessionId);
 
         if (!$order) {
             throw $this->createNotFoundException('Commande introuvable.');
         }
 
         // One-time sync with Stripe on page load
-        $stripeSecret = $_ENV['STRIPE_SECRET_KEY'] ?? null;
-        if ($stripeSecret) {
-            Stripe::setApiKey((string) $stripeSecret);
-            try {
-                $stripeSession = Session::retrieve($sessionId);
-                if ($stripeSession->payment_status === 'paid' && $order->getStatus() !== 'paid') {
-                    // Deduct stock from products based on cart items
-                    $user = $this->getUser();
-                    if ($user instanceof User) {
-                        $this->cartService->deductStockForUser($user);
-                    }
+        try {
+            $wasPaid = $this->stripeService->syncPaymentStatus($sessionId, $order);
 
-                    $order->setStatus('paid');
-                    $em->flush();
-
-                    // Send order confirmation email
-                    try {
-                        $items = [];
-                        $lineItems = Session::allLineItems($sessionId, ['limit' => 100]);
-                        foreach ($lineItems->data as $li) {
-                            $items[] = [
-                                'name'      => $li->description ?? '',
-                                'quantity'  => $li->quantity ?? 0,
-                                'unitPrice' => ($li->price->unit_amount ?? 0) / 100,
-                                'subtotal'  => ($li->amount_total ?? 0) / 100,
-                            ];
-                        }
-                        $this->mailerService->sendOrderConfirmation($order, $items);
-                    } catch (\Exception) {
-                        // Non-blocking: email failure shouldn't break the success page
-                    }
+            if ($wasPaid) {
+                $user = $this->getUser();
+                if ($user instanceof User) {
+                    $this->cartService->deductStockForUser($user);
                 }
-            } catch (\Exception) {
-                // Non-blocking — JS polling will handle it
+
+                $this->orderService->flush();
+                $this->stripeService->sendOrderConfirmationEmail($order, $sessionId);
             }
+        } catch (\Exception) {
+            // Non-blocking — JS polling will handle it
         }
 
         return $this->render('stripe/success.html.twig', [
@@ -88,9 +67,9 @@ final class PaymentController extends AbstractController
      * Polling endpoint — called by JS every 3s to check order status.
      */
     #[Route('/order-status/{sessionId}', name: 'order_status', methods: ['GET'])]
-    public function orderStatus(string $sessionId, EntityManagerInterface $em): Response
+    public function orderStatus(string $sessionId): Response
     {
-        $order = $em->getRepository(Order::class)->findOneBy(['stripeSessionId' => $sessionId]);
+        $order = $this->orderService->findByStripeSessionId($sessionId);
 
         if (!$order) {
             return $this->json(['ok' => false, 'message' => 'Commande introuvable.'], 404);

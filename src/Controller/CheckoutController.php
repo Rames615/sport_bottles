@@ -6,8 +6,9 @@ use App\Entity\Order;
 use App\Entity\ShippingAddress;
 use App\Entity\User;
 use App\Form\ShippingAddressType;
-use Stripe\Stripe;
-use Stripe\Checkout\Session;
+use App\Service\CartService;
+use App\Service\OrderService;
+use App\Service\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class CheckoutController extends AbstractController
 {
     public function __construct(
-        private \App\Service\CartService $cartService,
+        private CartService $cartService,
+        private OrderService $orderService,
+        private StripeService $stripeService,
     ) {}
 
     /**
@@ -98,17 +101,9 @@ final class CheckoutController extends AbstractController
 
     /**
      * STEP 2 (POST) — Confirm order without Stripe (direct "paid" status).
-     * Used when payment is handled outside Stripe (e.g. bank transfer confirmed manually).
-     *
-     * Flow:
-     *   1. Validates user & CSRF token
-     *   2. Validates cart
-     *   3. Retrieves & verifies shipping address from session
-     *   4. Creates Order with status "paid"
-     *   5. Clears cart and session, then redirects home
      */
     #[Route('/confirm', name: 'confirm_post', methods: ['POST'])]
-    public function confirmOrder(Request $request, EntityManagerInterface $em): RedirectResponse
+    public function confirmOrder(Request $request): RedirectResponse
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -131,26 +126,16 @@ final class CheckoutController extends AbstractController
             return $this->redirectToRoute('checkout_shipping');
         }
 
-        $shippingAddress = $em->getRepository(ShippingAddress::class)->find($shippingAddressId);
-        if (!$shippingAddress || $shippingAddress->getUser() !== $user) {
+        $shippingAddress = $this->orderService->getValidatedShippingAddress($shippingAddressId, $user);
+        if (!$shippingAddress) {
             $this->addFlash('error', 'Adresse de livraison invalide.');
             return $this->redirectToRoute('checkout_shipping');
         }
 
         $total = (int) round($result['total'] * 100);
 
-        $order = new Order();
-        $order->setUser($user);
-        $order->setTotalAmount($total);
-        $order->setStatus('paid');
-        $order->setCreatedAt(new \DateTimeImmutable());
-        $order->setShippingAddress((string) $shippingAddress);
-        $em->persist($order);
-        $em->flush();
-
-        // Deduct stock from products based on cart items
+        $this->orderService->createOrder($user, $total, 'paid', (string) $shippingAddress);
         $this->cartService->deductStockForUser($user);
-
         $this->cartService->clear($user);
         $request->getSession()->remove('shipping_address_id');
 
@@ -160,16 +145,9 @@ final class CheckoutController extends AbstractController
 
     /**
      * STEP 3 — Payment method selection page.
-     *
-     * Displays the payment-method.html.twig template which offers:
-     *   - Credit/debit card (redirects to Stripe via checkout_pay)
-     *   - Digital wallets (Apple Pay, Google Pay, PayPal — UI only, wired to Stripe)
-     *   - Bank transfer (wired to checkout_confirm_post)
-     *
-     * Requires a shipping address in session (set in step 1).
      */
     #[Route('/method', name: 'method', methods: ['GET'])]
-    public function method(Request $request, EntityManagerInterface $em): Response|RedirectResponse
+    public function method(Request $request): Response|RedirectResponse
     {
         $user = $this->getUser();
 
@@ -184,15 +162,13 @@ final class CheckoutController extends AbstractController
             return $this->redirectToRoute('app_cartindex');
         }
 
-        // Require a shipping address from the previous step
         $shippingAddressId = $request->getSession()->get('shipping_address_id');
         if (!$shippingAddressId) {
             return $this->redirectToRoute('checkout_shipping');
         }
 
-        // Verify address still belongs to this user
-        $shippingAddress = $em->getRepository(ShippingAddress::class)->find($shippingAddressId);
-        if (!$shippingAddress || $shippingAddress->getUser() !== $user) {
+        $shippingAddress = $this->orderService->getValidatedShippingAddress($shippingAddressId, $user);
+        if (!$shippingAddress) {
             $this->addFlash('error', 'Adresse de livraison introuvable. Veuillez la resaisir.');
             return $this->redirectToRoute('checkout_shipping');
         }
@@ -206,12 +182,9 @@ final class CheckoutController extends AbstractController
 
     /**
      * STEP 4 — Create Stripe Checkout session and redirect to Stripe.
-     *
-     * Called by the "Carte bancaire" button in payment-method.html.twig.
-     * Requires shipping address in session (set in step 1).
      */
     #[Route('/pay', name: 'pay', methods: ['POST'])]
-    public function pay(Request $request, EntityManagerInterface $em): RedirectResponse|Response
+    public function pay(Request $request): RedirectResponse|Response
     {
         $user = $this->getUser();
 
@@ -236,8 +209,8 @@ final class CheckoutController extends AbstractController
             return $this->redirectToRoute('checkout_shipping');
         }
 
-        $shippingAddress = $em->getRepository(ShippingAddress::class)->find($shippingAddressId);
-        if (!$shippingAddress || $shippingAddress->getUser() !== $user) {
+        $shippingAddress = $this->orderService->getValidatedShippingAddress($shippingAddressId, $user);
+        if (!$shippingAddress) {
             $this->addFlash('error', 'Adresse de livraison invalide.');
             return $this->redirectToRoute('checkout_shipping');
         }
@@ -245,45 +218,17 @@ final class CheckoutController extends AbstractController
         $cart  = $result['cart'];
         $total = (int) round($result['total'] * 100);
 
-        $order = new Order();
-        $order->setUser($user);
-        $order->setTotalAmount($total);
-        $order->setStatus('pending');
-        $order->setCreatedAt(new \DateTimeImmutable());
-        $order->setShippingAddress((string) $shippingAddress);
-        $em->persist($order);
-        $em->flush();
+        $order = $this->orderService->createOrder($user, $total, 'pending', (string) $shippingAddress);
 
-        $stripeSecret = $_ENV['STRIPE_SECRET_KEY'] ?? null;
-        if (!$stripeSecret) {
-            $this->addFlash('error', 'Configuration Stripe manquante. Contactez l\'administrateur.');
+        try {
+            $successUrl = $this->generateUrl('payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL) . '?session_id={CHECKOUT_SESSION_ID}';
+            $cancelUrl  = $this->generateUrl('payment_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            $session = $this->stripeService->createCheckoutSession($cart, $successUrl, $cancelUrl);
+        } catch (\RuntimeException $e) {
+            $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('app_cartindex');
         }
-
-        Stripe::setApiKey((string) $stripeSecret);
-
-        $lineItems = [];
-        foreach ($cart->getItems() as $item) {
-            $product = $item->getProduct();
-            if ($product) {
-                $lineItems[] = [
-                    'price_data' => [
-                        'currency'     => 'eur',
-                        'product_data' => ['name' => $product->getDesignation() ?? ''],
-                        'unit_amount'  => (int) round((float) $item->getUnitPrice() * 100),
-                    ],
-                    'quantity' => $item->getQuantity() ?? 1,
-                ];
-            }
-        }
-
-        $session = Session::create([
-            'payment_method_types' => ['card'],
-            'line_items'           => $lineItems,
-            'mode'                 => 'payment',
-            'success_url'          => $this->generateUrl('payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url'           => $this->generateUrl('payment_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-        ]);
 
         $stripeUrl = $session->url;
         if (!$stripeUrl) {
@@ -291,9 +236,7 @@ final class CheckoutController extends AbstractController
             return $this->redirectToRoute('app_cartindex');
         }
 
-        $order->setStripeSessionId($session->id);
-        $em->flush();
-
+        $this->orderService->attachStripeSession($order, $session->id);
         $request->getSession()->remove('shipping_address_id');
 
         return new RedirectResponse($stripeUrl);
