@@ -114,7 +114,7 @@ module.exports = {
         'stripe-light':  '#EEECFF',   // --stripe-light (badge background)
 
         // Hero CTA gradient endpoints
-        'hero-from':     '#00FF99',
+        'hero-from':     'C',
         'hero-to':       '#00D4FF',
 
         // Semantic overrides (product.css defines its own --success-color)

@@ -178,6 +178,9 @@ final class StripeController extends AbstractController
         return new Response('Webhook traité', 200);
     }
 
+    /**
+     * @param \Stripe\Event|array<string, mixed> $event
+     */
     private function handleCheckoutCompleted(\Stripe\Event|array $event, \Psr\Log\LoggerInterface $logger): void
     {
         $sessionId = $this->stripeService->getSessionIdFromEvent($event);
@@ -200,6 +203,9 @@ final class StripeController extends AbstractController
         }
     }
 
+    /**
+     * @param \Stripe\Event|array<string, mixed> $event
+     */
     private function handlePaymentFailed(\Stripe\Event|array $event, \Psr\Log\LoggerInterface $logger): void
     {
         $data = $this->stripeService->getFailedPaymentData($event);

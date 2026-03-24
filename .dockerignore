@@ -1,0 +1,29 @@
+# Dependencies & cache (re-installed inside container)
+vendor/
+node_modules/
+var/
+
+# Docker files
+docker-compose.yml
+compose.yaml
+compose.override.yaml
+Dockerfile
+.dockerignore
+
+# Git
+.git/
+.gitignore
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+
+# Docs
+docs/
+
+# Tests
+tests/
+phpunit.dist.xml
+phpstan.neon

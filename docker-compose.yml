@@ -1,0 +1,48 @@
+services:
+  app:
+    build: .
+    container_name: sports_bottles_app
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html:delegated
+      - app_var:/var/www/html/var
+      - app_vendor:/var/www/html/vendor
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: 1
+      DATABASE_URL: "mysql://root:root@db:3306/sports_bottles?serverVersion=8.0.30&charset=utf8mb4"
+    networks:
+      - sports
+
+  db:
+    image: mysql:8.0.30
+    container_name: sports_bottles_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sports_bottles
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+    networks:
+      - sports
+
+networks:
+  sports:
+
+volumes:
+  db_data:
+  app_var:
+  app_vendor:

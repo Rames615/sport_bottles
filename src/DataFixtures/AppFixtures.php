@@ -2,11 +2,18 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(
+        private UserPasswordHasherInterface $passwordHasher,
+    ) {
+    }
+
     public function load(ObjectManager $manager): void
     {
         $now = new \DateTime();
@@ -106,12 +113,15 @@ class AppFixtures extends Fixture
         }
 
         $manager->flush();
+
+        // Create admin user
+        $admin = new User();
+        $admin->setEmail('sports@bottles.fr');
+        $admin->setRoles(['ROLE_ADMIN']);
+        $admin->setPassword($this->passwordHasher->hashPassword($admin, '123456'));
+        $admin->setIsVerified(true);
+        $manager->persist($admin);
+
+        $manager->flush();
     }
-    // UserFactory::new()
-    // ->withAttributes([
-    //     'email' => 'admin@example.com',
-    //     'password' => 'adminpass',
-    // ])
-    // ->promoteRole('ROLE_SUPER_ADMIN')
-    // ->create();
 }

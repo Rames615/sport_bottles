@@ -145,6 +145,8 @@ class StripeService
      *
      * @throws \UnexpectedValueException
      * @throws \RuntimeException
+     *
+     * @return \Stripe\Event|array<string, mixed>
      */
     public function constructWebhookEvent(string $payload, ?string $sigHeader): \Stripe\Event|array
     {
@@ -164,6 +166,8 @@ class StripeService
 
     /**
      * Extract event type from a Stripe event (object or array).
+     *
+     * @param \Stripe\Event|array<string, mixed> $event
      */
     public function getEventType(\Stripe\Event|array $event): ?string
     {
@@ -176,6 +180,8 @@ class StripeService
 
     /**
      * Extract session ID from a checkout.session.completed event.
+     *
+     * @param \Stripe\Event|array<string, mixed> $event
      */
     public function getSessionIdFromEvent(\Stripe\Event|array $event): ?string
     {
@@ -190,6 +196,7 @@ class StripeService
     /**
      * Extract payment intent data from a payment_intent.payment_failed event.
      *
+     * @param \Stripe\Event|array<string, mixed> $event
      * @return array{id: string|null, order_id: string|null}
      */
     public function getFailedPaymentData(\Stripe\Event|array $event): array
