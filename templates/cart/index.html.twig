@@ -70,12 +70,38 @@
 
 									<div class="w-full sm:w-auto flex items-center justify-center">
 
-										<div class="flex items-center max-w-[140px] mx-auto">
+																				<div class="flex items-center max-w-[140px] mx-auto">
 
 											<form method="post" action="{{ path('app_cartupdate', {itemId: item.id}) }}">
 												<input type="hidden" name="_token" value="{{ csrf_token('cart_update') }}">
 												<input type="hidden" name="quantity" value="{{ item.quantity - 1 }}">
-												<button</i class="flex items-center justify-center w-8 h-8 border border-gray-300 text-gray-700 rounded-l hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed" {{ item.quantity <= 1 ? 'disabled' : '' }}> <i class="bi bi-dash"></i> </button> </form> <input type="text" class="w-10 h-8 border-y border-gray-300 text-center text-sm font-medium bg-white" value="{{ item.quantity }}" readonly> <form method="post" action="{{ path('app_cartupdate', {itemId: item.id}) }}"> <input type="hidden" name="_token" value="{{ csrf_token('cart_update') }}"> <input type="hidden" name="quantity" value="{{ item.quantity + 1 }}"> <button class="flex items-center justify-center w-8 h-8 border border-gray-300 text-gray-700 rounded-r hover:bg-gray-50"> <i class="bi bi-plus"></i> </button> </form> </div> </div> <div class="w-full sm:w-auto text-right"> <p class="font-semibold text-gray-900 mb-2"> {{ item.subtotal|number_format(2, ',', ' ') }} € </p> <form method="post" action="{{ path('app_cartremove', {itemId: item.id}) }}"> <input type="hidden" name="_token" value="{{ csrf_token('cart_remove') }}"> <button class="inline-flex items-center justify-center w-8 h-8 border border-red-200 text-red-600 rounded hover:bg-red-50 transition-colors"> <i class="bi bi-trash">></button>
+												<button class="flex items-center justify-center w-8 h-8 border border-gray-300 text-gray-700 rounded-l hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed" {{ item.quantity <= 1 ? 'disabled' : '' }}>
+													<i class="bi bi-dash"></i>
+												</button>
+											</form>
+
+											<input type="text" class="w-10 h-8 border-y border-gray-300 text-center text-sm font-medium bg-white" value="{{ item.quantity }}" readonly>
+
+											<form method="post" action="{{ path('app_cartupdate', {itemId: item.id}) }}">
+												<input type="hidden" name="_token" value="{{ csrf_token('cart_update') }}">
+												<input type="hidden" name="quantity" value="{{ item.quantity + 1 }}">
+												<button class="flex items-center justify-center w-8 h-8 border border-gray-300 text-gray-700 rounded-r hover:bg-gray-50">
+													<i class="bi bi-plus"></i>
+												</button>
+											</form>
+
+										</div>
+									</div>
+
+									<div class="w-full sm:w-auto text-right">
+										<p class="font-semibold text-gray-900 mb-2">
+											{{ item.subtotal|number_format(2, ',', ' ') }} €
+										</p>
+										<form method="post" action="{{ path('app_cartremove', {itemId: item.id}) }}">
+											<input type="hidden" name="_token" value="{{ csrf_token('cart_remove') }}">
+											<button class="inline-flex items-center justify-center w-8 h-8 border border-red-200 text-red-600 rounded hover:bg-red-50 transition-colors">
+												<i class="bi bi-trash"></i>
+											</button>
 											</form>
 										</div>
 
@@ -83,7 +109,6 @@
 								</div>
 							</div>
 						{% endfor %}
-
 					</div>
 
 					{# clone résumé #}
