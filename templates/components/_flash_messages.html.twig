@@ -10,7 +10,6 @@
         {% set cls = colorMap[label] ?? colorMap['info'] %}
         <div class="flex items-start gap-3 p-4 mb-3 border rounded-lg {{ cls }}" role="alert">
             <span class="flex-1 text-sm">{{ message }}</span>
-            {# TODO: data-bs-dismiss="alert" requires Bootstrap JS — replace with a Stimulus controller when Bootstrap is removed #}
             <button type="button" class="ml-auto opacity-60 hover:opacity-100 text-current leading-none" data-bs-dismiss="alert" aria-label="Close">✕</button>
         </div>
     {% endfor %}

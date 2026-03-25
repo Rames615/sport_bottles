@@ -5,33 +5,6 @@
 {% block body %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-<style>
-    @keyframes popIn {
-        0%   { transform: scale(0); opacity: 0; }
-        100% { transform: scale(1); opacity: 1; }
-    }
-    @keyframes fadeUp {
-        0%   { opacity: 0; transform: translateY(16px); }
-        100% { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fall {
-        0%   { opacity: 1; transform: translateY(-10px) rotate(0deg); }
-        100% { opacity: 0; transform: translateY(130px) rotate(360deg); }
-    }
-    .pop-in  { animation: popIn  .5s cubic-bezier(.175,.885,.32,1.275) both; }
-    .fade-up { animation: fadeUp .45s ease both; }
-    .delay-1 { animation-delay: .15s; }
-    .delay-2 { animation-delay: .25s; }
-    .delay-3 { animation-delay: .35s; }
-    .delay-4 { animation-delay: .45s; }
-    .dot {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0;
-        animation: fall linear forwards;
-    }
-</style>
-
 <div class="min-h-screen flex justify-center items-center pt-20 pb-[60px] px-4">
     <div class="w-full max-w-md">
 
@@ -46,7 +19,7 @@
             <div class="p-6 md:p-10 text-center">
 
                 <!-- Animated check -->
-                <div class="pop-in rounded-full inline-flex items-center justify-center mb-3 shadow-sm"
+                <div class="animate-bounce rounded-full inline-flex items-center justify-center mb-3 shadow-sm"
                      style="width:88px;height:88px;background:linear-gradient(135deg,#1a8a5a,#34d18a);">
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
                         <path d="M10 20L17 27L30 13" stroke="white" stroke-width="3.5"
@@ -54,13 +27,13 @@
                     </svg>
                 </div>
 
-                <h1 class="font-bold text-2xl mb-1 fade-up delay-1 text-[#0f1923]">Commande confirmée !</h1>
-                <p class="text-gray-500 mb-4 fade-up delay-2">
+                <h1 class="font-bold text-2xl mb-1 text-[#0f1923]">Commande confirmée !</h1>
+                <p class="text-gray-500 mb-4">
                     Votre paiement a été accepté. Vous recevrez<br>une confirmation par e-mail.
                 </p>
 
                 <!-- Order summary box -->
-                <div class="rounded-xl text-left mb-4 fade-up delay-3 bg-[#f7f9fb] border border-[#e8edf2] px-6 py-5">
+                <div class="rounded-xl text-left mb-4 bg-[#f7f9fb] border border-[#e8edf2] px-6 py-5">
                     <div class="flex justify-between py-2 border-b border-[#e8edf2]">
                         <span class="text-gray-500 text-sm">Référence</span>
                         <span class="font-semibold text-sm">Commande #{{ order.id }}</span>
@@ -84,7 +57,7 @@
                 </div>
 
                 <!-- Actions -->
-                <div class="fade-up delay-4">
+                <div>
                     <a href="{{ path('app_home') }}"
                        class="flex items-center justify-center gap-2 w-full rounded-xl py-3 font-semibold mb-2 text-white no-underline transition-all duration-200 hover:opacity-[.92] hover:-translate-y-0.5"
                        style="background:linear-gradient(135deg,#1a8a5a,#34d18a);">
@@ -114,7 +87,7 @@
     const wrap   = document.getElementById('confetti');
     for (let i = 0; i < 32; i++) {
         const d = document.createElement('div');
-        d.className = 'dot';
+        d.className = 'absolute rounded-full animate-ping';
         const size = Math.random() * 8 + 5;
         Object.assign(d.style, {
             width:            size + 'px',

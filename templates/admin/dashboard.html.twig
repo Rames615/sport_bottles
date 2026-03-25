@@ -1,138 +1,146 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tableau de bord admin - Sports Bottles{% endblock %}
+{% block title %}Tableau de bord admin - Sports Bottles
+{% endblock %}
 
 {% block body %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[70px] md:mt-[60px] py-8" id="adminDashboardData"
-    data-user-count="{{ userCount }}"
-    data-product-count="{{ productCount }}"
-    data-category-count="{{ categoryCount }}"
-    data-cart-count="{{ cartCount }}"
-    data-order-count="{{ orderCount }}"
-    data-promotion-count="{{ promotionCount }}">
-    <h1 class="text-2xl font-bold font-display text-gray-900 mb-6">Tableau de bord</h1>
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[70px] md:mt-[60px] py-8" id="adminDashboardData" data-user-count="{{ userCount }}" data-product-count="{{ productCount }}" data-category-count="{{ categoryCount }}" data-cart-count="{{ cartCount }}" data-order-count="{{ orderCount }}" data-promotion-count="{{ promotionCount }}">
+		<h1 class="text-2xl font-bold font-display text-gray-900 mb-6">Tableau de bord</h1>
 
-    {# Composant réutilisable #}
-    {% include 'components/_flash_messages.html.twig' %}
+		{# Composant réutilisable #}
+		{% include 'components/_flash_messages.html.twig' %}
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
 
-        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
-            <div class="flex items-center">
-                <div class="mr-3 text-3xl leading-none text-blue-600"><i class="bi bi-people-fill" aria-hidden="true"></i></div>
-                <div>
-                    <div class="text-sm text-gray-500">Utilisateurs</div>
-                    <div class="text-2xl font-bold">{{ userCount }}</div>
-                </div>
-            </div>
-            <a href="/admin/user" class="absolute inset-0" aria-label="Gérer les utilisateurs"></a>
-        </div>
+			<div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+				<div class="flex items-center">
+					<div class="mr-3 text-3xl leading-none text-blue-600">
+						<i class="bi bi-people-fill" aria-hidden="true"></i>
+					</div>
+					<div>
+						<div class="text-sm text-gray-500">Utilisateurs</div>
+						<div class="text-2xl font-bold">{{ userCount }}</div>
+					</div>
+				</div>
+				<a href="/admin/user" class="absolute inset-0" aria-label="Gérer les utilisateurs"></a>
+			</div>
 
-        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
-            <div class="flex items-center">
-                <div class="mr-3 text-3xl leading-none text-green-600"><i class="bi bi-box-seam-fill" aria-hidden="true"></i></div>
-                <div>
-                    <div class="text-sm text-gray-500">Produits</div>
-                    <div class="text-2xl font-bold">{{ productCount }}</div>
-                </div>
-            </div>
-            <a href="/admin/product" class="absolute inset-0" aria-label="Gérer les produits"></a>
-        </div>
+			<div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+				<div class="flex items-center">
+					<div class="mr-3 text-3xl leading-none text-green-600">
+						<i class="bi bi-box-seam-fill" aria-hidden="true"></i>
+					</div>
+					<div>
+						<div class="text-sm text-gray-500">Produits</div>
+						<div class="text-2xl font-bold">{{ productCount }}</div>
+					</div>
+				</div>
+				<a href="/admin/product" class="absolute inset-0" aria-label="Gérer les produits"></a>
+			</div>
 
-        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
-            <div class="flex items-center">
-                <div class="mr-3 text-3xl leading-none text-yellow-500"><i class="bi bi-tags-fill" aria-hidden="true"></i></div>
-                <div>
-                    <div class="text-sm text-gray-500">Categories</div>
-                    <div class="text-2xl font-bold">{{ categoryCount }}</div>
-                </div>
-            </div>
-            <a href="/admin/category" class="absolute inset-0" aria-label="Gérer les categories"></a>
-        </div>
+			<div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+				<div class="flex items-center">
+					<div class="mr-3 text-3xl leading-none text-yellow-500">
+						<i class="bi bi-tags-fill" aria-hidden="true"></i>
+					</div>
+					<div>
+						<div class="text-sm text-gray-500">Categories</div>
+						<div class="text-2xl font-bold">{{ categoryCount }}</div>
+					</div>
+				</div>
+				<a href="/admin/category" class="absolute inset-0" aria-label="Gérer les categories"></a>
+			</div>
 
-        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
-            <div class="flex items-center">
-                <div class="mr-3 text-3xl leading-none text-red-500"><i class="bi bi-cart-fill" aria-hidden="true"></i></div>
-                <div>
-                    <div class="text-sm text-gray-500">Paniers</div>
-                    <div class="text-2xl font-bold">{{ cartCount }}</div>
-                </div>
-            </div>
-            <a href="/admin/cart" class="absolute inset-0" aria-label="Gérer les paniers"></a>
-        </div>
+			<div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+				<div class="flex items-center">
+					<div class="mr-3 text-3xl leading-none text-red-500">
+						<i class="bi bi-cart-fill" aria-hidden="true"></i>
+					</div>
+					<div>
+						<div class="text-sm text-gray-500">Paniers</div>
+						<div class="text-2xl font-bold">{{ cartCount }}</div>
+					</div>
+				</div>
+				<a href="/admin/cart" class="absolute inset-0" aria-label="Gérer les paniers"></a>
+			</div>
 
-        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
-            <div class="flex items-center">
-                <div class="mr-3 text-3xl leading-none text-gray-500"><i class="bi bi-receipt-cutoff" aria-hidden="true"></i></div>
-                <div>
-                    <div class="text-sm text-gray-500">Commandes</div>
-                    <div class="text-2xl font-bold">{{ orderCount }}</div>
-                </div>
-            </div>
-            <a href="/admin/order" class="absolute inset-0" aria-label="Gérer les commandes"></a>
-        </div>
+			<div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+				<div class="flex items-center">
+					<div class="mr-3 text-3xl leading-none text-gray-500">
+						<i class="bi bi-receipt-cutoff" aria-hidden="true"></i>
+					</div>
+					<div>
+						<div class="text-sm text-gray-500">Commandes</div>
+						<div class="text-2xl font-bold">{{ orderCount }}</div>
+					</div>
+				</div>
+				<a href="/admin/order" class="absolute inset-0" aria-label="Gérer les commandes"></a>
+			</div>
 
-        <div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
-            <div class="flex items-center">
-                <div class="mr-3 text-3xl leading-none text-cyan-500"><i class="bi bi-percent" aria-hidden="true"></i></div>
-                <div>
-                    <div class="text-sm text-gray-500">Promotions</div>
-                    <div class="text-2xl font-bold">{{ promotionCount }}</div>
-                </div>
-            </div>
-            <a href="/admin/promotion" class="absolute inset-0" aria-label="Gérer les promotions"></a>
-        </div>
+			<div class="bg-white rounded-xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-all p-3 h-full relative">
+				<div class="flex items-center">
+					<div class="mr-3 text-3xl leading-none text-cyan-500">
+						<i class="bi bi-percent" aria-hidden="true"></i>
+					</div>
+					<div>
+						<div class="text-sm text-gray-500">Promotions</div>
+						<div class="text-2xl font-bold">{{ promotionCount }}</div>
+					</div>
+				</div>
+				<a href="/admin/promotion" class="absolute inset-0" aria-label="Gérer les promotions"></a>
+			</div>
 
-    </div>
+		</div>
 
-    {% set totalEntities = userCount + productCount + categoryCount + cartCount + orderCount + promotionCount %}
-    {% set conversionRate = cartCount > 0 ? ((orderCount / cartCount) * 100) : 0 %}
-    {% set productPerCategory = categoryCount > 0 ? (productCount / categoryCount) : 0 %}
+		{% set totalEntities = userCount + productCount + categoryCount + cartCount + orderCount + promotionCount %}
+		{% set conversionRate = cartCount > 0 ? ((orderCount / cartCount) * 100) : 0 %}
+		{% set productPerCategory = categoryCount > 0 ? (productCount / categoryCount) : 0 %}
 
-    <div class="grid grid-cols-1 xl:grid-cols-[7fr_5fr] gap-6 mt-2">
+		<div class="grid grid-cols-1 xl:grid-cols-[7fr_5fr] gap-6 mt-2">
 
-        <div class="bg-white rounded-[0.9rem] shadow-[0_6px_20px_rgba(15,23,42,0.08)] p-4 md:p-5 h-full">
-            <h5 class="text-base font-bold mb-1 text-gray-900">Repartition generale</h5>
-            <p class="text-sm text-gray-500 mb-4">Vue d'ensemble des entites de la plateforme.</p>
-            <div class="relative min-h-[280px] md:min-h-[240px]">
-                <canvas id="overviewChart"></canvas>
-            </div>
-        </div>
+			<div class="bg-white rounded-[0.9rem] shadow-[0_6px_20px_rgba(15,23,42,0.08)] p-4 md:p-5 h-full">
+				<h5 class="text-base font-bold mb-1 text-gray-900">Repartition generale</h5>
+				<p class="text-sm text-gray-500 mb-4">Vue d'ensemble des entites de la plateforme.</p>
+				<div class="relative min-h-[280px] md:min-h-[240px]">
+					<canvas id="overviewChart"></canvas>
+				</div>
+			</div>
 
-        <div class="bg-white rounded-[0.9rem] shadow-[0_6px_20px_rgba(15,23,42,0.08)] p-4 md:p-5 h-full">
-            <h5 class="text-base font-bold mb-1 text-gray-900">Statistiques detaillees</h5>
-            <p class="text-sm text-gray-500 mb-4">Indicateurs operationnels rapides.</p>
+			<div class="bg-white rounded-[0.9rem] shadow-[0_6px_20px_rgba(15,23,42,0.08)] p-4 md:p-5 h-full">
+				<h5 class="text-base font-bold mb-1 text-gray-900">Statistiques detaillees</h5>
+				<p class="text-sm text-gray-500 mb-4">Indicateurs operationnels rapides.</p>
 
-            <div class="grid grid-cols-2 md:grid-cols-1 gap-3 mb-6">
-                <div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
-                    <span class="block text-xs text-gray-500">Total entites</span>
-                    <span class="block text-xl font-bold text-gray-900">{{ totalEntities }}</span>
-                </div>
-                <div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
-                    <span class="block text-xs text-gray-500">Ratio commandes/paniers</span>
-                    <span class="block text-xl font-bold text-gray-900">{{ conversionRate|number_format(1, ',', ' ') }} %</span>
-                </div>
-                <div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
-                    <span class="block text-xs text-gray-500">Produits par categorie</span>
-                    <span class="block text-xl font-bold text-gray-900">{{ productPerCategory|number_format(1, ',', ' ') }}</span>
-                </div>
-                <div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
-                    <span class="block text-xs text-gray-500">Promotions actives (total)</span>
-                    <span class="block text-xl font-bold text-gray-900">{{ promotionCount }}</span>
-                </div>
-            </div>
+				<div class="grid grid-cols-2 md:grid-cols-1 gap-3 mb-6">
+					<div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
+						<span class="block text-xs text-gray-500">Total entites</span>
+						<span class="block text-xl font-bold text-gray-900">{{ totalEntities }}</span>
+					</div>
+					<div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
+						<span class="block text-xs text-gray-500">Ratio commandes/paniers</span>
+						<span class="block text-xl font-bold text-gray-900">{{ conversionRate|number_format(1, ',', ' ') }}
+							%</span>
+					</div>
+					<div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
+						<span class="block text-xs text-gray-500">Produits par categorie</span>
+						<span class="block text-xl font-bold text-gray-900">{{ productPerCategory|number_format(1, ',', ' ') }}</span>
+					</div>
+					<div class="border border-black/[0.08] rounded-[0.7rem] px-3.5 py-3 bg-white">
+						<span class="block text-xs text-gray-500">Promotions actives (total)</span>
+						<span class="block text-xl font-bold text-gray-900">{{ promotionCount }}</span>
+					</div>
+				</div>
 
-            <div class="relative min-h-[280px] md:min-h-[240px]">
-                <canvas id="funnelChart"></canvas>
-            </div>
-        </div>
+				<div class="relative min-h-[280px] md:min-h-[240px]">
+					<canvas id="funnelChart"></canvas>
+				</div>
+			</div>
 
-    </div>
-{% endblock %}
+		</div>
+	{% endblock %}
 
 
-{% block javascripts %}
-{{ parent() }}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ asset('scripts/dashboard.js') }}"></script>
-{% endblock %}
+	{% block javascripts %}
+		{{ parent() }}
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script src="{{ asset('scripts/dashboard.js') }}"></script>
+	{% endblock %}

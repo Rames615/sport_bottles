@@ -1,143 +1,151 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mentions légales – Sports Bottles{% endblock %}
+{% block title %}Mentions légales – Sports Bottles
+{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+	{{ parent() }}
+	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
 
-{# ── HERO ── #}
-<section class="relative overflow-hidden text-center py-10 sm:py-12 px-8 mt-20" style="background: linear-gradient(135deg, #edf7f4 0%, #f5fbf9 100%);">
-    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(31,122,99,.12) 0%, transparent 70%);"></div>
-    <div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, rgba(31,122,99,.2), transparent);"></div>
-    <div class="relative">
-        <span class="inline-block text-xs font-semibold tracking-widest uppercase border mb-4 px-3 py-1 rounded-full" style="background: rgba(31,122,99,.1); border-color: rgba(31,122,99,.3); color: #1F7A63;">Légal</span>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-main leading-tight" style="font-family: 'Syne', sans-serif;">Mentions légales</h1>
-        <p class="mt-3 text-[0.9rem] text-muted">Dernière mise à jour : {{ "now"|date("d F Y") }}</p>
-    </div>
-</section>
+	{# ── HERO ── #}
+	<section class="relative overflow-hidden text-center py-10 sm:py-12 px-8 mt-20" style="background: linear-gradient(135deg, #edf7f4 0%, #f5fbf9 100%);">
+		<div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(31,122,99,.12) 0%, transparent 70%);"></div>
+		<div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, rgba(31,122,99,.2), transparent);"></div>
+		<div class="relative">
+			<span class="inline-block text-xs font-semibold tracking-widest uppercase border mb-4 px-3 py-1 rounded-full" style="background: rgba(31,122,99,.1); border-color: rgba(31,122,99,.3); color: #1F7A63;">Légal</span>
+			<h1 class="text-3xl sm:text-4xl font-extrabold text-main leading-tight" style="font-family: 'Syne', sans-serif;">Mentions légales</h1>
+			<p class="mt-3 text-[0.9rem] text-muted">Dernière mise à jour :
+				{{ "now"|date("d F Y") }}</p>
+		</div>
+	</section>
 
-{# ── CONTENT ── #}
-<main class="max-w-[820px] mx-auto px-6 sm:px-8 py-14 pb-20">
-    <p class="text-sm text-[#5a6a7e] text-center px-5 py-4 rounded-xl border mb-10" style="background: linear-gradient(135deg, rgba(27,143,228,.08), rgba(93,184,255,.06)); border-color: rgba(27,143,228,.2);">
-        Conformément aux dispositions de la <strong class="text-[#1b8fe4]">loi n° 2004-575 du 21 juin 2004</strong> pour la
-        confiance en l'économie numérique (LCEN), les informations suivantes sont portées à la connaissance
-        des utilisateurs du site www.sportsbottles.fr.
-    </p>
+	{# ── CONTENT ── #}
+	<main class="max-w-[820px] mx-auto px-6 sm:px-8 py-14 pb-20">
+		<p class="text-sm text-[#5a6a7e] text-center px-5 py-4 rounded-xl border mb-10" style="background: linear-gradient(135deg, rgba(27,143,228,.08), rgba(93,184,255,.06)); border-color: rgba(27,143,228,.2);">
+			Conformément aux dispositions de la
+			<strong class="text-[#1b8fe4]">loi n° 2004-575 du 21 juin 2004</strong>
+			pour la
+			        confiance en l'économie numérique (LCEN), les informations suivantes sont portées à la connaissance
+			        des utilisateurs du site www.sportsbottles.fr.
+		</p>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">1</span>
-            Éditeur du site
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Le site www.sportsbottles.fr est édité par la société :</p>
-        <div class="grid grid-cols-2 gap-x-8 mt-3">
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Raison sociale</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">Sports Bottles SAS</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Forme juridique</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">Société par actions simplifiée (SAS)</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Capital social</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">10 000 €</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Siège social</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">12 rue des Sportifs, 75001 Paris, France</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">SIREN</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">123 456 789</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">SIRET</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">123 456 789 00012</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">N° TVA intracommunautaire</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">FR 12 123456789</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">RCS</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">Paris B 123 456 789</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Téléphone</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">+33 (0)1 23 45 67 89</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">E-mail</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">contact@sportsbottles.fr</span>
-        </div>
-        <p class="text-[#5a6a7e] text-[0.95rem] mt-4">Directeur de la publication : Jean Dupont, Président de Sports Bottles SAS.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">1</span>
+				Éditeur du site
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Le site www.sportsbottles.fr est édité par la société :</p>
+			<div class="grid grid-cols-2 gap-x-8 mt-3">
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Raison sociale</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">Sports Bottles SAS</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Forme juridique</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">Société par actions simplifiée (SAS)</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Capital social</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">10 000 €</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Siège social</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">12 rue des Sportifs, 75001 Paris, France</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">SIREN</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">123 456 789</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">SIRET</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">123 456 789 00012</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">N° TVA intracommunautaire</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">FR 12 123456789</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">RCS</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">Paris B 123 456 789</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Téléphone</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">+33 (0)1 23 45 67 89</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">E-mail</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">contact@sportsbottles.fr</span>
+			</div>
+			<p class="text-[#5a6a7e] text-[0.95rem] mt-4">Directeur de la publication : Jean Dupont, Président de Sports Bottles SAS.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">2</span>
-            Hébergement
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Le site www.sportsbottles.fr est hébergé par :</p>
-        <div class="grid grid-cols-2 gap-x-8 mt-3">
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Hébergeur</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">OVH SAS</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Adresse</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">2 rue Kellermann, 59100 Roubaix, France</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Téléphone</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">+33 (0)9 72 10 10 07</span>
-            <span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Site web</span>
-            <span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">www.ovhcloud.com</span>
-        </div>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">2</span>
+				Hébergement
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Le site www.sportsbottles.fr est hébergé par :</p>
+			<div class="grid grid-cols-2 gap-x-8 mt-3">
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Hébergeur</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">OVH SAS</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Adresse</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">2 rue Kellermann, 59100 Roubaix, France</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Téléphone</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">+33 (0)9 72 10 10 07</span>
+				<span class="text-sm font-semibold text-[#0d1b2a] py-1.5 border-b border-[#dde4ed]">Site web</span>
+				<span class="text-sm text-[#5a6a7e] py-1.5 border-b border-[#dde4ed]">www.ovhcloud.com</span>
+			</div>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">3</span>
-            Propriété intellectuelle
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">L'ensemble du contenu du site www.sportsbottles.fr (textes, images, graphismes, logo, icônes,
-        sons, logiciels…) est la propriété exclusive de Sports Bottles SAS, à l'exception des éléments
-        issus de tiers expressément désignés.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Toute reproduction, représentation, modification, publication, transmission, dénaturation, totale
-        ou partielle du site ou de son contenu, par quelque procédé que ce soit, est interdite sans l'accord
-        préalable et écrit de Sports Bottles SAS.</p>
-        <ul class="list-none p-0 mt-2 mb-0 space-y-1">
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>La marque « Sports Bottles » est une marque déposée à l'INPI.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Toute utilisation non autorisée constitue une contrefaçon passible de poursuites judiciaires.</li>
-        </ul>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">3</span>
+				Propriété intellectuelle
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">L'ensemble du contenu du site www.sportsbottles.fr (textes, images, graphismes, logo, icônes,
+				        sons, logiciels…) est la propriété exclusive de Sports Bottles SAS, à l'exception des éléments
+				        issus de tiers expressément désignés.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Toute reproduction, représentation, modification, publication, transmission, dénaturation, totale
+				        ou partielle du site ou de son contenu, par quelque procédé que ce soit, est interdite sans l'accord
+				        préalable et écrit de Sports Bottles SAS.</p>
+			<ul class="list-none p-0 mt-2 mb-0 space-y-1">
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>La marque « Sports Bottles » est une marque déposée à l'INPI.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Toute utilisation non autorisée constitue une contrefaçon passible de poursuites judiciaires.</li>
+			</ul>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">4</span>
-            Responsabilité
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Sports Bottles SAS s'efforce d'assurer au mieux de ses possibilités l'exactitude et la mise à
-        jour des informations diffusées sur ce site. Toutefois, elle ne peut garantir l'exactitude, la
-        précision ou l'exhaustivité des informations mises à disposition.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">En conséquence, Sports Bottles SAS décline toute responsabilité pour toute imprécision,
-        inexactitude ou omission portant sur des informations disponibles sur ce site, ainsi que pour tout
-        dommage résultant d'une intrusion frauduleuse d'un tiers.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">4</span>
+				Responsabilité
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Sports Bottles SAS s'efforce d'assurer au mieux de ses possibilités l'exactitude et la mise à
+				        jour des informations diffusées sur ce site. Toutefois, elle ne peut garantir l'exactitude, la
+				        précision ou l'exhaustivité des informations mises à disposition.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">En conséquence, Sports Bottles SAS décline toute responsabilité pour toute imprécision,
+				        inexactitude ou omission portant sur des informations disponibles sur ce site, ainsi que pour tout
+				        dommage résultant d'une intrusion frauduleuse d'un tiers.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">5</span>
-            Données personnelles
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Les informations recueillies par Sports Bottles font l'objet d'un traitement informatique destiné
-        à la gestion de la relation client. Conformément au RGPD et à la loi Informatique et Libertés, vous
-        disposez d'un droit d'accès, de rectification, de suppression et de portabilité de vos données.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Pour exercer ces droits, contactez notre DPO : <strong>dpo@sportsbottles.fr</strong>. Vous pouvez
-        également adresser une réclamation à la CNIL (www.cnil.fr).</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Pour plus d'informations, consultez notre
-            <a href="{{ path('app_politique_confidentialite') }}" class="text-[#1b8fe4] font-medium no-underline hover:underline">
-                Politique de confidentialité
-            </a>.
-        </p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">5</span>
+				Données personnelles
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Les informations recueillies par Sports Bottles font l'objet d'un traitement informatique destiné
+				        à la gestion de la relation client. Conformément au RGPD et à la loi Informatique et Libertés, vous
+				        disposez d'un droit d'accès, de rectification, de suppression et de portabilité de vos données.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Pour exercer ces droits, contactez notre DPO :
+				<strong>dpo@sportsbottles.fr</strong>. Vous pouvez
+					        également adresser une réclamation à la CNIL (www.cnil.fr).</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Pour plus d'informations, consultez notre
+				<a href="{{ path('app_politique_confidentialite') }}" class="text-[#1b8fe4] font-medium no-underline hover:underline">
+					Politique de confidentialité
+				</a>.
+			</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">6</span>
-            Droit applicable
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Les présentes mentions légales sont soumises au droit français. En cas de litige, et après tentative
-        de résolution amiable, les tribunaux compétents du ressort de Paris seront seuls habilités à en connaître.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Pour toute question ou réclamation, vous pouvez contacter notre service client à l'adresse
-        <strong>contact@sportsbottles.fr</strong> ou via notre
-            <a href="{{ path('app_contact') }}" class="text-[#1b8fe4] font-medium no-underline hover:underline">
-                formulaire de contact
-            </a>.
-        </p>
-    </div>
-</main>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">6</span>
+				Droit applicable
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Les présentes mentions légales sont soumises au droit français. En cas de litige, et après tentative
+				        de résolution amiable, les tribunaux compétents du ressort de Paris seront seuls habilités à en connaître.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Pour toute question ou réclamation, vous pouvez contacter notre service client à l'adresse
+				<strong>contact@sportsbottles.fr</strong>
+				ou via notre
+				<a href="{{ path('app_contact') }}" class="text-[#1b8fe4] font-medium no-underline hover:underline">
+					formulaire de contact
+				</a>.
+			</p>
+		</div>
+	</main>
 
 {% endblock %}

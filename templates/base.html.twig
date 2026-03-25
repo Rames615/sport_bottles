@@ -1,86 +1,94 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token('') }}">
-    <meta name="csrf-cart-token" content="{{ csrf_token('cart_add') }}">
-    <title>{% block title %}Sports Bottles - Bouteilles Durables{% endblock %}</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="csrf-token" content="{{ csrf_token('') }}">
+		<meta name="csrf-cart-token" content="{{ csrf_token('cart_add') }}">
+		<title>
+			{% block title %}Sports Bottles - Bouteilles Durables
+			{% endblock %}
+		</title>
+		<link
+		rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+		<!-- Icons -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+		<link
+		rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <!-- Tailwind compiled CSS -->
-    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+		<!-- Tailwind compiled CSS -->
+		<link rel="stylesheet" href="{{ asset('styles/app.css') }}"> {% block stylesheets %}{% endblock %}
+		{% block importmap %}
+			{{ importmap('app') }}
+		{% endblock %}
+	</head>
 
-    {% block stylesheets %}{% endblock %}
-    {% block importmap %}{{ importmap('app') }}{% endblock %}
-</head>
+	<body>
+		<!-- Decorative bottle background -->
+		<div class="site-bg-deco" aria-hidden="true">
+			<img src="{{ asset('products_images/isothermique_blue.png') }}" class="bg-bottle b1" alt="">
+			<img src="{{ asset('products_images/glass_green.png') }}" class="bg-bottle b2" alt="">
+			<img src="{{ asset('products_images/bpa-free-rose.png') }}" class="bg-bottle b3" alt="">
+			<img src="{{ asset('products_images/acier_inoxydable_vert.png') }}" class="bg-bottle b4" alt="">
+			<img src="{{ asset('products_images/verre_blue.png') }}" class="bg-bottle b5" alt="">
+			<img src="{{ asset('products_images/isothermique_red.png') }}" class="bg-bottle b6" alt="">
+			<img src="{{ asset('products_images/glass_degrade_blue.png') }}" class="bg-bottle b7" alt="">
+			<img src="{{ asset('products_images/transparent_sans_bpa.png') }}" class="bg-bottle b8" alt="">
+			<img src="{{ asset('products_images/acier_inoxydable.png') }}" class="bg-bottle b9" alt="">
+		</div>
 
-<body>
-    <!-- Decorative bottle background -->
-    <div class="site-bg-deco" aria-hidden="true">
-        <img src="{{ asset('products_images/isothermique_blue.png') }}"    class="bg-bottle b1" alt="">
-        <img src="{{ asset('products_images/glass_green.png') }}"           class="bg-bottle b2" alt="">
-        <img src="{{ asset('products_images/bpa-free-rose.png') }}"         class="bg-bottle b3" alt="">
-        <img src="{{ asset('products_images/acier_inoxydable_vert.png') }}" class="bg-bottle b4" alt="">
-        <img src="{{ asset('products_images/verre_blue.png') }}"            class="bg-bottle b5" alt="">
-        <img src="{{ asset('products_images/isothermique_red.png') }}"      class="bg-bottle b6" alt="">
-        <img src="{{ asset('products_images/glass_degrade_blue.png') }}"    class="bg-bottle b7" alt="">
-        <img src="{{ asset('products_images/transparent_sans_bpa.png') }}"  class="bg-bottle b8" alt="">
-        <img src="{{ asset('products_images/acier_inoxydable.png') }}"      class="bg-bottle b9" alt="">
-    </div>
+		{% include 'nav.html.twig' %}
 
-    {% include 'nav.html.twig' %}
+		<main>
+			{% block body %}{% endblock %}
+		</main>
 
-    <main>
-        {% block body %}{% endblock %}
-    </main>
+		{% include 'footer.html.twig' %}
 
-    {% include 'footer.html.twig' %}
+		<!-- Cookie consent modal (Bootstrap JS required) -->
+		<div class="modal fade" id="cookieConsentModal" tabindex="-1" aria-labelledby="cookieConsentLabel" aria-hidden="true">
+			<div class="modal-dialog flex items-center min-h-[calc(100%-1rem)] my-2 mx-auto max-w-lg px-4">
+				<div class="modal-content w-full rounded-xl bg-white shadow-green-lg border border-gray-100 overflow-hidden">
+					<div class="flex items-center px-6 pt-5 pb-4 border-b border-gray-100">
+						<h5 class="text-base font-semibold text-gray-900 m-0" id="cookieConsentLabel">Cookies et confidentialité</h5>
+					</div>
+					<div class="px-6 py-5">
+						<p class="text-sm text-gray-600 m-0">Nous utilisons des cookies pour améliorer votre expérience. En continuant, vous acceptez l'utilisation des cookies.</p>
+					</div>
+					<div class="flex justify-end gap-3 px-6 pt-4 pb-5 border-t border-gray-100">
+						<button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors" id="cookie-decline">Refuser</button>
+						<button type="button" class="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-green-dark transition-colors" id="cookie-accept">Accepter</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <!-- Cookie consent modal (Bootstrap JS required) -->
-    <div class="modal fade" id="cookieConsentModal" tabindex="-1" aria-labelledby="cookieConsentLabel" aria-hidden="true">
-        <div class="modal-dialog flex items-center min-h-[calc(100%-1rem)] my-2 mx-auto max-w-lg px-4">
-            <div class="modal-content w-full rounded-xl bg-white shadow-green-lg border border-gray-100 overflow-hidden">
-                <div class="flex items-center px-6 pt-5 pb-4 border-b border-gray-100">
-                    <h5 class="text-base font-semibold text-gray-900 m-0" id="cookieConsentLabel">Cookies et confidentialité</h5>
-                </div>
-                <div class="px-6 py-5">
-                    <p class="text-sm text-gray-600 m-0">Nous utilisons des cookies pour améliorer votre expérience. En continuant, vous acceptez l'utilisation des cookies.</p>
-                </div>
-                <div class="flex justify-end gap-3 px-6 pt-4 pb-5 border-t border-gray-100">
-                    <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors" id="cookie-decline">Refuser</button>
-                    <button type="button" class="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-green-dark transition-colors" id="cookie-accept">Accepter</button>
-                </div>
-            </div>
-        </div>
-    </div>
+		<!-- Bootstrap JS (dropdowns, collapse, modals) -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" data-turbo-eval="false"></script>
 
-    <!-- Bootstrap JS (dropdowns, collapse, modals) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" data-turbo-eval="false"></script>
+		<script src="{{ asset('scripts/cart.js') }}" data-turbo-eval="false"></script>
+		<script src="{{ asset('scripts/product-filters.js') }}"></script>
 
-    <script src="{{ asset('scripts/cart.js') }}" data-turbo-eval="false"></script>
-    <script src="{{ asset('scripts/product-filters.js') }}"></script>
+		{% block javascripts %}{% endblock %}
 
-    {% block javascripts %}{% endblock %}
+		<!-- Re-initialize Bootstrap components after Turbo navigation -->
+		<script data-turbo-eval="false">
+			function reinitBootstrap() {
+if (typeof bootstrap === 'undefined') 
+return;
 
-    <!-- Re-initialize Bootstrap components after Turbo navigation -->
-    <script data-turbo-eval="false">
-        function reinitBootstrap() {
-            if (typeof bootstrap === 'undefined') return;
-            document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(el => bootstrap.Dropdown.getOrCreateInstance(el));
-            document.querySelectorAll('.collapse').forEach(el => bootstrap.Collapse.getOrCreateInstance(el, { toggle: false }));
-        }
-        document.addEventListener('DOMContentLoaded', reinitBootstrap);
-        document.addEventListener('turbo:load', reinitBootstrap);
-    </script>
-</body>
+document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(el => bootstrap.Dropdown.getOrCreateInstance(el));
+document.querySelectorAll('.collapse').forEach(el => bootstrap.Collapse.getOrCreateInstance(el, {toggle: false}));
+}
+document.addEventListener('DOMContentLoaded', reinitBootstrap);
+document.addEventListener('turbo:load', reinitBootstrap);
+		</script>
+	</body>
 </html>

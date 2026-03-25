@@ -1,166 +1,162 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.designation }} – Sports Bottles{% endblock %}
+{% block title %}
+	{{ product.designation }}
+	– Sports Bottles
+{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
 {% block body %}
 
-{% set imageFileName = product.imgPath ? (product.imgPath|split('/')|last) : null %}
-{% set productImagePath = imageFileName
+	{% set imageFileName = product.imgPath ? (product.imgPath|split('/')|last) : null %}
+	{% set productImagePath = imageFileName
     ? asset('products_images/' ~ imageFileName)
     : asset('images/placeholder.png') %}
 
-{# ── Always display the product's own image on its detail page ── #}
-{% set displayImagePath = productImagePath %}
+	{# ── Always display the product's own image on its detail page ── #}
+	{% set displayImagePath = productImagePath %}
 
-{% set finalPrice = product.finalPrice %}
-{% set isDiscounted = (finalPrice != product.price) %}
+	{% set finalPrice = product.finalPrice %}
+	{% set isDiscounted = (finalPrice != product.price) %}
 
-<div class="max-w-[1100px] mx-auto px-4 sm:px-6 py-10 mt-[70px]">
+	<div
+		class="max-w-[1100px] mx-auto px-4 sm:px-6 py-10 mt-[70px]">
 
-    {# ── Breadcrumb ──────────────────────────────────────────── #}
-    <nav aria-label="breadcrumb" class="mb-6">
-        <ol class="flex items-center gap-2 text-sm flex-wrap text-muted">
-            <li><a href="{{ path('app_home') }}" class="text-primary no-underline hover:underline">Accueil</a></li>
-            <li class="text-[#dee2e6]">/</li>
-            <li><a href="{{ path('app_product') }}" class="text-primary no-underline hover:underline">Produits</a></li>
-            <li class="text-[#dee2e6]">/</li>
-            <li class="text-[#212529] truncate max-w-[200px]" aria-current="page">{{ product.designation }}</li>
-        </ol>
-    </nav>
+		{# ── Breadcrumb ──────────────────────────────────────────── #}
+		<nav aria-label="breadcrumb" class="mb-6">
+			<ol class="flex items-center gap-2 text-sm flex-wrap text-muted">
+				<li>
+					<a href="{{ path('app_home') }}" class="text-primary no-underline hover:underline">Accueil</a>
+				</li>
+				<li class="text-[#dee2e6]">/</li>
+				<li>
+					<a href="{{ path('app_product') }}" class="text-primary no-underline hover:underline">Produits</a>
+				</li>
+				<li class="text-[#dee2e6]">/</li>
+				<li class="text-[#212529] truncate max-w-[200px]" aria-current="page">{{ product.designation }}</li>
+			</ol>
+		</nav>
 
-    <div class="flex gap-10 items-start flex-col md:flex-row">
+		<div
+			class="flex gap-10 items-start flex-col md:flex-row">
 
-        {# ── Left – Image ─────────────────────────────────────── #}
-        <div class="w-full md:w-5/12">
-            <div class="sticky top-20 rounded-2xl overflow-hidden border"
-                 style="background-color:#f8faf9; border-color:#e2ede9;">
-                <img src="{{ displayImagePath }}"
-                     alt="{{ product.designation }}"
-                     class="block w-full object-contain p-4"
-                     style="max-height:420px;"
-                     onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}'">
-            </div>
-        </div>
+			{# ── Left – Image ─────────────────────────────────────── #}
+			<div class="w-full md:w-5/12">
+				<div class="sticky top-20 rounded-2xl overflow-hidden border" style="background-color:#f8faf9; border-color:#e2ede9;">
+					<img src="{{ displayImagePath }}" alt="{{ product.designation }}" class="block w-full object-contain p-4" style="max-height:420px;" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}'">
+				</div>
+			</div>
 
-        {# ── Right – Info ─────────────────────────────────────── #}
-        <div class="w-full md:w-7/12">
+			{# ── Right – Info ─────────────────────────────────────── #}
+			<div
+				class="w-full md:w-7/12">
 
-            {# Name #}
-            <h1 class="font-bold mb-3"
-                style="font-family:'Playfair Display',Georgia,serif;
-                       font-size:clamp(1.5rem,3vw,2.2rem);
-                       color:#0f1923; letter-spacing:-0.02em; line-height:1.2;">
-                {{ product.designation }}
-            </h1>
+				{# Name #}
+				<h1 class="font-bold mb-3" style="font-family:'Playfair Display',Georgia,serif;
+						                       font-size:clamp(1.5rem,3vw,2.2rem);
+						                       color:#0f1923; letter-spacing:-0.02em; line-height:1.2;">
+					{{ product.designation }}
+				</h1>
 
-            {# Category badge #}
-            {% if product.category %}
-            <span class="inline-block text-[.75rem] font-semibold tracking-[.06em] px-3 py-1 rounded-full mb-4"
-                  style="background-color:#e8f5f1; color:#1F7A63;">
-                {{ product.category.name }}
-            </span>
-            {% endif %}
+				{# Category badge #}
+				{% if product.category %}
+					<span class="inline-block text-[.75rem] font-semibold tracking-[.06em] px-3 py-1 rounded-full mb-4" style="background-color:#e8f5f1; color:#1F7A63;">
+						{{ product.category.name }}
+					</span>
+				{% endif %}
 
-            {# Price block #}
-            <div class="inline-flex items-baseline gap-3 mb-4 px-3 py-2 rounded-r-md"
-                 style="background-color:#e8f5f1; border-left:3px solid #1F7A63;">
-                <span class="font-bold leading-none"
-                      style="font-family:'Playfair Display',Georgia,serif;
-                             font-size:2rem; color:#1F7A63;">
-                    {{ finalPrice|number_format(2, ',', ' ') }} €
-                </span>
-                {% if isDiscounted %}
-                <span class="text-muted line-through text-sm">
-                    {{ product.price|number_format(2, ',', ' ') }} €
-                </span>
-                {% endif %}
-            </div>
+				{# Price block #}
+				<div class="inline-flex items-baseline gap-3 mb-4 px-3 py-2 rounded-r-md" style="background-color:#e8f5f1; border-left:3px solid #1F7A63;">
+					<span class="font-bold leading-none" style="font-family:'Playfair Display',Georgia,serif;
+							                             font-size:2rem; color:#1F7A63;">
+						{{ finalPrice|number_format(2, ',', ' ') }}
+						€
+					</span>
+					{% if isDiscounted %}
+						<span class="text-muted line-through text-sm">
+							{{ product.price|number_format(2, ',', ' ') }}
+							€
+						</span>
+					{% endif %}
+				</div>
 
-            {# Description #}
-            <div class="mb-4 pb-4 border-b border-[#e2ede9]">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="inline-flex items-center justify-center rounded-sm"
-                          style="width:1.5rem;height:1.5rem;
-                                 background-color:#e8f5f1;color:#1F7A63;font-size:.6rem;">
-                        <i class="fas fa-info fa-xs"></i>
-                    </span>
-                    <span class="uppercase font-semibold"
-                          style="font-size:.68rem;letter-spacing:.1em;color:#6b7f79;">
-                        Description
-                    </span>
-                </div>
-                <p class="m-0"
-                   style="font-size:.9375rem;line-height:1.75;
-                          color:#3a4a45;text-align:justify;">
-                    {{ product.description }}
-                </p>
-            </div>
+				{# Description #}
+				<div class="mb-4 pb-4 border-b border-[#e2ede9]">
+					<div class="flex items-center gap-2 mb-3">
+						<span class="inline-flex items-center justify-center rounded-sm" style="width:1.5rem;height:1.5rem;
+								                                 background-color:#e8f5f1;color:#1F7A63;font-size:.6rem;">
+							<i class="fas fa-info fa-xs"></i>
+						</span>
+						<span class="uppercase font-semibold" style="font-size:.68rem;letter-spacing:.1em;color:#6b7f79;">
+							Description
+						</span>
+					</div>
+					<p class="m-0" style="font-size:.9375rem;line-height:1.75;
+							                          color:#3a4a45;text-align:justify;">
+						{{ product.description }}
+					</p>
+				</div>
 
-            {# Caractéristiques #}
-            <div class="mb-4 pb-4 border-b border-[#e2ede9]">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="inline-flex items-center justify-center rounded-sm"
-                          style="width:1.5rem;height:1.5rem;
-                                 background-color:#e8f5f1;color:#1F7A63;font-size:.6rem;">
-                        <i class="fas fa-cog fa-xs"></i>
-                    </span>
-                    <span class="uppercase font-semibold"
-                          style="font-size:.68rem;letter-spacing:.1em;color:#6b7f79;">
-                        Caractéristiques
-                    </span>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    {% if product.capacity %}
-                    <span class="inline-flex items-center gap-1.5 text-[.8rem] font-medium px-3 py-2 rounded-full"
-                          style="background-color:#f0f4f3;color:#3a4a45;">
-                        <i class="fas fa-fill-drip" style="color:#1F7A63;"></i>
-                        {{ product.capacity }}
-                    </span>
-                    {% endif %}
-                    {% if product.temperature %}
-                    <span class="inline-flex items-center gap-1.5 text-[.8rem] font-medium px-3 py-2 rounded-full"
-                          style="background-color:#f0f4f3;color:#3a4a45;">
-                        <i class="fas fa-thermometer-half" style="color:#1F7A63;"></i>
-                        {{ product.temperature }}
-                    </span>
-                    {% endif %}
-                </div>
-            </div>
+				{# Caractéristiques #}
+				<div class="mb-4 pb-4 border-b border-[#e2ede9]">
+					<div class="flex items-center gap-2 mb-3">
+						<span class="inline-flex items-center justify-center rounded-sm" style="width:1.5rem;height:1.5rem;
+								                                 background-color:#e8f5f1;color:#1F7A63;font-size:.6rem;">
+							<i class="fas fa-cog fa-xs"></i>
+						</span>
+						<span class="uppercase font-semibold" style="font-size:.68rem;letter-spacing:.1em;color:#6b7f79;">
+							Caractéristiques
+						</span>
+					</div>
+					<div class="flex flex-wrap gap-2">
+						{% if product.capacity %}
+							<span class="inline-flex items-center gap-1.5 text-[.8rem] font-medium px-3 py-2 rounded-full" style="background-color:#f0f4f3;color:#3a4a45;">
+								<i class="fas fa-fill-drip" style="color:#1F7A63;"></i>
+								{{ product.capacity }}
+							</span>
+						{% endif %}
+						{% if product.temperature %}
+							<span class="inline-flex items-center gap-1.5 text-[.8rem] font-medium px-3 py-2 rounded-full" style="background-color:#f0f4f3;color:#3a4a45;">
+								<i class="fas fa-thermometer-half" style="color:#1F7A63;"></i>
+								{{ product.temperature }}
+							</span>
+						{% endif %}
+					</div>
+				</div>
 
-            {# Add-to-cart form #}
-            {% if product.stock > 0 %}
-            <form method="post" action="{{ path('app_cartadd', {id: product.id}) }}"
-                  class="flex gap-2 flex-wrap add-to-cart-form-detail">
-                <input type="hidden" name="_token" value="{{ csrf_token('cart_add') }}">
-                <button type="submit"
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-lg border-0 cursor-pointer transition-colors hover:bg-[#196350] focus:outline-none focus:ring-2 focus:ring-primary/30"
-                        aria-label="Ajouter {{ product.designation }} au panier">
-                    <i class="fas fa-shopping-cart"></i>
-                    Ajouter au panier
-                </button>
-            </form>
-            {% else %}
-            <p class="text-red-500 font-semibold mt-2">
-                <i class="fas fa-times-circle mr-1"></i> Produit actuellement indisponible
-            </p>
-            {% endif %}
+				{# Add-to-cart form #}
+				{% if product.stock > 0 %}
+					<form method="post" action="{{ path('app_cartadd', {id: product.id}) }}" class="flex gap-2 flex-wrap add-to-cart-form-detail">
+						<input type="hidden" name="_token" value="{{ csrf_token('cart_add') }}">
+						<button type="submit" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-lg border-0 cursor-pointer transition-colors hover:bg-[#196350] focus:outline-none focus:ring-2 focus:ring-primary/30" aria-label="Ajouter {{ product.designation }} au panier">
+							<i class="fas fa-shopping-cart"></i>
+							Ajouter au panier
+						</button>
+					</form>
+				{% else %}
+					<p class="text-red-500 font-semibold mt-2">
+						<i class="fas fa-times-circle mr-1"></i>
+						Produit actuellement indisponible
+					</p>
+				{% endif %}
 
-            {# Back link #}
-            <div class="mt-6">
-                <a href="{{ path('app_product') }}"
-                   class="inline-flex items-center gap-2 px-3 py-1.5 border border-[#6c757d] text-[#6c757d] text-sm rounded no-underline transition-colors hover:bg-[#6c757d] hover:text-white">
-                    <i class="fas fa-arrow-left fa-xs"></i>
-                    Retour aux produits
-                </a>
-            </div>
+				{# Back link #}
+				<div class="mt-6">
+					<a href="{{ path('app_product') }}" class="inline-flex items-center gap-2 px-3 py-1.5 border border-[#6c757d] text-[#6c757d] text-sm rounded no-underline transition-colors hover:bg-[#6c757d] hover:text-white">
+						<i class="fas fa-arrow-left fa-xs"></i>
+						Retour aux produits
+					</a>
+				</div>
 
-        </div>{# /col right #}
-    </div>{# /flex row #}
+			</div>
+			{# /col right #}
+		</div>
+		{# /flex row #}
 
-</div>{# /page #}
+	</div>
+	{# /page #}
 
 {% endblock %}

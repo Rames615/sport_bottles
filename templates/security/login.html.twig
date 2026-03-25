@@ -1,118 +1,97 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion - Sports Bottles{% endblock %}
+{% block title %}Connexion - Sports Bottles
+{% endblock %}
 
 {% block body %}
-<div class="min-h-[calc(100vh-12vh)] flex items-center justify-center px-5 py-10 mt-[70px]"
-     style="background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);">
-    <div class="w-full max-w-[450px] mx-auto">
-        <div class="bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,.1)] p-10 w-full">
-            <div class="text-center mb-8">
-                <h1 class="text-[2rem] font-semibold m-0 mb-2">Connexion</h1>
-                <p class="text-[.95rem] text-gray-500 m-0">Connectez-vous à votre compte</p>
-            </div>
+	<div class="min-h-[calc(100vh-12vh)] flex items-center justify-center px-5 py-10 mt-[70px]" style="background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);">
+		<div class="w-full max-w-[450px] mx-auto">
+			<div class="bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,.1)] p-10 w-full">
+				<div class="text-center mb-8">
+					<h1 class="text-[2rem] font-semibold m-0 mb-2">Connexion</h1>
+					<p class="text-[.95rem] text-gray-500 m-0">Connectez-vous à votre compte</p>
+				</div>
 
-            {% if error %}
-                <div class="flex items-start gap-2 p-4 mb-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm" role="alert" aria-live="assertive">
-                    <svg class="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
-                    <div>
-                        <strong>Erreur :</strong>
-                        {% if error.messageKey == 'Invalid credentials.' %}
-                            Compte non trouvé. Veuillez vous inscrire avant de vous connecter.
-                        {% else %}
-                            {{ error.messageKey|trans(error.messageData, 'security') }}
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
+				{% if error %}
+					<div class="flex items-start gap-2 p-4 mb-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm" role="alert" aria-live="assertive">
+						<svg class="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+						<div>
+							<strong>Erreur :</strong>
+							{% if error.messageKey == 'Invalid credentials.' %}
+								Compte non trouvé. Veuillez vous inscrire avant de vous connecter.
+							{% else %}
+								{{ error.messageKey|trans(error.messageData, 'security') }}
+							{% endif %}
+						</div>
+					</div>
+				{% endif %}
 
-            {% for message in app.flashes('success') %}
-                <div class="flex items-start gap-2 p-4 mb-4 bg-green-50 border border-green-200 text-green-700 rounded-xl text-sm" role="alert" aria-live="assertive">
-                    <svg class="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                    <div><strong>Succès :</strong> {{ message }}</div>
-                </div>
-            {% endfor %}
+				{% for message in app.flashes('success') %}
+					<div class="flex items-start gap-2 p-4 mb-4 bg-green-50 border border-green-200 text-green-700 rounded-xl text-sm" role="alert" aria-live="assertive">
+						<svg class="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+						<div>
+							<strong>Succès :</strong>
+							{{ message }}</div>
+					</div>
+				{% endfor %}
 
-            {% if app.user %}
-                <div class="flex items-start gap-2 p-4 mb-4 bg-blue-50 border border-blue-200 text-blue-700 rounded-xl text-sm" role="status">
-                    Vous êtes connecté en tant que <strong class="mx-1">{{ app.user.userIdentifier }}</strong>,
-                    <a href="{{ logout_path() }}" aria-label="Se déconnecter" class="text-blue-700 font-semibold underline">Se déconnecter</a>
-                </div>
-            {% endif %}
+				{% if app.user %}
+					<div class="flex items-start gap-2 p-4 mb-4 bg-blue-50 border border-blue-200 text-blue-700 rounded-xl text-sm" role="status">
+						Vous êtes connecté en tant que
+						<strong class="mx-1">{{ app.user.userIdentifier }}</strong>,
+						<a href="{{ logout_path() }}" aria-label="Se déconnecter" class="text-blue-700 font-semibold underline">Se déconnecter</a>
+					</div>
+				{% endif %}
 
-            <form method="post" novalidate>
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+				<form method="post" novalidate>
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                <div class="mb-4">
-                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
-                    <input
-                        type="email"
-                        id="username"
-                        name="_username"
-                        value="{{ last_username }}"
-                        class="w-full px-4 py-3 border {{ error ? 'border-red-400 focus:ring-red-300' : 'border-gray-300 focus:ring-primary/30' }} rounded-xl text-sm outline-none transition-shadow focus:ring-2"
-                        autocomplete="email"
-                        required
-                        autofocus
-                        aria-required="true"
-                        aria-invalid="{% if error %}true{% else %}false{% endif %}"
-                        aria-describedby="{% if error %}username-error{% endif %}"
-                        placeholder="votre@email.com"
-                    >
-                    {% if error %}
-                        <p id="username-error" class="mt-1 text-xs text-red-500" role="alert">
-                            {% if error.messageKey == 'Invalid credentials.' %}
-                                Compte non trouvé. Veuillez vous inscrire avant de vous connecter.
-                            {% else %}
-                                {{ error.messageKey|trans(error.messageData, 'security') }}
-                            {% endif %}
-                        </p>
-                    {% endif %}
-                </div>
+					<div class="mb-4">
+						<label for="username" class="block text-sm font-medium text-gray-700 mb-1">Email
+							<span class="text-red-500">*</span>
+						</label>
+						<input type="email" id="username" name="_username" value="{{ last_username }}" class="w-full px-4 py-3 border {{ error ? 'border-red-400 focus:ring-red-300' : 'border-gray-300 focus:ring-primary/30' }} rounded-xl text-sm outline-none transition-shadow focus:ring-2" autocomplete="email" required autofocus aria-required="true" aria-invalid="{% if error %}true{% else %}false{% endif %}" aria-describedby="{% if error %}username-error{% endif %}" placeholder="votre@email.com">
+						{% if error %}
+							<p id="username-error" class="mt-1 text-xs text-red-500" role="alert">
+								{% if error.messageKey == 'Invalid credentials.' %}
+									Compte non trouvé. Veuillez vous inscrire avant de vous connecter.
+								{% else %}
+									{{ error.messageKey|trans(error.messageData, 'security') }}
+								{% endif %}
+							</p>
+						{% endif %}
+					</div>
 
-                <div class="mb-4">
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe <span class="text-red-500">*</span></label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="_password"
-                        class="w-full px-4 py-3 border {{ error ? 'border-red-400 focus:ring-red-300' : 'border-gray-300 focus:ring-primary/30' }} rounded-xl text-sm outline-none transition-shadow focus:ring-2"
-                        autocomplete="current-password"
-                        required
-                        aria-required="true"
-                        aria-invalid="{% if error %}true{% else %}false{% endif %}"
-                        aria-describedby="{% if error %}password-error{% endif %}"
-                        placeholder="••••••••"
-                    >
-                    {% if error %}
-                        <p id="password-error" class="mt-1 text-xs text-red-500" role="alert">
-                            Vérifiez votre mot de passe
-                        </p>
-                    {% endif %}
-                </div>
+					<div class="mb-4">
+						<label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe
+							<span class="text-red-500">*</span>
+						</label>
+						<input type="password" id="password" name="_password" class="w-full px-4 py-3 border {{ error ? 'border-red-400 focus:ring-red-300' : 'border-gray-300 focus:ring-primary/30' }} rounded-xl text-sm outline-none transition-shadow focus:ring-2" autocomplete="current-password" required aria-required="true" aria-invalid="{% if error %}true{% else %}false{% endif %}" aria-describedby="{% if error %}password-error{% endif %}" placeholder="••••••••">
+						{% if error %}
+							<p id="password-error" class="mt-1 text-xs text-red-500" role="alert">
+								Vérifiez votre mot de passe
+							</p>
+						{% endif %}
+					</div>
 
-                <div class="mb-4 text-right">
-                    <a href="{{ path('app_forgot_password') }}" class="text-sm text-primary hover:underline">
-                        Mot de passe oublié ?
-                    </a>
-                </div>
+					<div class="mb-4 text-right">
+						<a href="{{ path('app_forgot_password') }}" class="text-sm text-primary hover:underline">
+							Mot de passe oublié ?
+						</a>
+					</div>
 
-                <button type="submit"
-                        class="w-full py-3 mt-1 bg-primary text-white font-semibold rounded-xl hover:bg-green-dark transition-colors"
-                        aria-label="Se connecter">
-                    Se connecter
-                </button>
-            </form>
+					<button type="submit" class="w-full py-3 mt-1 bg-primary text-white font-semibold rounded-xl hover:bg-green-dark transition-colors" aria-label="Se connecter">
+						Se connecter
+					</button>
+				</form>
 
-            <div class="text-center mt-8 pt-8 border-t border-gray-200">
-                <p class="text-gray-500 text-[.95rem] mb-4">Si vous n'avez pas encore de compte, inscrivez-vous.</p>
-                <a href="{{ path('app_register') }}"
-                   class="block w-full py-3 text-center border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition-colors no-underline"
-                   aria-label="Créer un compte">
-                    S'inscrire
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+				<div class="text-center mt-8 pt-8 border-t border-gray-200">
+					<p class="text-gray-500 text-[.95rem] mb-4">Si vous n'avez pas encore de compte, inscrivez-vous.</p>
+					<a href="{{ path('app_register') }}" class="block w-full py-3 text-center border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition-colors no-underline" aria-label="Créer un compte">
+						S'inscrire
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

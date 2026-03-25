@@ -1,120 +1,143 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Politique de confidentialité – Sports Bottles{% endblock %}
+{% block title %}Politique de confidentialité – Sports Bottles
+{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+	{{ parent() }}
+	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
 
-{# ── HERO ── #}
-<section class="relative overflow-hidden text-center py-10 sm:py-12 px-8 mt-20" style="background: linear-gradient(135deg, #edf7f4 0%, #f5fbf9 100%);">
-    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(31,122,99,.12) 0%, transparent 70%);"></div>
-    <div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, rgba(31,122,99,.2), transparent);"></div>
-    <div class="relative">
-        <span class="inline-block text-xs font-semibold tracking-widest uppercase border mb-4 px-3 py-1 rounded-full" style="background: rgba(31,122,99,.1); border-color: rgba(31,122,99,.3); color: #1F7A63;">Légal</span>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-main leading-tight" style="font-family: 'Syne', sans-serif;">Politique de confidentialité</h1>
-        <p class="mt-3 text-[0.9rem] text-muted">Dernière mise à jour : {{ "now"|date("d F Y") }}</p>
-    </div>
-</section>
+	{# ── HERO ── #}
+	<section class="relative overflow-hidden text-center py-10 sm:py-12 px-8 mt-20" style="background: linear-gradient(135deg, #edf7f4 0%, #f5fbf9 100%);">
+		<div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(31,122,99,.12) 0%, transparent 70%);"></div>
+		<div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, rgba(31,122,99,.2), transparent);"></div>
+		<div class="relative">
+			<span class="inline-block text-xs font-semibold tracking-widest uppercase border mb-4 px-3 py-1 rounded-full" style="background: rgba(31,122,99,.1); border-color: rgba(31,122,99,.3); color: #1F7A63;">Légal</span>
+			<h1 class="text-3xl sm:text-4xl font-extrabold text-main leading-tight" style="font-family: 'Syne', sans-serif;">Politique de confidentialité</h1>
+			<p class="mt-3 text-[0.9rem] text-muted">Dernière mise à jour :
+				{{ "now"|date("d F Y") }}</p>
+		</div>
+	</section>
 
-{# ── CONTENT ── #}
-<main class="max-w-[820px] mx-auto px-6 sm:px-8 py-14 pb-20">
-    <p class="text-sm text-[#5a6a7e] text-center px-5 py-4 rounded-xl border mb-10" style="background: linear-gradient(135deg, rgba(27,143,228,.08), rgba(93,184,255,.06)); border-color: rgba(27,143,228,.2);">
-        Ce document décrit comment <strong class="text-[#1b8fe4]">Sports Bottles</strong> collecte, utilise et protège vos données
-        personnelles conformément au RGPD.
-    </p>
+	{# ── CONTENT ── #}
+	<main class="max-w-[820px] mx-auto px-6 sm:px-8 py-14 pb-20">
+		<p class="text-sm text-[#5a6a7e] text-center px-5 py-4 rounded-xl border mb-10" style="background: linear-gradient(135deg, rgba(27,143,228,.08), rgba(93,184,255,.06)); border-color: rgba(27,143,228,.2);">
+			Ce document décrit comment
+			<strong class="text-[#1b8fe4]">Sports Bottles</strong>
+			collecte, utilise et protège vos données
+			        personnelles conformément au RGPD.
+		</p>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">1</span>
-            Responsable du traitement
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Sports Bottles, société par actions simplifiée au capital de 10 000 €, dont le siège social est
-        situé au 12 rue des Sportifs, 75001 Paris, est responsable du traitement de vos données personnelles.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Pour toute question relative à la présente politique, vous pouvez contacter notre délégué à la
-        protection des données à l'adresse : <strong>dpo@sportsbottles.fr</strong>.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">1</span>
+				Responsable du traitement
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Sports Bottles, société par actions simplifiée au capital de 10 000 €, dont le siège social est
+				        situé au 12 rue des Sportifs, 75001 Paris, est responsable du traitement de vos données personnelles.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Pour toute question relative à la présente politique, vous pouvez contacter notre délégué à la
+				        protection des données à l'adresse :
+				<strong>dpo@sportsbottles.fr</strong>.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">2</span>
-            Données collectées
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Nous collectons les catégories de données suivantes lors de votre utilisation de notre site :</p>
-        <ul class="list-none p-0 mt-2 mb-0 space-y-1">
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données d'identification : nom, prénom, adresse e-mail, numéro de téléphone.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données de commande : adresse de livraison, historique d'achats, mode de paiement (tokenisé).</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données de navigation : adresse IP, cookies, pages visitées, durée de session.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données de communication : messages échangés avec notre service client.</li>
-        </ul>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">2</span>
+				Données collectées
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Nous collectons les catégories de données suivantes lors de votre utilisation de notre site :</p>
+			<ul class="list-none p-0 mt-2 mb-0 space-y-1">
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données d'identification : nom, prénom, adresse e-mail, numéro de téléphone.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données de commande : adresse de livraison, historique d'achats, mode de paiement (tokenisé).</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données de navigation : adresse IP, cookies, pages visitées, durée de session.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données de communication : messages échangés avec notre service client.</li>
+			</ul>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">3</span>
-            Finalités et bases légales
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Vos données sont traitées pour les finalités suivantes :</p>
-        <ul class="list-none p-0 mt-2 mb-0 space-y-1">
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Exécution de votre commande et gestion de votre compte client (base : exécution du contrat).</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Envoi de communications commerciales avec votre consentement (base : consentement).</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Amélioration de nos services et analyses statistiques (base : intérêt légitime).</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Respect de nos obligations légales et comptables (base : obligation légale).</li>
-        </ul>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">3</span>
+				Finalités et bases légales
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Vos données sont traitées pour les finalités suivantes :</p>
+			<ul class="list-none p-0 mt-2 mb-0 space-y-1">
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Exécution de votre commande et gestion de votre compte client (base : exécution du contrat).</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Envoi de communications commerciales avec votre consentement (base : consentement).</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Amélioration de nos services et analyses statistiques (base : intérêt légitime).</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Respect de nos obligations légales et comptables (base : obligation légale).</li>
+			</ul>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">4</span>
-            Durée de conservation
-        </h2>
-        <ul class="list-none p-0 mt-2 mb-0 space-y-1">
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données clients actifs : durée de la relation commerciale + 3 ans.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données comptables : 10 ans conformément à la loi.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données de navigation : 13 mois maximum.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données de prospection commerciale : 3 ans à compter du dernier contact.</li>
-        </ul>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">4</span>
+				Durée de conservation
+			</h2>
+			<ul class="list-none p-0 mt-2 mb-0 space-y-1">
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données clients actifs : durée de la relation commerciale + 3 ans.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données comptables : 10 ans conformément à la loi.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données de navigation : 13 mois maximum.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Données de prospection commerciale : 3 ans à compter du dernier contact.</li>
+			</ul>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">5</span>
-            Vos droits
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Conformément au RGPD, vous disposez des droits suivants sur vos données personnelles :</p>
-        <ul class="list-none p-0 mt-2 mb-3 space-y-1">
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Droit d'accès : obtenir une copie des données vous concernant.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Droit de rectification : corriger des données inexactes ou incomplètes.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Droit à l'effacement : demander la suppression de vos données.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Droit à la portabilité : recevoir vos données dans un format structuré.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Droit d'opposition : vous opposer à certains traitements.</li>
-        </ul>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Pour exercer ces droits, contactez-nous à <strong>privacy@sportsbottles.fr</strong>. Vous pouvez
-        également introduire une réclamation auprès de la CNIL (www.cnil.fr).</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">5</span>
+				Vos droits
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Conformément au RGPD, vous disposez des droits suivants sur vos données personnelles :</p>
+			<ul class="list-none p-0 mt-2 mb-3 space-y-1">
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Droit d'accès : obtenir une copie des données vous concernant.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Droit de rectification : corriger des données inexactes ou incomplètes.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Droit à l'effacement : demander la suppression de vos données.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Droit à la portabilité : recevoir vos données dans un format structuré.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Droit d'opposition : vous opposer à certains traitements.</li>
+			</ul>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Pour exercer ces droits, contactez-nous à
+				<strong>privacy@sportsbottles.fr</strong>. Vous pouvez
+					        également introduire une réclamation auprès de la CNIL (www.cnil.fr).</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">6</span>
-            Sécurité des données
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos
-        données contre tout accès non autorisé, perte, destruction ou altération. Ces mesures incluent le
-        chiffrement SSL, l'authentification à deux facteurs et des audits de sécurité réguliers.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">6</span>
+				Sécurité des données
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos
+				        données contre tout accès non autorisé, perte, destruction ou altération. Ces mesures incluent le
+				        chiffrement SSL, l'authentification à deux facteurs et des audits de sécurité réguliers.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">7</span>
-            Partage des données
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Vos données ne sont jamais vendues à des tiers. Elles peuvent être partagées avec nos sous-traitants
-        (hébergeur, prestataire de paiement, transporteur) dans le strict cadre de l'exécution de nos services,
-        liés par des clauses contractuelles de protection des données.</p>
-    </div>
-</main>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">7</span>
+				Partage des données
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Vos données ne sont jamais vendues à des tiers. Elles peuvent être partagées avec nos sous-traitants
+				        (hébergeur, prestataire de paiement, transporteur) dans le strict cadre de l'exécution de nos services,
+				        liés par des clauses contractuelles de protection des données.</p>
+		</div>
+	</main>
 
 {% endblock %}

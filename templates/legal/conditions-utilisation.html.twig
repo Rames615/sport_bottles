@@ -1,121 +1,131 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Conditions d'utilisation – Sports Bottles{% endblock %}
+{% block title %}Conditions d'utilisation – Sports Bottles
+{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+	{{ parent() }}
+	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
 
-{# ── HERO ── #}
-<section class="relative overflow-hidden text-center py-10 sm:py-12 px-8 mt-20" style="background: linear-gradient(135deg, #edf7f4 0%, #f5fbf9 100%);">
-    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(31,122,99,.12) 0%, transparent 70%);"></div>
-    <div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, rgba(31,122,99,.2), transparent);"></div>
-    <div class="relative">
-        <span class="inline-block text-xs font-semibold tracking-widest uppercase border mb-4 px-3 py-1 rounded-full" style="background: rgba(31,122,99,.1); border-color: rgba(31,122,99,.3); color: #1F7A63;">Légal</span>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-main leading-tight" style="font-family: 'Syne', sans-serif;">Conditions d'utilisation</h1>
-        <p class="mt-3 text-[0.9rem] text-muted">Dernière mise à jour : {{ "now"|date("d F Y") }}</p>
-    </div>
-</section>
+	{# ── HERO ── #}
+	<section class="relative overflow-hidden text-center py-10 sm:py-12 px-8 mt-20" style="background: linear-gradient(135deg, #edf7f4 0%, #f5fbf9 100%);">
+		<div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(31,122,99,.12) 0%, transparent 70%);"></div>
+		<div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, rgba(31,122,99,.2), transparent);"></div>
+		<div class="relative">
+			<span class="inline-block text-xs font-semibold tracking-widest uppercase border mb-4 px-3 py-1 rounded-full" style="background: rgba(31,122,99,.1); border-color: rgba(31,122,99,.3); color: #1F7A63;">Légal</span>
+			<h1 class="text-3xl sm:text-4xl font-extrabold text-main leading-tight" style="font-family: 'Syne', sans-serif;">Conditions d'utilisation</h1>
+			<p class="mt-3 text-[0.9rem] text-muted">Dernière mise à jour :
+				{{ "now"|date("d F Y") }}</p>
+		</div>
+	</section>
 
-{# ── CONTENT ── #}
-<main class="max-w-[820px] mx-auto px-6 sm:px-8 py-14 pb-20">
-    <p class="text-sm text-[#5a6a7e] text-center px-5 py-4 rounded-xl border mb-10" style="background: linear-gradient(135deg, rgba(27,143,228,.08), rgba(93,184,255,.06)); border-color: rgba(27,143,228,.2);">
-        En accédant à notre site, vous acceptez sans réserve les présentes
-        <strong class="text-[#1b8fe4]">Conditions Générales d'Utilisation</strong>. Veuillez les lire attentivement.
-    </p>
+	{# ── CONTENT ── #}
+	<main class="max-w-[820px] mx-auto px-6 sm:px-8 py-14 pb-20">
+		<p class="text-sm text-[#5a6a7e] text-center px-5 py-4 rounded-xl border mb-10" style="background: linear-gradient(135deg, rgba(27,143,228,.08), rgba(93,184,255,.06)); border-color: rgba(27,143,228,.2);">
+			En accédant à notre site, vous acceptez sans réserve les présentes
+			<strong class="text-[#1b8fe4]">Conditions Générales d'Utilisation</strong>. Veuillez les lire attentivement.
+		</p>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">1</span>
-            Objet et acceptation
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités et
-        conditions d'utilisation du site internet www.sportsbottles.fr, ainsi que les droits et obligations
-        des parties dans ce cadre.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">L'accès et l'utilisation du site impliquent l'acceptation pleine et entière des présentes CGU.
-        Si vous n'acceptez pas ces conditions, nous vous invitons à ne pas utiliser notre site.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">1</span>
+				Objet et acceptation
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités et
+				        conditions d'utilisation du site internet www.sportsbottles.fr, ainsi que les droits et obligations
+				        des parties dans ce cadre.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">L'accès et l'utilisation du site impliquent l'acceptation pleine et entière des présentes CGU.
+				        Si vous n'acceptez pas ces conditions, nous vous invitons à ne pas utiliser notre site.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">2</span>
-            Accès au site
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Le site est accessible gratuitement depuis tout endroit à tout utilisateur disposant d'un accès à
-        Internet. Tous les frais nécessaires pour l'accès aux services (matériel informatique, connexion
-        Internet…) sont à la charge de l'utilisateur.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Sports Bottles se réserve le droit de modifier, interrompre, à tout moment sans préavis et sans
-        indemnité, l'accès temporaire ou définitif à tout ou partie du site.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">2</span>
+				Accès au site
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Le site est accessible gratuitement depuis tout endroit à tout utilisateur disposant d'un accès à
+				        Internet. Tous les frais nécessaires pour l'accès aux services (matériel informatique, connexion
+				        Internet…) sont à la charge de l'utilisateur.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Sports Bottles se réserve le droit de modifier, interrompre, à tout moment sans préavis et sans
+				        indemnité, l'accès temporaire ou définitif à tout ou partie du site.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">3</span>
-            Propriété intellectuelle
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">L'ensemble du contenu présent sur le site (textes, images, vidéos, logos, icônes, sons,
-        logiciels…) est protégé par le droit de la propriété intellectuelle et appartient exclusivement
-        à Sports Bottles ou à ses partenaires.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des
-        éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation
-        écrite préalable.</p>
-        <ul class="list-none p-0 mt-2 mb-0 space-y-1">
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>La marque "Sports Bottles" est une marque déposée.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Tout usage non autorisé constitue une contrefaçon sanctionnée par le Code de la propriété intellectuelle.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Les liens hypertextes vers notre site sont autorisés sous réserve d'accord préalable.</li>
-        </ul>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">3</span>
+				Propriété intellectuelle
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">L'ensemble du contenu présent sur le site (textes, images, vidéos, logos, icônes, sons,
+				        logiciels…) est protégé par le droit de la propriété intellectuelle et appartient exclusivement
+				        à Sports Bottles ou à ses partenaires.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des
+				        éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation
+				        écrite préalable.</p>
+			<ul class="list-none p-0 mt-2 mb-0 space-y-1">
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>La marque "Sports Bottles" est une marque déposée.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Tout usage non autorisé constitue une contrefaçon sanctionnée par le Code de la propriété intellectuelle.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Les liens hypertextes vers notre site sont autorisés sous réserve d'accord préalable.</li>
+			</ul>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">4</span>
-            Comportement de l'utilisateur
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">L'utilisateur s'engage à utiliser le site conformément aux lois et règlements en vigueur. Il est notamment interdit de :</p>
-        <ul class="list-none p-0 mt-2 mb-0 space-y-1">
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Diffuser des contenus illicites, offensants, diffamatoires ou contraires aux bonnes mœurs.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Usurper l'identité d'une autre personne ou entité.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Introduire des virus, chevaux de Troie ou tout autre programme malveillant.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Tenter d'accéder sans autorisation aux systèmes ou réseaux connectés au site.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Collecter des données personnelles d'autres utilisateurs sans leur consentement.</li>
-        </ul>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">4</span>
+				Comportement de l'utilisateur
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">L'utilisateur s'engage à utiliser le site conformément aux lois et règlements en vigueur. Il est notamment interdit de :</p>
+			<ul class="list-none p-0 mt-2 mb-0 space-y-1">
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Diffuser des contenus illicites, offensants, diffamatoires ou contraires aux bonnes mœurs.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Usurper l'identité d'une autre personne ou entité.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Introduire des virus, chevaux de Troie ou tout autre programme malveillant.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Tenter d'accéder sans autorisation aux systèmes ou réseaux connectés au site.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Collecter des données personnelles d'autres utilisateurs sans leur consentement.</li>
+			</ul>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">5</span>
-            Limitation de responsabilité
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Sports Bottles s'efforce de maintenir le site accessible et les informations exactes. Cependant,
-        nous ne garantissons pas l'absence d'erreurs, l'absence de virus ni la disponibilité continue du site.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Sports Bottles ne pourra être tenu responsable de tout dommage direct ou indirect résultant de
-        l'utilisation du site, de l'impossibilité d'y accéder, ou de la confiance accordée aux informations
-        qui y sont publiées.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">5</span>
+				Limitation de responsabilité
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Sports Bottles s'efforce de maintenir le site accessible et les informations exactes. Cependant,
+				        nous ne garantissons pas l'absence d'erreurs, l'absence de virus ni la disponibilité continue du site.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Sports Bottles ne pourra être tenu responsable de tout dommage direct ou indirect résultant de
+				        l'utilisation du site, de l'impossibilité d'y accéder, ou de la confiance accordée aux informations
+				        qui y sont publiées.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">6</span>
-            Liens hypertextes
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Le site peut contenir des liens vers des sites tiers. Ces liens sont fournis à titre informatif.
-        Sports Bottles n'exerce aucun contrôle sur ces sites et décline toute responsabilité quant à leur
-        contenu ou leur politique de confidentialité.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">6</span>
+				Liens hypertextes
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Le site peut contenir des liens vers des sites tiers. Ces liens sont fournis à titre informatif.
+				        Sports Bottles n'exerce aucun contrôle sur ces sites et décline toute responsabilité quant à leur
+				        contenu ou leur politique de confidentialité.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">7</span>
-            Droit applicable et juridiction
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Les présentes CGU sont soumises au droit français. En cas de litige, et après tentative de
-        résolution amiable, les tribunaux compétents de Paris seront seuls habilités à connaître dudit litige.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Sports Bottles se réserve le droit de modifier les présentes CGU à tout moment. La version
-        applicable est celle en ligne au moment de votre visite.</p>
-    </div>
-</main>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">7</span>
+				Droit applicable et juridiction
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Les présentes CGU sont soumises au droit français. En cas de litige, et après tentative de
+				        résolution amiable, les tribunaux compétents de Paris seront seuls habilités à connaître dudit litige.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Sports Bottles se réserve le droit de modifier les présentes CGU à tout moment. La version
+				        applicable est celle en ligne au moment de votre visite.</p>
+		</div>
+	</main>
 
 {% endblock %}

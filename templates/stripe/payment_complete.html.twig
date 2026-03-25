@@ -5,38 +5,6 @@
 {% block body %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-<style>
-    @keyframes popIn {
-        0%   { transform: scale(0); opacity: 0; }
-        100% { transform: scale(1); opacity: 1; }
-    }
-    @keyframes drawCheck {
-        0%   { opacity: 0; transform: scale(0.5); }
-        100% { opacity: 1; transform: scale(1); }
-    }
-    @keyframes fadeUp {
-        0%   { opacity: 0; transform: translateY(14px); }
-        100% { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fall {
-        0%   { opacity: 1; transform: translateY(-10px) rotate(0deg); }
-        100% { opacity: 0; transform: translateY(120px) rotate(360deg); }
-    }
-    .pop-in    { animation: popIn .5s cubic-bezier(.175,.885,.32,1.275) both; }
-    .draw-chk  { animation: drawCheck .4s ease .3s both; }
-    .fade-up   { animation: fadeUp .4s ease both; }
-    .delay-1   { animation-delay: .2s; }
-    .delay-2   { animation-delay: .3s; }
-    .delay-3   { animation-delay: .4s; }
-    .delay-4   { animation-delay: .5s; }
-    .dot {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0;
-        animation: fall linear forwards;
-    }
-</style>
-
 <div class="min-h-screen bg-[#f0f4f8] flex items-center justify-center py-10 px-4">
     <div class="bg-white rounded-3xl max-w-[560px] w-full px-12 py-14 shadow-[0_8px_48px_rgba(0,0,0,0.1)] text-center relative overflow-hidden max-[480px]:px-6 max-[480px]:py-10">
 
@@ -47,20 +15,20 @@
         <div class="absolute inset-0 pointer-events-none overflow-hidden" id="confetti"></div>
 
         <!-- Check icon -->
-        <div class="pop-in w-[88px] h-[88px] rounded-full bg-gradient-to-br from-[#1a8a5a] to-[#34d18a] flex items-center justify-center mx-auto mb-8 shadow-[0_12px_32px_rgba(26,138,90,0.3)]">
-            <svg class="draw-chk" width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <div class="animate-bounce w-[88px] h-[88px] rounded-full bg-gradient-to-br from-[#1a8a5a] to-[#34d18a] flex items-center justify-center mx-auto mb-8 shadow-[0_12px_32px_rgba(26,138,90,0.3)]">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
                 <path d="M10 20L17 27L30 13" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </div>
 
-        <h1 class="fade-up delay-1 text-[2.6rem] tracking-[1px] text-[#0f1923] mb-[10px] font-bold">Commande confirmée!</h1>
-        <p class="fade-up delay-2 text-[#6b7a8d] text-base mb-9 leading-[1.6]">
+        <h1 class="text-[2.6rem] tracking-[1px] text-[#0f1923] mb-[10px] font-bold">Commande confirmée!</h1>
+        <p class="text-[#6b7a8d] text-base mb-9 leading-[1.6]">
             Votre paiement a été accepté et votre commande est en cours de préparation.<br>
             Vous recevrez une confirmation par e-mail.
         </p>
 
         <!-- Order Details -->
-        <div class="fade-up delay-3 bg-[#f7f9fb] rounded-[14px] p-6 mb-8 text-left border border-[#e8edf2]">
+        <div class="bg-[#f7f9fb] rounded-[14px] p-6 mb-8 text-left border border-[#e8edf2]">
             <div class="flex justify-between items-center py-2 border-b border-[#e8edf2] text-[.95rem]">
                 <span class="text-[#6b7a8d] font-medium"><i class="bi bi-hash"></i> Référence</span>
                 <span class="text-[#0f1923] font-semibold">Commande #{{ order.id }}</span>
@@ -81,7 +49,7 @@
 
         <!-- Actions -->
         <a href="{{ path('app_home') }}"
-           class="fade-up delay-4 inline-flex items-center justify-center gap-2 w-full rounded-xl py-[14px] px-8 font-semibold text-base text-white no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(26,138,90,0.35)] mb-3 shadow-[0_4px_16px_rgba(26,138,90,0.25)]"
+           class="inline-flex items-center justify-center gap-2 w-full rounded-xl py-[14px] px-8 font-semibold text-base text-white no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(26,138,90,0.35)] mb-3 shadow-[0_4px_16px_rgba(26,138,90,0.25)]"
            style="background:linear-gradient(135deg,#1a8a5a,#34d18a);">
             <i class="bi bi-house-fill"></i> Retour à l'accueil
         </a>
@@ -104,7 +72,7 @@
 
         for (let i = 0; i < count; i++) {
             const dot = document.createElement('div');
-            dot.className = 'dot';
+            dot.className = 'absolute rounded-full animate-ping';
             const size = Math.random() * 8 + 5;
             dot.style.cssText = `
                 width: ${size}px;

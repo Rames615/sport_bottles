@@ -1,153 +1,187 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Politique de cookies – Sports Bottles{% endblock %}
+{% block title %}Politique de cookies – Sports Bottles
+{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+	{{ parent() }}
+	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
 
-{# ── HERO ── #}
-<section class="relative overflow-hidden text-center py-10 sm:py-12 px-8 mt-20" style="background: linear-gradient(135deg, #edf7f4 0%, #f5fbf9 100%);">
-    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(31,122,99,.12) 0%, transparent 70%);"></div>
-    <div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, rgba(31,122,99,.2), transparent);"></div>
-    <div class="relative">
-        <span class="inline-block text-xs font-semibold tracking-widest uppercase border mb-4 px-3 py-1 rounded-full" style="background: rgba(31,122,99,.1); border-color: rgba(31,122,99,.3); color: #1F7A63;">Légal</span>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-main leading-tight" style="font-family: 'Syne', sans-serif;">Politique de cookies</h1>
-        <p class="mt-3 text-[0.9rem] text-muted">Dernière mise à jour : {{ "now"|date("d F Y") }}</p>
-    </div>
-</section>
+	{# ── HERO ── #}
+	<section class="relative overflow-hidden text-center py-10 sm:py-12 px-8 mt-20" style="background: linear-gradient(135deg, #edf7f4 0%, #f5fbf9 100%);">
+		<div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(31,122,99,.12) 0%, transparent 70%);"></div>
+		<div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, rgba(31,122,99,.2), transparent);"></div>
+		<div class="relative">
+			<span class="inline-block text-xs font-semibold tracking-widest uppercase border mb-4 px-3 py-1 rounded-full" style="background: rgba(31,122,99,.1); border-color: rgba(31,122,99,.3); color: #1F7A63;">Légal</span>
+			<h1 class="text-3xl sm:text-4xl font-extrabold text-main leading-tight" style="font-family: 'Syne', sans-serif;">Politique de cookies</h1>
+			<p class="mt-3 text-[0.9rem] text-muted">Dernière mise à jour :
+				{{ "now"|date("d F Y") }}</p>
+		</div>
+	</section>
 
-{# ── CONTENT ── #}
-<main class="max-w-[820px] mx-auto px-6 sm:px-8 py-14 pb-20">
-    <p class="text-sm text-[#5a6a7e] text-center px-5 py-4 rounded-xl border mb-10" style="background: linear-gradient(135deg, rgba(27,143,228,.08), rgba(93,184,255,.06)); border-color: rgba(27,143,228,.2);">
-        Cette page explique comment <strong class="text-[#1b8fe4]">Sports Bottles</strong> utilise les cookies et technologies
-        similaires, conformément au RGPD et aux recommandations de la CNIL.
-    </p>
+	{# ── CONTENT ── #}
+	<main class="max-w-[820px] mx-auto px-6 sm:px-8 py-14 pb-20">
+		<p class="text-sm text-[#5a6a7e] text-center px-5 py-4 rounded-xl border mb-10" style="background: linear-gradient(135deg, rgba(27,143,228,.08), rgba(93,184,255,.06)); border-color: rgba(27,143,228,.2);">
+			Cette page explique comment
+			<strong class="text-[#1b8fe4]">Sports Bottles</strong>
+			utilise les cookies et technologies
+			        similaires, conformément au RGPD et aux recommandations de la CNIL.
+		</p>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">1</span>
-            Qu'est-ce qu'un cookie ?
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Un cookie est un petit fichier texte déposé sur votre terminal (ordinateur, smartphone, tablette)
-        lors de la visite d'un site internet. Il permet au site de mémoriser des informations sur votre visite,
-        comme votre langue préférée et d'autres paramètres, afin de faciliter votre prochaine visite et de
-        rendre le site plus utile.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Les cookies ne peuvent pas endommager votre appareil et ne contiennent aucune information
-        personnelle directement identifiable.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">1</span>
+				Qu'est-ce qu'un cookie ?
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Un cookie est un petit fichier texte déposé sur votre terminal (ordinateur, smartphone, tablette)
+				        lors de la visite d'un site internet. Il permet au site de mémoriser des informations sur votre visite,
+				        comme votre langue préférée et d'autres paramètres, afin de faciliter votre prochaine visite et de
+				        rendre le site plus utile.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Les cookies ne peuvent pas endommager votre appareil et ne contiennent aucune information
+				        personnelle directement identifiable.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">2</span>
-            Types de cookies utilisés
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Nous utilisons les catégories de cookies suivantes sur notre site :</p>
-        <table class="w-full border-collapse text-sm mt-4 mb-2">
-            <thead>
-                <tr>
-                    <th class="bg-[#0d1b2a] text-white px-4 py-2.5 text-left text-xs font-semibold tracking-wide first:rounded-tl-lg last:rounded-tr-lg">Nom du cookie</th>
-                    <th class="bg-[#0d1b2a] text-white px-4 py-2.5 text-left text-xs font-semibold tracking-wide first:rounded-tl-lg last:rounded-tr-lg">Type</th>
-                    <th class="bg-[#0d1b2a] text-white px-4 py-2.5 text-left text-xs font-semibold tracking-wide first:rounded-tl-lg last:rounded-tr-lg">Durée</th>
-                    <th class="bg-[#0d1b2a] text-white px-4 py-2.5 text-left text-xs font-semibold tracking-wide first:rounded-tl-lg last:rounded-tr-lg">Finalité</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="even:bg-[#f4f7fb]">
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><code>session_id</code></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700">Essentiel</span></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Session</td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Maintien de la session utilisateur</td>
-                </tr>
-                <tr class="even:bg-[#f4f7fb]">
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><code>cart_token</code></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700">Essentiel</span></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">7 jours</td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Sauvegarde du panier d'achat</td>
-                </tr>
-                <tr class="even:bg-[#f4f7fb]">
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><code>consent_choice</code></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700">Essentiel</span></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">12 mois</td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Mémorisation de vos préférences cookies</td>
-                </tr>
-                <tr class="even:bg-[#f4f7fb]">
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><code>_ga</code></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Analytique</span></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">2 ans</td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Google Analytics – distinction des visiteurs</td>
-                </tr>
-                <tr class="even:bg-[#f4f7fb]">
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><code>_gid</code></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Analytique</span></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">24 h</td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Google Analytics – statistiques de session</td>
-                </tr>
-                <tr class="even:bg-[#f4f7fb]">
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><code>_fbp</code></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top"><span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-600">Marketing</span></td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">90 jours</td>
-                    <td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Meta Pixel – suivi des conversions publicitaires</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">2</span>
+				Types de cookies utilisés
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Nous utilisons les catégories de cookies suivantes sur notre site :</p>
+			<table class="w-full border-collapse text-sm mt-4 mb-2">
+				<thead>
+					<tr>
+						<th class="bg-[#0d1b2a] text-white px-4 py-2.5 text-left text-xs font-semibold tracking-wide first:rounded-tl-lg last:rounded-tr-lg">Nom du cookie</th>
+						<th class="bg-[#0d1b2a] text-white px-4 py-2.5 text-left text-xs font-semibold tracking-wide first:rounded-tl-lg last:rounded-tr-lg">Type</th>
+						<th class="bg-[#0d1b2a] text-white px-4 py-2.5 text-left text-xs font-semibold tracking-wide first:rounded-tl-lg last:rounded-tr-lg">Durée</th>
+						<th class="bg-[#0d1b2a] text-white px-4 py-2.5 text-left text-xs font-semibold tracking-wide first:rounded-tl-lg last:rounded-tr-lg">Finalité</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="even:bg-[#f4f7fb]">
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<code>session_id</code>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700">Essentiel</span>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Session</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Maintien de la session utilisateur</td>
+					</tr>
+					<tr class="even:bg-[#f4f7fb]">
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<code>cart_token</code>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700">Essentiel</span>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">7 jours</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Sauvegarde du panier d'achat</td>
+					</tr>
+					<tr class="even:bg-[#f4f7fb]">
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<code>consent_choice</code>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700">Essentiel</span>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">12 mois</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Mémorisation de vos préférences cookies</td>
+					</tr>
+					<tr class="even:bg-[#f4f7fb]">
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<code>_ga</code>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Analytique</span>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">2 ans</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Google Analytics – distinction des visiteurs</td>
+					</tr>
+					<tr class="even:bg-[#f4f7fb]">
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<code>_gid</code>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Analytique</span>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">24 h</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Google Analytics – statistiques de session</td>
+					</tr>
+					<tr class="even:bg-[#f4f7fb]">
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<code>_fbp</code>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">
+							<span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-600">Marketing</span>
+						</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">90 jours</td>
+						<td class="px-4 py-2 border-b border-[#dde4ed] text-[#5a6a7e] align-top">Meta Pixel – suivi des conversions publicitaires</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">3</span>
-            Cookies essentiels
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Ces cookies sont strictement nécessaires au fonctionnement du site. Ils ne peuvent pas être
-        désactivés sans affecter les fonctionnalités de base, telles que la navigation, la connexion à votre
-        compte ou la gestion du panier.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Conformément à la réglementation, ces cookies ne nécessitent pas votre consentement préalable.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">3</span>
+				Cookies essentiels
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Ces cookies sont strictement nécessaires au fonctionnement du site. Ils ne peuvent pas être
+				        désactivés sans affecter les fonctionnalités de base, telles que la navigation, la connexion à votre
+				        compte ou la gestion du panier.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Conformément à la réglementation, ces cookies ne nécessitent pas votre consentement préalable.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">4</span>
-            Cookies analytiques
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Ces cookies nous permettent de comprendre comment les visiteurs interagissent avec notre site en
-        collectant et transmettant des informations de façon anonyme.</p>
-        <ul class="list-none p-0 mt-2 mb-3 space-y-1">
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Nombre de visiteurs et de pages vues.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Source du trafic (moteur de recherche, réseaux sociaux…).</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Comportement de navigation (durée, parcours, taux de rebond).</li>
-        </ul>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Ces cookies sont déposés uniquement avec votre consentement.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">4</span>
+				Cookies analytiques
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Ces cookies nous permettent de comprendre comment les visiteurs interagissent avec notre site en
+				        collectant et transmettant des informations de façon anonyme.</p>
+			<ul class="list-none p-0 mt-2 mb-3 space-y-1">
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Nombre de visiteurs et de pages vues.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Source du trafic (moteur de recherche, réseaux sociaux…).</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Comportement de navigation (durée, parcours, taux de rebond).</li>
+			</ul>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Ces cookies sont déposés uniquement avec votre consentement.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">5</span>
-            Cookies marketing
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Ces cookies sont utilisés pour vous proposer des publicités pertinentes sur nos sites partenaires.
-        Ils permettent de mesurer l'efficacité de nos campagnes publicitaires et de limiter le nombre
-        d'affichages d'une même annonce.</p>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Ils sont déposés uniquement avec votre consentement explicite et peuvent être retirés à tout moment
-        depuis le bandeau de gestion des cookies.</p>
-    </div>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">5</span>
+				Cookies marketing
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Ces cookies sont utilisés pour vous proposer des publicités pertinentes sur nos sites partenaires.
+				        Ils permettent de mesurer l'efficacité de nos campagnes publicitaires et de limiter le nombre
+				        d'affichages d'une même annonce.</p>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Ils sont déposés uniquement avec votre consentement explicite et peuvent être retirés à tout moment
+				        depuis le bandeau de gestion des cookies.</p>
+		</div>
 
-    <div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
-        <h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
-            <span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">6</span>
-            Gestion de vos préférences
-        </h2>
-        <p class="text-[#5a6a7e] text-[0.95rem] mb-3">Vous pouvez à tout moment modifier vos préférences en matière de cookies via :</p>
-        <ul class="list-none p-0 mt-2 mb-3 space-y-1">
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Le bandeau de consentement disponible en bas de page.</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Les paramètres de votre navigateur (Internet Explorer, Firefox, Chrome, Safari…).</li>
-            <li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5"><span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Les outils de désinscription proposés directement par les plateformes tierces.</li>
-        </ul>
-        <p class="text-[#5a6a7e] text-[0.95rem]">Attention : le refus de certains cookies peut affecter votre expérience de navigation et limiter
-        l'accès à certaines fonctionnalités du site.</p>
-    </div>
-</main>
+		<div class="bg-white rounded-2xl border border-[#dde4ed] px-8 sm:px-12 py-10 mb-7 shadow-sm hover:shadow-md transition-shadow">
+			<h2 class="flex items-center gap-3 text-xl font-bold text-[#0d1b2a] mb-4" style="font-family: 'Syne', sans-serif;">
+				<span class="inline-flex items-center justify-center w-8 h-8 text-white text-xs font-bold rounded-lg shrink-0" style="background: linear-gradient(135deg, #1b8fe4, #5db8ff);">6</span>
+				Gestion de vos préférences
+			</h2>
+			<p class="text-[#5a6a7e] text-[0.95rem] mb-3">Vous pouvez à tout moment modifier vos préférences en matière de cookies via :</p>
+			<ul class="list-none p-0 mt-2 mb-3 space-y-1">
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Le bandeau de consentement disponible en bas de page.</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Les paramètres de votre navigateur (Internet Explorer, Firefox, Chrome, Safari…).</li>
+				<li class="relative pl-6 text-[#5a6a7e] text-[0.95rem] py-0.5">
+					<span class="absolute left-0 text-[#1b8fe4] text-sm" aria-hidden="true">→</span>Les outils de désinscription proposés directement par les plateformes tierces.</li>
+			</ul>
+			<p class="text-[#5a6a7e] text-[0.95rem]">Attention : le refus de certains cookies peut affecter votre expérience de navigation et limiter
+				        l'accès à certaines fonctionnalités du site.</p>
+		</div>
+	</main>
 
 {% endblock %}
