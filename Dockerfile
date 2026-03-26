@@ -1,18 +1,20 @@
-FROM php:8.3-apache-bookworm
+FROM php:8.4-fpm-alpine
 
-# Installation dépendances système (single layer, clean cache)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Install system deps (Alpine packages) + nginx + supervisord
+RUN apk add --no-cache \
     git \
     unzip \
-    libzip-dev \
-    libicu-dev \
-    libonig-dev \
+    icu-dev \
+    oniguruma-dev \
     libxml2-dev \
     curl \
     libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    default-mysql-client \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libzip-dev \
+    mysql-client \
+    nginx \
+    supervisor \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j"$(nproc)" \
         pdo \
@@ -20,25 +22,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         zip \
         intl \
         gd \
-        opcache \
-    && rm -rf /var/lib/apt/lists/*
+        opcache
 
-# Apache config
-RUN a2enmod rewrite
+# Nginx config
+COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-
-# Symfony-optimised Apache VirtualHost (no .htaccess needed)
-RUN echo '<VirtualHost *:80>\n\
-    DocumentRoot ${APACHE_DOCUMENT_ROOT}\n\
-    <Directory ${APACHE_DOCUMENT_ROOT}>\n\
-        AllowOverride All\n\
-        Require all granted\n\
-        FallbackResource /index.php\n\
-    </Directory>\n\
-    ErrorLog ${APACHE_LOG_DIR}/error.log\n\
-    CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
-</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+# Supervisord config (runs nginx + php-fpm together)
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Composer (cached layer — only re-runs when composer files change)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -57,7 +47,10 @@ RUN mkdir -p var/cache var/log \
     && composer dump-autoload --optimize \
     && php bin/console cache:clear --no-warmup 2>/dev/null || true
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public
+# Permissions — Alpine uses www-data (82:82)
+RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public \
+    && mkdir -p /run/nginx
 
 EXPOSE 80
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

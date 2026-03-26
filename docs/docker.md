@@ -19,7 +19,7 @@
 ├───────────────────────┬────────────────────────┬─────────────────────────┤
 │   sports_bottles_app  │   sports_bottles_db    │   sports_bottles_pma    │
 │                       │                        │                         │
-│   PHP 8.3 + Apache    │   MySQL 8.0.30         │   phpMyAdmin latest     │
+│   PHP 8.4 + Nginx     │   MySQL 8.0.30         │   phpMyAdmin latest     │
 │   Port: 8080          │   Port: 3307           │   Port: 8081            │
 │                       │                        │                         │
 │   Volumes:            │   Volume:              │   (pas de volume)       │
@@ -33,9 +33,11 @@
 
 | Fichier | Rôle |
 |---------|------|
-| `Dockerfile` | Image PHP 8.3 + Apache avec extensions (pdo_mysql, intl, gd, zip, opcache), Composer et VirtualHost Symfony |
-| `docker-compose.yml` | Orchestre les services `app` (PHP/Apache), `db` (MySQL) et `pma` (phpMyAdmin) avec healthcheck sur la base de données |
-| `.dockerignore` | Exclut `vendor/`, `var/`, `.git/`, `docs/`, `tests/` pour accélérer le build |
+| `Dockerfile` | Image PHP 8.4-fpm-alpine avec extensions (pdo_mysql, intl, gd, zip, opcache), Composer, Nginx et Supervisord. |
+| `docker-compose.yml` | Orchestre les services `app` (PHP/Nginx), `db` (MySQL) et `pma` (phpMyAdmin) avec healthcheck sur la base de données. |
+| `docker/nginx/default.conf` | Fichier de configuration du site pour Nginx. |
+| `docker/supervisord.conf` | Fichier de configuration pour Supervisord, qui gère les processus `php-fpm` et `nginx`. |
+| `.dockerignore` | Exclut `vendor/`, `var/`, `.git/`, `docs/`, `tests/` pour accélérer le build. |
 
 ### Volumes nommés
 
