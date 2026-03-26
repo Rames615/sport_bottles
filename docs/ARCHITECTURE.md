@@ -52,6 +52,14 @@ Le coeur de la logique transactionnelle est regroupé dans `CartService`. Ce ser
 
 Doctrine ORM assure la persistance des données. Les changements de schéma sont tracés par migrations et les données de démonstration sont fournies via les fixtures.
 
+### Ressources statiques et JavaScript
+
+Le dossier `public/scripts/` contient les scripts JavaScript non bundlés utilisés en complément d'AssetMapper. Le fichier principal est `payment.js`, qui porte la logique du formulaire de paiement Stripe : création du PaymentIntent, confirmation de la carte via l'API Stripe.js et gestion des erreurs avec retry.
+
+Pour éviter d'inliner des valeurs dynamiques (clé publique Stripe, URLs d'API) dans un fichier statique, un objet `window.PaymentConfig` est défini par un `<script>` inline dans `payment.html.twig`. Ce pont est lu par `payment.js` au chargement, ce qui conserve la séparation entre logique comportementale et configuration serveur.
+
+Les templates Stripe (`cancel.html.twig`, `complete.html.twig`, `payment_complete.html.twig`) utilisent exclusivement des classes utilitaires Tailwind pour leurs animations (`animate-bounce`, `animate-ping`, `animate-spin`), sans CSS supplémentaire ni `@keyframes` personnalisés.
+
 ## Entités principales
 
 Le modèle métier s'appuie sur les entités suivantes :

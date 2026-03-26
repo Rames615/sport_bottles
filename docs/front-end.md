@@ -474,6 +474,52 @@ Ces points renforcent la qualite d'usage du site et participent a une interface 
 
 ---
 
+## 14.13 Animations utilitaires Tailwind dans les templates Stripe
+
+Les pages liées au paiement (`cancel.html.twig`, `complete.html.twig`, `payment_complete.html.twig`) utilisent exclusivement les classes d'animation intégrées à Tailwind CSS, sans aucun `@keyframes` personnalisé ni fichier CSS dédié.
+
+Les classes employées sont les suivantes :
+
+- `animate-bounce` : fait rebondir une icône de confirmation ou d'erreur pour attirer l'attention ;
+- `animate-ping` : produit un effet de pulsation concentrique, souvent utilisé comme indicateur d'état actif ;
+- `animate-spin` : tourne un élément en continu, typiquement une icône de chargement.
+
+Cette approche garantit que les animations restent cohérentes avec le reste de l'interface, restent optimisées par le JIT Tailwind et ne nécessitent aucun outillage CSS supplémentaire.
+
+---
+
+## 14.14 JavaScript externe et pattern window.PaymentConfig
+
+Le fichier `public/scripts/payment.js` contient la totalité de la logique du formulaire de paiement Stripe : montage de l'élément de carte, validation en temps réel, création du PaymentIntent côté serveur, confirmation de la carte et gestion des erreurs.
+
+Ce script est chargé via une balise `<script src="/scripts/payment.js">` dans `payment.html.twig`. Pour éviter d'inliner des valeurs dynamiques (clé publique Stripe, URLs d'API générées par Symfony) dans un fichier statique, un objet de configuration est exposé juste avant le chargement du script :
+
+```twig
+<script>
+    window.PaymentConfig = {
+        stripePublicKey: "{{ stripe_public_key }}",
+        createIntentUrl: "{{ path('app_payment_create_intent') }}",
+        confirmUrl:      "{{ path('app_payment_confirm') }}"
+    };
+</script>
+<script src="/scripts/payment.js"></script>
+```
+
+`payment.js` consomme ensuite cet objet :
+
+```js
+const config = window.PaymentConfig || {};
+const stripe  = Stripe(config.stripePublicKey);
+```
+
+Cette séparation permet de :
+
+- conserver `payment.js` en tant que fichier statique versionnable ;
+- injecter les données dynamiques via Twig sans coupler le script au rendu serveur ;
+- éviter tout `eval()` ou interpolation de chaînes non sécurisée.
+
+---
+
 ## 14.12 Bilan de la partie front-end
 
 La partie front-end de Sports Bottles s'appuie sur une combinaison coherente de Twig et Tailwind CSS. Cette architecture permet :

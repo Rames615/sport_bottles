@@ -14,21 +14,19 @@
 ## Architecture Docker
 
 ```
-┌──────────────────────────────────────────────┐
-│              docker-compose.yml              │
-├──────────────────┬───────────────────────────┤
-│  sports_bottles  │   sports_bottles_db       │
-│      _app        │                           │
-│                  │                           │
-│  PHP 8.3 +       │   MySQL 8.0.30           │
-│  Apache          │                           │
-│  Port: 8080      │   Port: 3307             │
-│                  │                           │
-│  Volumes:        │   Volume:                │
-│  • bind-mount ./ │   • db_data (persistant) │
-│  • app_var       │                           │
-│  • app_vendor    │                           │
-└──────────────────┴───────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│                          docker-compose.yml                              │
+├───────────────────────┬────────────────────────┬─────────────────────────┤
+│   sports_bottles_app  │   sports_bottles_db    │   sports_bottles_pma    │
+│                       │                        │                         │
+│   PHP 8.3 + Apache    │   MySQL 8.0.30         │   phpMyAdmin latest     │
+│   Port: 8080          │   Port: 3307           │   Port: 8081            │
+│                       │                        │                         │
+│   Volumes:            │   Volume:              │   (pas de volume)       │
+│   • bind-mount ./     │   • db_data            │                         │
+│   • app_var           │     (persistant)       │                         │
+│   • app_vendor        │                        │                         │
+└───────────────────────┴────────────────────────┴─────────────────────────┘
 ```
 
 ### Fichiers Docker du projet
@@ -36,7 +34,7 @@
 | Fichier | Rôle |
 |---------|------|
 | `Dockerfile` | Image PHP 8.3 + Apache avec extensions (pdo_mysql, intl, gd, zip, opcache), Composer et VirtualHost Symfony |
-| `docker-compose.yml` | Orchestre les services `app` (PHP/Apache) et `db` (MySQL) avec healthcheck |
+| `docker-compose.yml` | Orchestre les services `app` (PHP/Apache), `db` (MySQL) et `pma` (phpMyAdmin) avec healthcheck sur la base de données |
 | `.dockerignore` | Exclut `vendor/`, `var/`, `.git/`, `docs/`, `tests/` pour accélérer le build |
 
 ### Volumes nommés
@@ -93,9 +91,10 @@ docker compose ps
 Résultat attendu :
 
 ```
-NAME                 IMAGE                STATUS                   PORTS
-sports_bottles_app   sports_bottles-app   Up X minutes             0.0.0.0:8080->80/tcp
-sports_bottles_db    mysql:8.0.30         Up X minutes (healthy)   0.0.0.0:3307->3306/tcp
+NAME                 IMAGE                        STATUS                   PORTS
+sports_bottles_app   sports_bottles-app           Up X minutes             0.0.0.0:8080->80/tcp
+sports_bottles_db    mysql:8.0.30                 Up X minutes (healthy)   0.0.0.0:3307->3306/tcp
+sports_bottles_pma   phpmyadmin/phpmyadmin:latest Up X minutes             0.0.0.0:8081->80/tcp
 ```
 
 ### 4. Installer les dépendances et préparer la base
@@ -150,6 +149,7 @@ curl http://localhost:8080/webhook/stripe
 | Compiler Tailwind en mode watch | `docker compose exec app php bin/console tailwind:build --watch` |
 | Vérifier les variables d'env | `docker compose exec app php bin/console debug:dotenv` |
 | Se connecter à MySQL | `docker compose exec db mysql -uroot -proot sports_bottles` |
+| Ouvrir phpMyAdmin | Navigateur → http://localhost:8081 (connexion automatique) |
 
 ---
 
@@ -242,3 +242,4 @@ docker compose exec app php bin/console tailwind:build
 |---------|-----------|----------------|-----|
 | Application PHP | 8080 | 80 | http://localhost:8080 |
 | MySQL | 3307 | 3306 | `mysql -h 127.0.0.1 -P 3307 -uroot -proot` |
+| phpMyAdmin | 8081 | 80 | http://localhost:8081 |

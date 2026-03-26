@@ -264,8 +264,11 @@ Le projet s'appuie sur la stack suivante :
 - Stripe PHP ;
 - EasyAdmin ;
 - AssetMapper, Stimulus et Symfony UX Turbo ;
+- Tailwind CSS (intégration via `symfonycasts/tailwind-bundle`) ;
 - PHPUnit ;
-- PHPStan.
+- PHPStan ;
+- Docker et Docker Compose (environnement conteneurisé recommandé) ;
+- phpMyAdmin (interface web de gestion de la base de données, port 8081).
 
 ## 12. Qualité logicielle et maintenabilité
 
