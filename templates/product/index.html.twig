@@ -65,7 +65,7 @@
 		{# Products Grid #}
 		<div class="px-6 sm:px-8 py-8">
 			{% if allProducts is not empty %}
-				<div class="products-grid grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-6">
+				<div class="products-grid grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pt-2">
 					{% for product in allProducts %}
 						{% include 'product/_card.html.twig' with {'product': product} only %}
 					{% endfor %}
