@@ -31,32 +31,32 @@ final class WebhookController extends AbstractController
     {
         // Health check for local testing (Stripe CLI, etc.)
         if ($request->isMethod('GET')) {
-            $logger->info('Stripe webhook health check (GET)');
-            return new Response('Webhook endpoint OK', 200);
+            $logger->info('Vérification du webhook Stripe (GET).');
+            return new Response('Point de terminaison webhook opérationnel', 200);
         }
 
         $payload        = $request->getContent();
         $sigHeader      = $request->headers->get('Stripe-Signature');
         $endpointSecret = $_ENV['STRIPE_WEBHOOK_SECRET'] ?? null;
 
-        $logger->info('Stripe webhook received', ['signature' => $sigHeader]);
+        $logger->info('Webhook Stripe reçu.', ['signature' => $sigHeader]);
 
         try {
             if ($endpointSecret) {
                 $event = Webhook::constructEvent($payload, (string) $sigHeader, (string) $endpointSecret);
             } else {
-                $logger->warning('STRIPE_WEBHOOK_SECRET missing — processing without signature verification.');
+                $logger->warning('STRIPE_WEBHOOK_SECRET absent — traitement sans vérification de signature.');
                 $event = json_decode($payload, true);
                 if (!$event) {
-                    throw new \RuntimeException('Invalid payload.');
+                    throw new \RuntimeException('Payload invalide.');
                 }
             }
         } catch (\UnexpectedValueException | \DomainException $e) {
-            $logger->error('Invalid Stripe webhook: ' . $e->getMessage());
-            return new Response('Invalid webhook', 400);
+            $logger->error('Webhook Stripe invalide : ' . $e->getMessage());
+            return new Response('Webhook invalide', 400);
         } catch (\Exception $e) {
-            $logger->error('Webhook processing error: ' . $e->getMessage());
-            return new Response('Server error', 500);
+            $logger->error('Erreur lors du traitement du webhook : ' . $e->getMessage());
+            return new Response('Erreur serveur', 500);
         }
 
         $type = is_object($event) ? ($event->type ?? null) : ($event['type'] ?? null);
@@ -68,10 +68,10 @@ final class WebhookController extends AbstractController
         match ($type) {
             'checkout.session.completed'   => $this->handleSessionCompleted($event, $em, $logger),
             'payment_intent.payment_failed' => $this->handlePaymentFailed($event, $em, $logger),
-            default                        => $logger->info('Unhandled Stripe event type: ' . (string) $type),
+            default                        => $logger->info('Type d\'événement Stripe non géré : ' . (string) $type),
         };
 
-        return new Response('Webhook processed', 200);
+        return new Response('Webhook traité', 200);
     }
 
     private function handleSessionCompleted(mixed $event, EntityManagerInterface $em, LoggerInterface $logger): void
@@ -90,7 +90,7 @@ final class WebhookController extends AbstractController
 
             $order->setStatus('paid');
             $em->flush();
-            $logger->info('Order marked as paid via webhook', ['order_id' => $order->getId()]);
+            $logger->info('Commande marquée comme payée via webhook.', ['order_id' => $order->getId()]);
 
             // Send order confirmation email with line items from Stripe
             try {
@@ -110,7 +110,7 @@ final class WebhookController extends AbstractController
                 }
                 $this->mailerService->sendOrderConfirmation($order, $items);
             } catch (\Exception $e) {
-                $logger->error('Failed to send order confirmation email from webhook', ['exception' => $e->getMessage()]);
+                $logger->error('Échec de l\'envoi de l\'e-mail de confirmation de commande depuis le webhook.', ['exception' => $e->getMessage()]);
             }
         }
     }
@@ -121,7 +121,7 @@ final class WebhookController extends AbstractController
         $piId     = is_object($pi) ? ($pi->id ?? null) : ($pi['id'] ?? null);
         $metadata = is_object($pi) ? ($pi->metadata ?? null) : ($pi['metadata'] ?? null);
 
-        $logger->warning('Payment failed', ['payment_intent' => $piId]);
+        $logger->warning('Paiement échoué.', ['payment_intent' => $piId]);
 
         $orderId = is_object($metadata) ? ($metadata->order_id ?? null) : ($metadata['order_id'] ?? null);
 
@@ -130,7 +130,7 @@ final class WebhookController extends AbstractController
             if ($order) {
                 $order->setStatus('failed');
                 $em->flush();
-                $logger->info('Order marked as failed via webhook', ['order_id' => $order->getId()]);
+                $logger->info('Commande marquée comme échouée via webhook.', ['order_id' => $order->getId()]);
             }
         }
     }
