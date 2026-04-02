@@ -30,7 +30,7 @@
 		{% endblock %}
 	</head>
 
-	<body>
+	<body class="bg-body-bg font-sans text-text-main">
 		<!-- Decorative bottle background -->
 		<div class="site-bg-deco" aria-hidden="true">
 			<img src="{{ asset('products_images/isothermique_blue.png') }}" class="bg-bottle b1" alt="">
@@ -46,7 +46,7 @@
 
 		{% include 'nav.html.twig' %}
 
-		<main>
+		<main class="relative z-[1]">
 			{% block body %}{% endblock %}
 		</main>
 
