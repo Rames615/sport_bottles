@@ -7,15 +7,7 @@ module.exports = {
     './public/scripts/**/*.js',
   ],
 
-  /**
-   * IMPORTANT — Preflight disabled during Bootstrap coexistence (Phase 2/3 transition).
-   * Tailwind's Preflight (base reset) conflicts with Bootstrap's Reboot styles.
-   * Re-enable this (delete the corePlugins block) once:
-   *   1. The Bootstrap CDN <link> is removed from templates/base.html.twig
-   *   Bootstrap CSS CDN has been removed (Phase 3 complete).
-   *   Preflight is now enabled — Tailwind's base reset handles normalization.
-   */
-  /* corePlugins: { preflight: false }, — REMOVED: Bootstrap CSS is gone */
+  // Preflight (base reset) is enabled — Bootstrap CSS CDN removed, no conflicts.
 
   safelist: [
     /**
@@ -113,9 +105,9 @@ module.exports = {
         'stripe':        '#5753E0',   // --stripe      (badge text)
         'stripe-light':  '#EEECFF',   // --stripe-light (badge background)
 
-        // Hero CTA gradient endpoints
-        'hero-from':     'C',
-        'hero-to':       '#00D4FF',
+        // Hero CTA gradient endpoints (from-hero-from / to-hero-to)
+        'hero-from':     '#00FF99',   // neon mint — gradient start
+        'hero-to':       '#00D4FF',   // cyan     — gradient end
 
         // Semantic overrides (product.css defines its own --success-color)
         'success-alt':   '#28A745',   // product price color (differs from Bootstrap's green)
@@ -203,7 +195,8 @@ module.exports = {
           '0%, 100%': { transform: 'scale(1)' },
           '50%':       { transform: 'scale(1.1)' },
         },
-        // Hero feature badges — staggered fade + slide up
+        // Hero feature badges — used via arbitrary values: animate-[fadeSlideUp_.6s_ease_both]
+        // No named animation shorthand needed; JIT resolves the keyframe by name.
         fadeSlideUp: {
           from: { opacity: '0', transform: 'translateY(20px)' },
           to:   { opacity: '1', transform: 'translateY(0)' },
@@ -216,6 +209,7 @@ module.exports = {
         'badge-pop':   'badge-pop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         'modal-in':    'modalSlideIn 0.3s ease-out',
         'slide-right': 'slideInRight 0.3s ease-out',
+        'slide-out':   'slideOutRight 0.3s ease-in forwards',  // toast dismiss (hero.js / cart.js)
         'slide-up':    'slideUp 0.4s ease-out',
         'pulse-icon':  'pulseIcon 2s ease-in-out infinite',
       },
