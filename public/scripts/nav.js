@@ -30,9 +30,8 @@
             document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function (el) {
                 bootstrap.Dropdown.getOrCreateInstance(el);
             });
-            document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (el) {
-                bootstrap.Collapse.getOrCreateInstance(el);
-            });
+            /* Collapse re-init handled by reinitBootstrap() in base.html.twig
+               with {toggle:false} on the actual .collapse element. */
         }
 
         /* ── Mobile: close navbar on nav-link click ─────────────────── */
