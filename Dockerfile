@@ -49,8 +49,7 @@ COPY . .
 
 # Create var directory (excluded by .dockerignore) + finish autoloader
 RUN mkdir -p var/cache var/log \
-    && composer dump-autoload --optimize \
-    && php bin/console cache:clear --no-warmup 2>/dev/null || true
+    && composer dump-autoload --optimize
 
 # Permissions — Alpine uses www-data (82:82)
 RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public \
