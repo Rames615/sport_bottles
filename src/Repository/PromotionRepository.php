@@ -35,4 +35,18 @@ class PromotionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function countActivePromotions(): int
+    {
+        $now = new \DateTimeImmutable();
+
+        return (int) $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->where('p.isActive = true')
+            ->andWhere('p.startAt <= :now')
+            ->andWhere('p.endAt >= :now')
+            ->setParameter('now', $now)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

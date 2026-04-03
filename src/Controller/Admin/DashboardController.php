@@ -14,13 +14,15 @@ use App\Entity\Category;
 use App\Entity\Cart;
 use App\Entity\Order;
 use App\Entity\Promotion;
+use App\Repository\PromotionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private PromotionRepository $promotionRepository
     ) {}
 
     #[IsGranted('ROLE_ADMIN')]
@@ -32,6 +34,7 @@ class DashboardController extends AbstractDashboardController
         $cartCount = $this->entityManager->getRepository(Cart::class)->count([]);
         $orderCount = $this->entityManager->getRepository(Order::class)->count([]);
         $promotionCount = $this->entityManager->getRepository(Promotion::class)->count([]);
+        $activePromotionCount = $this->promotionRepository->countActivePromotions();
 
         return $this->render('admin/dashboard.html.twig', compact(
             'userCount',
@@ -39,7 +42,8 @@ class DashboardController extends AbstractDashboardController
             'categoryCount',
             'cartCount',
             'orderCount',
-            'promotionCount'
+            'promotionCount',
+            'activePromotionCount'
         ));
     }
 

@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block body %}
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[70px] md:mt-[60px] py-8" id="adminDashboardData" data-user-count="{{ userCount }}" data-product-count="{{ productCount }}" data-category-count="{{ categoryCount }}" data-cart-count="{{ cartCount }}" data-order-count="{{ orderCount }}" data-promotion-count="{{ promotionCount }}">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[70px] md:mt-[60px] py-8" id="adminDashboardData" data-user-count="{{ userCount }}" data-product-count="{{ productCount }}" data-category-count="{{ categoryCount }}" data-cart-count="{{ cartCount }}" data-order-count="{{ orderCount }}" data-promotion-count="{{ promotionCount }}" data-active-promotion-count="{{ activePromotionCount }}">
 		<h1 class="text-2xl font-bold font-display text-gray-900 mb-6">Tableau de bord</h1>
 
 		{# Composant réutilisable #}
@@ -83,8 +83,9 @@
 						<i class="bi bi-percent" aria-hidden="true"></i>
 					</div>
 					<div>
-						<div class="text-sm text-gray-500">Promotions</div>
-						<div class="text-2xl font-bold">{{ promotionCount }}</div>
+						<div class="text-sm text-gray-500">Promotions actives</div>
+						<div class="text-2xl font-bold">{{ activePromotionCount }}</div>
+						<div class="text-xs text-gray-400">{{ promotionCount }} au total</div>
 					</div>
 				</div>
 				<a href="/admin/promotion" class="absolute inset-0" aria-label="Gérer les promotions"></a>
