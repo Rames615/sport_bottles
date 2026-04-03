@@ -9,4 +9,4 @@ import './styles/app.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 // import './hero.js';
-import './cookie-consent.js';
+// Cookie consent moved to public/scripts/cookie-consent.js (loaded via <script> in base.html.twig)
