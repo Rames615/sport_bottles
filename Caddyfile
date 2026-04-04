@@ -1,0 +1,6 @@
+# Remplace ton-domaine.com par ton vrai domaine
+# Caddy gère automatiquement le certificat SSL Let's Encrypt
+
+ton-domaine.com {
+    reverse_proxy app:80
+}
