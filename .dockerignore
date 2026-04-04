@@ -4,7 +4,6 @@ node_modules/
 var/
 
 # Environment files — secrets must NEVER enter the build context
-.env
 .env.local
 .env.local.php
 .env.*.local
