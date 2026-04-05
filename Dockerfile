@@ -47,9 +47,6 @@ RUN mkdir -p var/cache var/log \
     && composer dump-autoload --optimize \
     && php bin/console cache:clear --no-warmup 2>/dev/null || true
 
-# Install importmap vendor assets (e.g. @hotwired/stimulus)
-RUN php bin/console importmap:install
-
 # Build Tailwind CSS for production
 RUN php bin/console tailwind:build --minify 2>/dev/null || true
 
@@ -59,4 +56,4 @@ RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public \
 
 EXPOSE 80
 
-CMD ["sh", "-c", "chown -R www-data:www-data /var/www/html/var && exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
+CMD ["sh", "-c", "chown -R www-data:www-data /var/www/html/var /var/www/html/public/vendor && php bin/console importmap:install && exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
