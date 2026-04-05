@@ -56,4 +56,4 @@ RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public \
 
 EXPOSE 80
 
-CMD ["sh", "-c", "chown -R www-data:www-data /var/www/html/var && exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
+CMD ["sh", "-c", "chown -R www-data:www-data /var/www/html/var && su -s /bin/sh www-data -c 'php bin/console tailwind:build --minify' && exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
