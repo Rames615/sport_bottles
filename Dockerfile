@@ -56,4 +56,4 @@ RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public \
 
 EXPOSE 80
 
-CMD ["sh", "-c", "chown -R www-data:www-data /var/www/html/var /var/www/html/public/vendor && php bin/console importmap:install && exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
+CMD ["sh", "-c", "chown -R www-data:www-data /var/www/html/var && php bin/console importmap:install && chown -R www-data:www-data /var/www/html/public/vendor && exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
