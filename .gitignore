@@ -17,3 +17,4 @@
 /public/assets/
 ###< symfony/asset-mapper ###
 nul
+*.sql
