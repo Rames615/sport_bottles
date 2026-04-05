@@ -25,11 +25,18 @@ class ContactType extends AbstractType
                 ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Votre email',
-                'attr'  => ['placeholder' => 'jean@exemple.fr'],
+                'label' => 'Adresse e-mail',
+                'attr'  => [
+                    'placeholder'    => 'prenom@exemple.com',
+                    'autocomplete'   => 'email',
+                    'inputmode'      => 'email',
+                    'spellcheck'     => 'false',
+                    'autocapitalize' => 'none',
+                    'autocorrect'    => 'off',
+                ],
                 'constraints' => [
-                    new Assert\NotBlank(message: 'Veuillez entrer votre email.'),
-                    new Assert\Email(message: 'Adresse email invalide.'),
+                    new Assert\NotBlank(message: 'Veuillez entrer votre adresse e-mail.'),
+                    new Assert\Email(mode: 'html5', message: 'Veuillez entrer une adresse e-mail valide (ex : prenom@exemple.com).'),
                 ],
             ])
             ->add('subject', TextType::class, [

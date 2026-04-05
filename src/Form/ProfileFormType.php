@@ -17,13 +17,18 @@ class ProfileFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
+                'label' => 'Adresse e-mail',
                 'attr' => [
-                    'autocomplete' => 'email',
-                    'placeholder' => 'votre@email.com',
+                    'placeholder'    => 'prenom@exemple.com',
+                    'autocomplete'   => 'email',
+                    'inputmode'      => 'email',
+                    'spellcheck'     => 'false',
+                    'autocapitalize' => 'none',
+                    'autocorrect'    => 'off',
                 ],
                 'constraints' => [
-                    new NotBlank(message: 'Veuillez entrer votre adresse email.'),
-                    new Email(message: 'Veuillez entrer une adresse email valide.'),
+                    new NotBlank(message: 'Veuillez entrer votre adresse e-mail.'),
+                    new Email(mode: 'html5', message: 'Veuillez entrer une adresse e-mail valide (ex : prenom@exemple.com).'),
                 ],
             ]);
     }
