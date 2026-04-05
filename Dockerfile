@@ -42,14 +42,17 @@ RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 # Copy the rest of the project
 COPY . .
 
+# Force prod environment for all build-time console commands
+ENV APP_ENV=prod APP_DEBUG=0
+
 # Create var directory (excluded by .dockerignore) + finish autoloader
-RUN mkdir -p var/cache var/log \
+RUN mkdir -p var/cache var/log var/tailwind \
     && composer dump-autoload --optimize \
-    && php bin/console cache:clear --no-warmup 2>/dev/null || true
+    && php bin/console cache:clear --no-warmup --env=prod
 
 # Build Tailwind CSS then compile all assets to public/assets/ for static serving
-RUN php bin/console tailwind:build --minify \
-    && php bin/console asset-map:compile
+RUN php bin/console tailwind:build --minify --env=prod \
+    && php bin/console asset-map:compile --env=prod
 
 # Permissions — Alpine uses www-data (82:82)
 RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public \
