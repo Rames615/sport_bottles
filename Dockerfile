@@ -47,6 +47,9 @@ RUN mkdir -p var/cache var/log \
     && composer dump-autoload --optimize \
     && php bin/console cache:clear --no-warmup 2>/dev/null || true
 
+# Install importmap vendor assets (e.g. @hotwired/stimulus)
+RUN php bin/console importmap:install
+
 # Build Tailwind CSS for production
 RUN php bin/console tailwind:build --minify 2>/dev/null || true
 
