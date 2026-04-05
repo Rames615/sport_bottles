@@ -48,6 +48,7 @@ ENV APP_ENV=prod APP_DEBUG=0
 # Create var directory (excluded by .dockerignore) + finish autoloader
 RUN mkdir -p var/cache var/log var/tailwind \
     && composer dump-autoload --optimize \
+    && php bin/console assets:install --env=prod \
     && php bin/console cache:clear --no-warmup --env=prod
 
 # Build Tailwind CSS then compile all assets to public/assets/ for static serving
