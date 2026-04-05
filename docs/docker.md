@@ -1,247 +1,202 @@
-# 🐳 Guide d'installation Docker — Sports Bottles
+# Docker — Architecture de production (Hetzner)
 
-## Prérequis
+## Infrastructure
 
-| Outil | Version minimale | Lien |
-|-------|-----------------|------|
-| **Docker Desktop** | 4.x+ | [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/) |
-| **Git** | 2.x+ | [git-scm.com](https://git-scm.com/) |
-
-> **Windows** : Docker Desktop doit être installé et **en cours d'exécution** (icône dans la barre des tâches). Activer WSL 2 est recommandé pour de meilleures performances.
+| Composant | Valeur |
+|-----------|--------|
+| VPS | Hetzner CX22 — Ubuntu 24.04 |
+| IP | `157.180.35.139` |
+| Domaine | `sports-bottles.duckdns.org` |
+| Docker | 29.3.1 |
+| Docker Compose | v5.1.1 |
+| Répertoire app | `/home/deploy/sports_bottles` |
 
 ---
 
-## Architecture Docker
+## Architecture des services
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                          docker-compose.yml                              │
-├───────────────────────┬────────────────────────┬─────────────────────────┤
-│   sports_bottles_app  │   sports_bottles_db    │   sports_bottles_pma    │
-│                       │                        │                         │
-│   PHP 8.4 + Nginx     │   MySQL 8.0.30         │   phpMyAdmin latest     │
-│   Port: 8080          │   Port: 3307           │   Port: 8081            │
-│                       │                        │                         │
-│   Volumes:            │   Volume:              │   (pas de volume)       │
-│   • bind-mount ./     │   • db_data            │                         │
-│   • app_var           │     (persistant)       │                         │
-│   • app_vendor        │                        │                         │
-└───────────────────────┴────────────────────────┴─────────────────────────┘
+Internet (HTTPS)
+       │
+       ▼
+┌─────────────────┐
+│  Caddy 2-alpine │  :80, :443 — reverse proxy + SSL Let's Encrypt auto
+└────────┬────────┘
+         │ proxy → app:80
+         ▼
+┌─────────────────────────────────┐
+│  sports_bottles_app             │
+│  PHP 8.4-fpm-alpine             │
+│  Nginx (port 80 interne)        │
+│  Supervisord (nginx + php-fpm)  │
+│                                 │
+│  Volumes:                       │
+│  • app_var → /var/www/html/var  │
+│  • products_images →            │
+│    /var/www/html/public/        │
+│    products_images              │
+└────────┬────────────────────────┘
+         │ TCP 3306
+         ▼
+┌─────────────────┐
+│  sports_bottles_db              │
+│  MySQL 8.0.30   │
+│  Volume: db_data                │
+└─────────────────┘
 ```
 
-### Fichiers Docker du projet
+---
+
+## Fichiers Docker
 
 | Fichier | Rôle |
 |---------|------|
-| `Dockerfile` | Image PHP 8.4-fpm-alpine avec extensions (pdo_mysql, intl, gd, zip, opcache), Composer, Nginx et Supervisord. |
-| `docker-compose.yml` | Orchestre les services `app` (PHP/Nginx), `db` (MySQL) et `pma` (phpMyAdmin) avec healthcheck sur la base de données. |
-| `docker/nginx/default.conf` | Fichier de configuration du site pour Nginx. |
-| `docker/supervisord.conf` | Fichier de configuration pour Supervisord, qui gère les processus `php-fpm` et `nginx`. |
-| `.dockerignore` | Exclut `vendor/`, `var/`, `.git/`, `docs/`, `tests/` pour accélérer le build. |
-
-### Volumes nommés
-
-Les volumes `app_var` et `app_vendor` isolent les dossiers `var/` et `vendor/` du bind-mount Windows → Linux. Cela **résout les erreurs de cache** (`rmdir: Directory not empty`) et **améliore considérablement les performances** d'I/O sur Windows.
+| `Dockerfile` | Image de l'application (build complet) |
+| `docker-compose.prod.yml` | Orchestration production (app + db + caddy) |
+| `Caddyfile` | Reverse proxy avec SSL automatique Let's Encrypt |
+| `docker/nginx/default.conf` | Config Nginx interne (port 80, routing PHP) |
+| `docker/supervisord.conf` | Gestion des processus nginx + php-fpm |
+| `.dockerignore` | Exclut vendor/, var/, .git/, .env.local, tests/ |
 
 ---
 
-## 🚀 Installation rapide (5 étapes)
+## Étapes du build Docker (Dockerfile)
 
-### 1. Cloner le projet
+Le build se déroule en couches dans cet ordre :
 
-```bash
-git clone <url-du-repo> sports_bottles
-cd sports_bottles
-```
+1. **Image de base** : `php:8.4-fpm-alpine`
+2. **Packages Alpine** : git, nginx, supervisor, icu-dev, libzip-dev, libpng-dev, etc.
+3. **Extensions PHP** : pdo_mysql, zip, intl, gd, opcache
+4. **Config nginx + supervisord** copiée dans l'image
+5. **Composer** installé depuis `composer:latest`
+6. **`composer install --no-dev`** (couche cachée, ne se relance que si composer.json change)
+7. **`COPY . .`** — tout le code source copié (hors `.dockerignore`)
+8. **`assets:install`** — copie les assets des bundles (EasyAdmin, etc.) vers `public/bundles/`
+9. **`cache:clear --env=prod`**
+10. **`tailwind:build --minify --env=prod`** — compile le CSS dans `var/tailwind/app.built.css`
+11. **`asset-map:compile --env=prod`** — fingerprinte et copie tous les assets dans `public/assets/`
+12. **`chown www-data`** sur `var/` et `public/`
+13. **CMD** : `chown -R www-data var/ && supervisord`
 
-### 2. Configurer l'environnement
+> `APP_ENV=prod` et `APP_DEBUG=0` sont définis comme variables d'environnement Docker pendant le build.
 
-Copier le fichier `.env.local` avec les clés Stripe (demander les clés test à l'équipe) :
+---
 
-```bash
-cp .env .env.local
-```
+## Variables d'environnement
 
-Éditer `.env.local` et vérifier ces variables :
+Toutes les variables de production sont dans **`.env.local`** sur le serveur (jamais committé).
+
+Le fichier `.env.prod.example` dans le repo sert de template.
+
+Variables obligatoires dans `.env.local` :
 
 ```dotenv
-DATABASE_URL="mysql://root:root@db:3306/sports_bottles?serverVersion=8.0.30&charset=utf8mb4"
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_PUBLIC_KEY=pk_test_...
+APP_ENV=prod
+APP_SECRET=<secret_32chars>
+
+DATABASE_URL="mysql://root:<MYSQL_ROOT_PASSWORD>@db:3306/sports_bottles?serverVersion=8.0.30&charset=utf8mb4"
+MYSQL_ROOT_PASSWORD=<mot_de_passe_root>
+MYSQL_DATABASE=sports_bottles
+
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_PUBLIC_KEY=pk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
-```
 
-> **Important** : Le `DATABASE_URL` doit pointer vers `db` (nom du service Docker), pas `127.0.0.1`.
-
-### 3. Construire et démarrer les conteneurs
-
-```bash
-docker compose up -d --build
-```
-
-Ce qui se passe :
-- Construction de l'image PHP/Apache depuis le `Dockerfile`
-- Démarrage de MySQL avec healthcheck (attend que MySQL soit prêt)
-- Démarrage de l'application PHP une fois MySQL healthy
-
-Vérifier que tout est lancé :
-
-```bash
-docker compose ps
-```
-
-Résultat attendu :
-
-```
-NAME                 IMAGE                        STATUS                   PORTS
-sports_bottles_app   sports_bottles-app           Up X minutes             0.0.0.0:8080->80/tcp
-sports_bottles_db    mysql:8.0.30                 Up X minutes (healthy)   0.0.0.0:3307->3306/tcp
-sports_bottles_pma   phpmyadmin/phpmyadmin:latest Up X minutes             0.0.0.0:8081->80/tcp
-```
-
-### 4. Installer les dépendances et préparer la base
-
-```bash
-# Installer les dépendances PHP (+ cache:clear, assets:install, importmap:install)
-docker compose exec app composer install
-
-# Créer la base de données (ignoré si elle existe déjà)
-docker compose exec app php bin/console doctrine:database:create --if-not-exists
-
-# Exécuter les migrations
-docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
-
-# Charger les données de test (fixtures)
-docker compose exec app php bin/console doctrine:fixtures:load --no-interaction
-```
-
-### 5. Compiler Tailwind CSS
-
-```bash
-docker compose exec app php bin/console tailwind:build
+MAILER_DSN=smtp://login:password@smtp.mailtrap.io:2525
 ```
 
 ---
 
-## ✅ Vérification
+## Volumes Docker
 
-Ouvrir le navigateur : **[http://localhost:8080](http://localhost:8080)**
+| Nom | Monté sur | Contenu |
+|-----|-----------|---------|
+| `db_data` | `/var/lib/mysql` | Données MySQL persistantes |
+| `app_var` | `/var/www/html/var` | Cache Symfony, logs, Tailwind buildé |
+| `products_images` | `/var/www/html/public/products_images` | Images des produits uploadées |
+| `caddy_data` | `/data` | Certificats SSL Let's Encrypt |
+| `caddy_config` | `/config` | Config Caddy |
 
-Vérifier les webhooks Stripe :
-
-```bash
-# Health check (doit retourner "Webhook endpoint OK")
-curl http://localhost:8080/stripe/webhook
-curl http://localhost:8080/webhook/stripe
-```
+> `public/assets/` (assets compilés avec fingerprint) est **dans l'image**, pas dans un volume — il est recréé à chaque build.
 
 ---
 
-## 📋 Commandes utiles
+## Réseau
+
+Tous les services partagent le réseau interne `sports` (bridge). Seul **Caddy** expose les ports 80 et 443 vers l'extérieur. L'app et la DB ne sont pas accessibles directement depuis Internet.
+
+---
+
+## Commandes de déploiement
+
+### Premier déploiement
+
+```bash
+git clone https://github.com/Rames615/sport_bottles.git sports_bottles
+cd sports_bottles
+nano .env.local          # remplir avec les vraies valeurs
+docker compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml exec app php bin/console doctrine:migrations:migrate --no-interaction
+```
+
+### Mise à jour (nouveau code)
+
+```bash
+git pull
+docker compose -f docker-compose.prod.yml build --progress=plain
+docker compose -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml exec app php bin/console doctrine:migrations:migrate --no-interaction
+```
+
+### Commandes utiles
 
 | Action | Commande |
 |--------|----------|
-| Démarrer les conteneurs | `docker compose up -d` |
-| Arrêter les conteneurs | `docker compose down` |
-| Voir les logs en direct | `docker compose logs -f app` |
-| Accéder au shell du conteneur | `docker compose exec app bash` |
-| Reconstruire après modif Dockerfile | `docker compose up -d --build` |
-| Exécuter une commande Symfony | `docker compose exec app php bin/console <commande>` |
-| Voir les routes | `docker compose exec app php bin/console debug:router` |
-| Compiler Tailwind en mode watch | `docker compose exec app php bin/console tailwind:build --watch` |
-| Vérifier les variables d'env | `docker compose exec app php bin/console debug:dotenv` |
-| Se connecter à MySQL | `docker compose exec db mysql -uroot -proot sports_bottles` |
-| Ouvrir phpMyAdmin | Navigateur → http://localhost:8081 (connexion automatique) |
+| Voir les logs en direct | `docker compose -f docker-compose.prod.yml logs -f app` |
+| Shell dans le conteneur | `docker compose -f docker-compose.prod.yml exec app sh` |
+| Statut des services | `docker compose -f docker-compose.prod.yml ps` |
+| Requête SQL directe | `docker compose -f docker-compose.prod.yml exec -T db mysql -uroot -p"$MYSQL_ROOT_PASSWORD" sports_bottles -e "SELECT ..."` |
+| Importer un dump SQL | `docker compose -f docker-compose.prod.yml exec -T db mysql -uroot -p"$MYSQL_ROOT_PASSWORD" sports_bottles < dump.sql` |
+| Redémarrer l'app | `docker compose -f docker-compose.prod.yml restart app` |
 
 ---
 
-## 🔑 Stripe Webhook en local
+## Résolution de problèmes
 
-### Méthode 1 : Stripe CLI (recommandée)
+### 502 Bad Gateway
 
-Installer Stripe CLI puis :
-
+Le conteneur `app` ne démarre pas. Vérifier :
 ```bash
-stripe login
-stripe listen --forward-to localhost:8080/stripe/webhook
+docker compose -f docker-compose.prod.yml logs app --tail 20
+```
+Cause fréquente : erreur dans le CMD (chown, console...) qui empêche supervisord de démarrer.
+
+### CSS absent (frontend ou admin)
+
+- **Frontend** : `public/assets/` doit être peuplé par `asset-map:compile` au build. Rebuilder l'image.
+- **Admin EasyAdmin** : `public/bundles/` doit être peuplé par `assets:install` au build. Rebuilder l'image.
+
+### Produits absents
+
+La base de données est vide après un premier déploiement. Importer un dump depuis la machine locale :
+```bash
+# Sur le PC local
+mysqldump -u root sports_bottles > dump.sql
+scp dump.sql root@157.180.35.139:/home/deploy/sports_bottles/
+
+# Sur le serveur
+MYSQL_ROOT_PASSWORD=$(grep MYSQL_ROOT_PASSWORD .env.local | cut -d'=' -f2)
+docker compose -f docker-compose.prod.yml exec -T db mysql -uroot -p"$MYSQL_ROOT_PASSWORD" sports_bottles < dump.sql
 ```
 
-Stripe CLI affichera un `whsec_...` temporaire → le copier dans `.env.local` comme `STRIPE_WEBHOOK_SECRET`.
+### Images produits absentes
 
-### Méthode 2 : Sans Stripe CLI
-
-Le webhook fonctionne sans Stripe CLI en développement. Le `STRIPE_WEBHOOK_SECRET` dans `.env.local` est utilisé pour la vérification de signature. En l'absence de ce secret, le controller accepte les payloads sans vérification (dev uniquement).
-
-### Routes Webhook
-
-| Route | Méthode | Controller |
-|-------|---------|------------|
-| `/stripe/webhook` | POST/GET | `StripeController::webhook()` |
-| `/webhook/stripe` | POST/GET | `WebhookController::stripe()` |
-
-Les deux endpoints gèrent :
-- `checkout.session.completed` → confirme la commande et envoie l'email
-- `payment_intent.payment_failed` → journalise l'échec de paiement
-
----
-
-## 🔧 Résolution de problèmes
-
-### Erreur : `Can't create database 'sports_bottles'; database exists`
-
-**Cause** : `MYSQL_DATABASE` dans `docker-compose.yml` crée déjà la base.
-**Solution** : Utiliser `--if-not-exists` :
-
+Le volume `products_images` est vide au premier déploiement. Copier depuis le PC local :
 ```bash
-docker compose exec app php bin/console doctrine:database:create --if-not-exists
+# Sur le PC local
+scp -r public/products_images/* root@157.180.35.139:/tmp/products_images/
+
+# Sur le serveur
+docker cp /tmp/products_images/. sports_bottles_app:/var/www/html/public/products_images/
+docker compose -f docker-compose.prod.yml exec app chown -R www-data:www-data /var/www/html/public/products_images
 ```
-
-### Erreur : `Failed to remove directory "var/cache/de_"` (cache:clear)
-
-**Cause** : Incompatibilité bind-mount Windows ↔ Linux filesystem.
-**Solution** : Les volumes nommés `app_var` et `app_vendor` dans `docker-compose.yml` sont déjà configurés pour résoudre ce problème. Si l'erreur persiste :
-
-```bash
-docker compose exec app bash -c "rm -rf var/cache/* && php bin/console cache:clear"
-```
-
-### Erreur : `Built Tailwind CSS file does not exist`
-
-**Solution** :
-
-```bash
-docker compose exec app php bin/console tailwind:build
-```
-
-### Erreur : `empty compose file`
-
-**Cause** : Présence d'un fichier `compose.yaml` vide à côté de `docker-compose.yml`.
-**Solution** : Supprimer le fichier vide :
-
-```bash
-rm compose.yaml compose.override.yaml
-```
-
-### Réinitialisation complète
-
-Pour repartir de zéro (supprime toutes les données) :
-
-```bash
-docker compose down -v
-docker compose up -d --build
-docker compose exec app composer install
-docker compose exec app php bin/console doctrine:database:create --if-not-exists
-docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
-docker compose exec app php bin/console doctrine:fixtures:load --no-interaction
-docker compose exec app php bin/console tailwind:build
-```
-
----
-
-## 🌐 Ports exposés
-
-| Service | Port local | Port conteneur | URL |
-|---------|-----------|----------------|-----|
-| Application PHP | 8080 | 80 | http://localhost:8080 |
-| MySQL | 3307 | 3306 | `mysql -h 127.0.0.1 -P 3307 -uroot -proot` |
-| phpMyAdmin | 8081 | 80 | http://localhost:8081 |
