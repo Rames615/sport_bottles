@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,8 +20,10 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    public function __construct(private EmailVerifier $emailVerifier)
-    {
+    public function __construct(
+        private EmailVerifier $emailVerifier,
+        private LoggerInterface $logger,
+    ) {
     }
 
     #[Route('/register', name: 'app_register')]
@@ -41,15 +44,21 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('no-reply@sportsbottles.fr', 'SportBottles'))
-                    ->to((string) $user->getEmail())
-                    ->subject('Confirmez votre adresse email — SportBottles')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-
-            // do anything else you need here, like send an email
+            try {
+                $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('no-reply@sportsbottles.fr', 'SportBottles'))
+                        ->to((string) $user->getEmail())
+                        ->subject('Confirmez votre adresse email — SportBottles')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                );
+            } catch (\Throwable $e) {
+                $this->logger->error('Registration confirmation email could not be sent.', [
+                    'user' => $user->getEmail(),
+                    'error' => $e->getMessage(),
+                ]);
+                $this->addFlash('warning', 'Votre compte a été créé, mais l\'e-mail de confirmation n\'a pas pu être envoyé. Contactez-nous si besoin.');
+            }
 
             return $security->login($user, 'form_login', 'main') ?? $this->redirectToRoute('app_home');
         }

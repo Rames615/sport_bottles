@@ -258,7 +258,7 @@ Ouvrir `https://sports-bottles.duckdns.org` dans le navigateur.
 ## 4. Mise à jour / Redéploiement
 
 ### Workflow standard (nouveau code pushé)
-
+<!-- todo: pour se-connecter au server et rechargement -->
 **1. Se connecter au serveur :**
 ```bash
 ssh root@157.180.35.139
