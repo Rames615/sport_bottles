@@ -2,6 +2,15 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
+    # Trust the reverse proxy (Caddy) so Symfony knows it's behind HTTPS.
+    # REMOTE_ADDR means "trust whoever is directly talking to PHP" (nginx/Caddy on the same host).
+    trusted_proxies: '127.0.0.1,REMOTE_ADDR'
+    trusted_headers:
+        - 'x-forwarded-for'
+        - 'x-forwarded-proto'
+        - 'x-forwarded-port'
+        - 'x-forwarded-host'
+
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 

@@ -383,7 +383,7 @@ docker compose -f docker-compose.prod.yml exec -T db mysql -uroot -p"$MYSQL_ROOT
 | Logs en direct | `docker compose -f docker-compose.prod.yml logs -f app` |
 | Shell dans l'app | `docker compose -f docker-compose.prod.yml exec app sh` |
 | Exécuter une migration | `docker compose -f docker-compose.prod.yml exec app php bin/console doctrine:migrations:migrate --no-interaction` |
-| Vider le cache Symfony | `docker compose -f docker-compose.prod.yml exec app php bin/console cache:clear` |
+| Vider le cache Symfony | `docker compose -f docker-compose.prod.yml exec app php bin/console cache:clear --env=prod` |
 | Utilisation CPU/RAM | `docker stats` |
 | Espace disque Docker | `docker system df` |
 | Nettoyer les images inutilisées | `docker image prune -f` |
