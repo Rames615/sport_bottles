@@ -47,8 +47,9 @@ RUN mkdir -p var/cache var/log \
     && composer dump-autoload --optimize \
     && php bin/console cache:clear --no-warmup 2>/dev/null || true
 
-# Build Tailwind CSS for production
-RUN php bin/console tailwind:build --minify 2>/dev/null || true
+# Build Tailwind CSS then compile all assets to public/assets/ for static serving
+RUN php bin/console tailwind:build --minify \
+    && php bin/console asset-map:compile
 
 # Permissions — Alpine uses www-data (82:82)
 RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public \
@@ -56,4 +57,4 @@ RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public \
 
 EXPOSE 80
 
-CMD ["sh", "-c", "chown -R www-data:www-data /var/www/html/var && su -s /bin/sh www-data -c 'php bin/console tailwind:build --minify' && exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
+CMD ["sh", "-c", "chown -R www-data:www-data /var/www/html/var && exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
