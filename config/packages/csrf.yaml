@@ -1,7 +1,5 @@
-# Stateless CSRF only for login/logout (these are token-based actions, not regular forms).
-# Regular forms (ShippingAddressType, ContactType, etc.) use session-based CSRF storage by default.
+# Session-based CSRF for login; stateless for logout only.
 framework:
     csrf_protection:
         stateless_token_ids:
-            - authenticate
             - logout
