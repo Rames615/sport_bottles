@@ -490,33 +490,51 @@ Cette approche garantit que les animations restent cohérentes avec le reste de 
 
 ## 14.14 JavaScript externe et pattern window.PaymentConfig
 
-Le fichier `public/scripts/payment.js` contient la totalité de la logique du formulaire de paiement Stripe : montage de l'élément de carte, validation en temps réel, création du PaymentIntent côté serveur, confirmation de la carte et gestion des erreurs.
+Le front-end JavaScript de Sports Bottles est organisé en fichiers statiques placés sous `public/scripts/` et conçus selon plusieurs patterns reproductibles. Les scripts n'injectent pas directement de valeurs sensibles : les données dynamiques (clé publique Stripe, URLs d'API Symfony, etc.) sont exposées par des objets globaux injectés via Twig (par exemple `window.PaymentConfig`) juste avant le chargement du script statique.
 
-Ce script est chargé via une balise `<script src="/scripts/payment.js">` dans `payment.html.twig`. Pour éviter d'inliner des valeurs dynamiques (clé publique Stripe, URLs d'API générées par Symfony) dans un fichier statique, un objet de configuration est exposé juste avant le chargement du script :
+Principales pratiques et motifs observés
+
+- **Modules IIFE / listeners** : la plupart des fichiers utilisent des IIFE ou `DOMContentLoaded` pour isoler le scope et initialiser le comportement uniquement quand le DOM est prêt.
+- **Compatibilité Turbo** : scripts idempotents (ex : `data-turbo-eval="false"`) ou utilisation d'`AbortController` / variables globales (`window._pfAbort`) pour annuler anciens listeners lors de navigations Turbo.
+- **Injection de configuration via `window`** : pattern `window.PaymentConfig` (ou autres objets `window.*`) permet de conserver les scripts statiques tout en transmettant des valeurs serveur-safes au runtime.
+- **APIs réseau modernes** : utilisation de `fetch`, `FormData`, `credentials: 'same-origin'`, et gestion explicite des CSRF tokens (meta tags ou champs de formulaire) pour les requêtes POST.
+- **Événements et délégation** : combinaison d'`addEventListener` sur éléments ciblés et d'écouteurs délégués (ex : `document.submit`) — parfois en phase de capture pour intercepter avant d'autres handlers.
+- **Robustesse & fallbacks** : vérifications `if (!el) return`, try/catch autour de DOM-manipulations, messages d'erreur clairs pour l'utilisateur et fallback `alert()` en dernier recours.
+- **Accessibilité & ARIA** : toasts et alertes utilisent `role="alert"`, badges mettent à jour `title` et attributs ARIA adaptés pour l'aide technique.
+- **UI & intégration Bootstrap/Stripe** : usage de `bootstrap.Modal` et conformité au SDK Stripe (`Stripe(config.stripePublicKey)`, `confirmCardPayment`) avec séparation claire des étapes (create PaymentIntent → confirm côté client → confirmation backend).
+- **Performance & UX** : cooldown anti-double-clic (`Set`), utilisation de `document.createDocumentFragment()` pour réordonner le DOM sans layout thrashing, `Intl.Collator` pour un tri localisé.
+
+Résumé par fichier (comportement et motifs clés)
+
+- `payment.js` — Montre le pattern `window.PaymentConfig` : charge `Stripe`, monte l'élément `card`, crée un PaymentIntent via l'API backend, confirme le paiement côté client, puis notifie le backend. Utilise les modals Bootstrap, gère explicitement le token CSRF et les erreurs utilisateur.
+- `cart.js` — Expose une API publique `window.updateCartBadge(count)`. Intercepte les `submit` en délégation (phase capture), envoie des requêtes AJAX via `fetch` et `FormData`, affiche des toasts et synchronise le tooltip du lien panier.
+- `hero.js` — Comportement d'ajout au panier depuis les cartes produit : cooldown par produit, prévention des doubles clics, consommation de `cart.js` via `window.updateCartBadge`, toasts temporaires, utilisation explicite du token CSRF depuis une meta.
+- `product-filters.js` — Filtrage et tri côté client : `AbortController` pour ré-init sur navigation Turbo, `Intl.Collator` pour tri localisé, parsing de prix, manipulation optimisée du DOM, et logique pour afficher/masquer les messages "aucun produit".
+- `product.js` — Composants d'UI produit (toggle filtres mobile, tabs de catégories) et helpers pour appliquer/reset des filtres ; mise en place simple et accessible des interactions.
+- `nav.js` — Ré-initialisation des composants Bootstrap après une navigation Turbo et fermeture de la navbar mobile ; bonne utilisation d'`AbortController` pour nettoyer les listeners précédents.
+- `cookie-consent.js` — Gestion RGPD par cookie première partie, modal Bootstrap statique, API publique `window.openCookieConsent()` pour permettre le retrait du consentement.
+- `dashboard.js` — Initialisation de `Chart.js` si présent, lecture sécurisée des `data-*` du DOM et rendu de graphiques responsives.
+
+Points d'attention et recommandations courtes
+
+- Centraliser la récupération des tokens CSRF (ex : meta `csrf-cart-token`) pour éviter duplications.
+- Documenter les APIs publiques exposées sur `window` (`PaymentConfig`, `updateCartBadge`, `openCookieConsent`) et éviter les collisions de noms.
+- Conserver les scripts statiques et injecter uniquement les petites config-objects via Twig (patron déjà appliqué pour `payment.js`).
+
+Exemple d'inclusion (pattern sûr et recommandé)
 
 ```twig
 <script>
     window.PaymentConfig = {
         stripePublicKey: "{{ stripe_public_key }}",
-        createIntentUrl: "{{ path('app_payment_create_intent') }}",
-        confirmUrl:      "{{ path('app_payment_confirm') }}"
+        createIntentUrl:  "{{ path('app_payment_create_intent') }}",
+        confirmPaymentUrl: "{{ path('app_payment_confirm') }}"
     };
 </script>
 <script src="/scripts/payment.js"></script>
 ```
 
-`payment.js` consomme ensuite cet objet :
-
-```js
-const config = window.PaymentConfig || {};
-const stripe  = Stripe(config.stripePublicKey);
-```
-
-Cette séparation permet de :
-
-- conserver `payment.js` en tant que fichier statique versionnable ;
-- injecter les données dynamiques via Twig sans coupler le script au rendu serveur ;
-- éviter tout `eval()` ou interpolation de chaînes non sécurisée.
+Cette section synthétise les compétences JavaScript appliquées dans le projet : modularité, gestion sécurisée des appels réseau, compatibilité Turbo, intégration sûre de services externes (Stripe, Bootstrap) et bonnes pratiques d'accessibilité et d'expérience utilisateur.
 
 ---
 
