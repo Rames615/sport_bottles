@@ -41,11 +41,11 @@ class OrderCrudController extends AbstractCrudController
             MoneyField::new('totalAmount')->setLabel('Montant total')->setCurrency('EUR')->setStoredAsCents(true),
             ChoiceField::new('status')->setChoices([
                 'En attente' => 'pending',
-                'Paye' => 'paid',
-                'Annulee' => 'cancelled',
+                'Payé' => 'paid',
+                'Annulé' => 'cancelled',
             ])->setLabel('Statut'),
             TextField::new('stripeSessionId')->setLabel('Session Stripe')->onlyOnDetail(),
-            DateTimeField::new('createdAt')->setLabel('Creee le'),
+            DateTimeField::new('createdAt')->setLabel('Créé le'),
             // ajouter le email du client dans la liste des commandes
             TextField::new('user.email')->setLabel('Email du client')->onlyOnIndex()
         ];
