@@ -30,7 +30,7 @@
 		{% endblock %}
 	</head>
 
-	<body class="bg-body-bg font-sans text-text-main">
+	<body class="min-h-screen flex flex-col bg-body-bg font-sans text-text-main">
 		<!-- Decorative bottle background -->
 		<div class="site-bg-deco" aria-hidden="true">
 			<img src="{{ asset('products_images/isothermique_blue.png') }}" class="bg-bottle b1" alt="">
@@ -46,7 +46,7 @@
 
 		{% include 'nav.html.twig' %}
 
-		<main class="relative z-[1]">
+		<main class="relative z-[1] flex-1">
 			{% for message in app.flashes('warning') %}
 				<div class="fixed top-20 left-1/2 -translate-x-1/2 z-[2000] w-full max-w-lg px-4">
 					<div class="flex items-start gap-2 p-4 bg-amber-50 border border-amber-300 text-amber-800 rounded-xl text-sm shadow-lg" role="alert">
