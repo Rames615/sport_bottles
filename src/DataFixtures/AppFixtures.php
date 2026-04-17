@@ -118,7 +118,8 @@ class AppFixtures extends Fixture
         $admin = new User();
         $admin->setEmail('sports@bottles.fr');
         $admin->setRoles(['ROLE_ADMIN']);
-        $admin->setPassword($this->passwordHasher->hashPassword($admin, '123456'));
+        $adminPassword = $_ENV['APP_ADMIN_PASSWORD'] ?? 'default_password';
+        $admin->setPassword($this->passwordHasher->hashPassword($admin, $adminPassword));
         $admin->setIsVerified(true);
         $manager->persist($admin);
 
