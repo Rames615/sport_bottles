@@ -68,7 +68,7 @@ class CartService
                     return false;
                 }
 
-                $cartItem->setQuantity($quantiteActuelle + 1);
+                $cartItem->setUnitPrice((string) $product->getFinalPrice());
                 // Update custom image if provided (use the latest promotion image)
                 if ($customImagePath !== null) {
                     $cartItem->setCustomImagePath($customImagePath);
@@ -85,7 +85,7 @@ class CartService
         $cartItem->setProduct($product);
         $cartItem->setQuantity(1);
         // Stocke le prix unitaire au moment de l'ajout
-        $cartItem->setUnitPrice((string) $product->getPrice());
+        $cartItem->setUnitPrice((string) $product->getFinalPrice());
         // Store custom image path if provided (e.g., promotion image)
         if ($customImagePath !== null) {
             $cartItem->setCustomImagePath($customImagePath);
