@@ -23,8 +23,19 @@
 			<ul
 				class="flex flex-col lg:flex-row lg:ml-auto lg:items-center lg:gap-1 list-none p-0 m-0
 					                        border-t border-white/10 py-2 lg:border-t-0 lg:py-0">
-
-				{# 1. Produits #}
+                
+				{# 1. Accueil #}
+				<li>
+					<a class="nav-link group flex items-center gap-2 px-[10px] py-2 text-white font-medium text-[.9rem] no-underline transition-colors duration-300 hover:text-primary relative" href="{{ path('app_home') }}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="shrink-0" viewBox="0 0 16 16" aria-hidden="true">
+							<path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 2.5 8H3v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V8h.5a.5.5 0 0 0 .354-.854l-6-6zM7.5 14V9h1v5h-1z"/>
+						</svg>
+						Accueil
+						<span class="hidden lg:block absolute bottom-[-5px] left-0 h-[2px] w-0 bg-primary transition-all duration-300 group-hover:w-full"></span>
+					</a>
+				</li>
+				
+				{# 2. Produits #}
 				<li>
 					<a class="nav-link group flex items-center gap-2 px-[10px] py-2 text-white font-medium text-[.9rem] no-underline transition-colors duration-300 hover:text-primary relative" href="{{ path('app_product') }}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="shrink-0" viewBox="0 0 16 16" aria-hidden="true">
@@ -35,7 +46,7 @@
 					</a>
 				</li>
 
-				{# 2. Contactez-nous #}
+				{# 3. Contactez-nous #}
 				<li>
 					<a class="nav-link group flex items-center gap-2 px-[10px] py-2 text-white font-medium text-[.9rem] no-underline transition-colors duration-300 hover:text-primary relative" href="{{ path('app_contact') }}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="shrink-0" viewBox="0 0 16 16" aria-hidden="true">
@@ -46,7 +57,7 @@
 					</a>
 				</li>
 
-				{# 3. Panier (logged-in only) #}
+				{# 4. Panier (logged-in only) #}
 				{% if app.user %}
 					{% set cartCount = cart_item_count is defined ? cart_item_count(app.user) : 0 %}
 					<li>
