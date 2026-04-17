@@ -223,7 +223,7 @@ class CartService
             $prixStocke = (float) $article->getUnitPrice();
 
             if (abs($prixActuel - $prixStocke) > 0.001) {
-                $article->setUnitPrice((string) $produit->getPrice());
+                $article->setUnitPrice((string) $produit->getFinalPrice());
             }
 
             $total += $article->getSubtotal();
