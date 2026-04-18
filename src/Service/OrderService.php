@@ -85,6 +85,8 @@ class OrderService
             return null;
         }
 
+        // Protection IDOR : on retourne l'adresse seulement si elle appartient
+        // à l'utilisateur courant.
         return $address;
     }
 

@@ -148,6 +148,8 @@ class CartService
             return;
         }
 
+        // Protection IDOR : on n'autorise la suppression que si l'article est bien lié
+        // au panier de l'utilisateur connecté.
         $cart->removeItem($article);
         $cart->setUpdatedAt(new \DateTimeImmutable());
         $this->em->remove($article);
@@ -174,6 +176,8 @@ class CartService
             return;
         }
 
+        // Protection IDOR : on n'autorise la modification de quantité que si l'article
+        // appartient bien à l'utilisateur connecté.
         // Supprime l'article si la quantité demandée est nulle ou négative
         if ($quantity <= 0) {
             $this->removeItemById($user, $itemId);
