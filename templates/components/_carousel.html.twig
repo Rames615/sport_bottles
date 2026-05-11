@@ -1,0 +1,36 @@
+{# Reusable Infinite Carousel Component
+   Usage (with items array): {% include 'components/_carousel.html.twig' with {
+       items: items_array,
+       itemsPerView: 4,
+       gap: 20,
+       autoplaySpeed: 3000,
+       carouselId: 'unique-id'
+   } only %}
+   
+   Usage (with block): {% include 'components/_carousel.html.twig' with {
+       itemsPerView: 4,
+       gap: 20,
+       autoplaySpeed: 3000,
+       carouselId: 'unique-id'
+   } %}
+       Content with carousel-item divs
+   {% endinclude %}
+#}
+
+<div class="carousel-wrapper" data-carousel-id="{{ carouselId }}" data-items-per-view="{{ itemsPerView }}" data-gap="{{ gap }}" data-autoplay-speed="{{ autoplaySpeed }}">
+    <div class="carousel-container" role="region" aria-label="Carrousel">
+        <div class="carousel-track">
+            {% if items is defined and items is not empty %}
+                {% for item in items %}
+                    <div class="carousel-item">
+                        {{ item.content | raw }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                {{ block('carousel_content') }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% block carousel_content %}{% endblock %}

@@ -1,0 +1,52 @@
+/* Carousel Component Styles */
+
+.carousel-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-container {
+    overflow: hidden;
+    width: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.carousel-item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Responsive carousel items per view */
+@media (max-width: 1200px) {
+    .carousel-wrapper[data-items-per-view="4"] {
+        --items-per-view: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-wrapper[data-items-per-view="4"] {
+        --items-per-view: 2;
+    }
+}
+
+@media (max-width: 640px) {
+    .carousel-wrapper[data-items-per-view="4"] {
+        --items-per-view: 1;
+    }
+}
+
+/* Pause animation on hover */
+.carousel-wrapper:hover .carousel-track {
+    animation-play-state: paused !important;
+}
