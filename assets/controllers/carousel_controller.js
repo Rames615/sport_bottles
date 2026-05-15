@@ -1,6 +1,6 @@
 /**
  * Carousel Controller
- * Manages infinite carousel functionality with hover pause
+ * Manages infinite carousel functionality with smooth continuous scrolling
  */
 
 class CarouselController {
@@ -18,6 +18,8 @@ class CarouselController {
         this.isAnimating = false;
         this.isPaused = false;
         this.autoplayInterval = null;
+        this.originalItemsCount = this.items.length;
+        this.currentPosition = 0;
         
         this.init();
     }
@@ -29,20 +31,32 @@ class CarouselController {
     }
     
     setupCarousel() {
-        // Clone items for infinite scroll effect
-        const clonedItems = Array.from(this.items).map(item => item.cloneNode(true));
-        clonedItems.forEach(item => {
-            this.track.appendChild(item);
+        // Clone items multiple times for truly infinite scroll
+        // We need at least 2x the items for seamless loop
+        const originalItems = Array.from(this.items);
+        
+        // Clone items 3 times total (original + 2 clones) for extra safety
+        originalItems.forEach(item => {
+            this.track.appendChild(item.cloneNode(true));
+        });
+        originalItems.forEach(item => {
+            this.track.appendChild(item.cloneNode(true));
         });
         
         // Update items reference after cloning
         this.items = this.track.querySelectorAll('.carousel-item');
         
-        // Calculate item width
+        // Calculate dimensions
         this.updateDimensions();
         
-        // Set initial position
+        // Disable transition initially for positioning
+        this.track.style.transition = 'none';
         this.resetPosition();
+        
+        // Enable transition after initial setup
+        setTimeout(() => {
+            this.track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        }, 50);
     }
     
     updateDimensions() {
@@ -123,27 +137,29 @@ class CarouselController {
         if (this.isAnimating) return;
         
         this.isAnimating = true;
-        
-        // Move to next item
         this.currentPosition += this.totalItemWidth;
-        this.animateTrack(() => {
-            this.isAnimating = false;
+        
+        this.track.style.transform = `translateX(-${this.currentPosition}px)`;
+        
+        // Check if we need to reset position for infinite loop
+        setTimeout(() => {
+            const maxScroll = this.originalItemsCount * this.totalItemWidth;
             
-            // Check if we've scrolled through all original items
-            const originalItemsPixels = (this.items.length / 2) * this.totalItemWidth;
-            
-            if (this.currentPosition >= originalItemsPixels) {
-                // Jump back to start without animation
+            if (this.currentPosition >= maxScroll * 2) {
+                // Instantly jump back to start without visual break
                 this.track.style.transition = 'none';
-                this.currentPosition = 0;
-                this.track.style.transform = 'translateX(0)';
+                this.currentPosition = maxScroll;
+                this.track.style.transform = `translateX(-${this.currentPosition}px)`;
                 
-                // Re-enable animation
-                setTimeout(() => {
-                    this.track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                }, 50);
+                // Force reflow to ensure instant jump
+                void this.track.offsetHeight;
+                
+                // Re-enable smooth transition
+                this.track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
             }
-        });
+            
+            this.isAnimating = false;
+        }, 600); // Match animation duration
     }
     
     slidePrev() {
@@ -151,36 +167,32 @@ class CarouselController {
         
         this.isAnimating = true;
         
+        const maxScroll = this.originalItemsCount * this.totalItemWidth;
+        
         if (this.currentPosition <= 0) {
-            // Jump to end without animation
-            const originalItemsPixels = (this.items.length / 2) * this.totalItemWidth;
+            // Jump to end instantly without visual break
             this.track.style.transition = 'none';
-            this.currentPosition = originalItemsPixels - this.totalItemWidth;
+            this.currentPosition = maxScroll * 2 - this.totalItemWidth;
             this.track.style.transform = `translateX(-${this.currentPosition}px)`;
             
-            // Re-enable animation
+            // Force reflow to ensure instant jump
+            void this.track.offsetHeight;
+            
+            // Re-enable smooth transition
+            this.track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            
             setTimeout(() => {
-                this.track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
                 this.currentPosition -= this.totalItemWidth;
-                this.animateTrack(() => {
-                    this.isAnimating = false;
-                });
+                this.track.style.transform = `translateX(-${this.currentPosition}px)`;
+                this.isAnimating = false;
             }, 50);
         } else {
             this.currentPosition -= this.totalItemWidth;
-            this.animateTrack(() => {
+            this.track.style.transform = `translateX(-${this.currentPosition}px)`;
+            
+            setTimeout(() => {
                 this.isAnimating = false;
-            });
-        }
-    }
-    
-    animateTrack(callback) {
-        this.track.style.transform = `translateX(-${this.currentPosition}px)`;
-        
-        if (callback) {
-            this.track.addEventListener('transitionend', () => {
-                callback();
-            }, { once: true });
+            }, 600);
         }
     }
     

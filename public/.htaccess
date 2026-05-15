@@ -1,0 +1,37 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Determine the RewriteBase automatically and store it in an environment variable.
+    RewriteCond $0 ^(.*)$ [NC]
+    RewriteRule ^(.*)$ - [E=BASE:%1]
+
+    # If the requested filename exists, simply use it.
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule .? - [QSA,L]
+
+    # If the requested filename is such that this rewrite rule might cause an
+    # infinite loop, then stop processing the request here.
+    RewriteCond %{REQUEST_FILENAME} -d [OR]
+    RewriteCond %{REQUEST_FILENAME} -l
+    RewriteRule .? - [QSA,L]
+
+    # Rewrite all other queries to the front controller.
+    RewriteRule .? %{ENV:BASE}/index.php [QSA,L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    <IfModule mod_alias.c>
+        # When mod_rewrite is not available, we instruct a temporary redirect of
+        # the request to the front controller explicitly (due the lack of
+        # mod_rewrite, this redirect is permanent).
+        <Location /index.php>
+            <IfModule mod_alias.c>
+                MultiviewsMatch Any
+            </IfModule>
+        </Location>
+        # Redirect to front controller for everything else
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^.*$ /index.php [QSA,R=permanent,L]
+    </IfModule>
+</IfModule>
